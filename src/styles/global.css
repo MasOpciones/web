@@ -1651,3 +1651,31 @@ main {
 .site-footer-minimal a:hover {
   color: var(--text);
 }
+
+.site-social-footer {
+  margin-top: 7rem;
+  padding: 0 1.5rem 3rem;
+  text-align: center;
+  opacity: 0.62;
+}
+
+.site-social-footer p {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+}
+
+.site-social-footer a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+  text-decoration-color: transparent;
+  transition: text-decoration-color 0.2s ease;
+}
+
+.site-social-footer a:hover {
+  text-decoration-color: currentColor;
+}
