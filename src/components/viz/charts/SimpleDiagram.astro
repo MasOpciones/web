@@ -1,0 +1,186 @@
+---
+interface DiagramPoint {
+  x: number;
+  y: number;
+  label: string;
+  tone?: "accent" | "default" | "muted";
+  labelSide?: "right" | "left" | "top" | "bottom";
+}
+
+interface Props {
+  eyebrow?: string;
+  title?: string;
+  description?: string;
+  xLabel?: string;
+  yLabel?: string;
+  caption?: string;
+  points?: DiagramPoint[];
+  height?: number;
+}
+
+const {
+  eyebrow,
+  title = "Diagrama editorial",
+  description,
+  xLabel = "Eje X",
+  yLabel = "Eje Y",
+  caption,
+  height = 360,
+  points = [
+    {
+      x: 34,
+      y: 38,
+      label: "Ingreso mediano",
+      tone: "default",
+      labelSide: "right",
+    },
+    {
+      x: 66,
+      y: 60,
+      label: "Crecimiento agregado",
+      tone: "accent",
+      labelSide: "right",
+    },
+  ],
+} = Astro.props;
+
+const clamp = (value: number, min: number, max: number) =>
+  Math.max(min, Math.min(max, value));
+
+const safePoints = points.map((point) => ({
+  ...point,
+  x: clamp(point.x, 16, 84),
+  y: clamp(point.y, 18, 80),
+}));
+
+function getLabelPosition(point: DiagramPoint & { x: number; y: number }) {
+  const side = point.labelSide ?? "right";
+
+  if (side === "left") {
+    return {
+      x: point.x - 2.6,
+      y: point.y - 1.4,
+      anchor: "end",
+    };
+  }
+
+  if (side === "top") {
+    return {
+      x: point.x,
+      y: point.y - 4.6,
+      anchor: "middle",
+    };
+  }
+
+  if (side === "bottom") {
+    return {
+      x: point.x,
+      y: point.y + 6,
+      anchor: "middle",
+    };
+  }
+
+  return {
+    x: point.x + 2.6,
+    y: point.y - 1.4,
+    anchor: "start",
+  };
+}
+
+const positionedPoints = safePoints.map((point) => ({
+  ...point,
+  labelPos: getLabelPosition(point),
+}));
+---
+
+<section class="viz-diagram">
+  {(eyebrow || title || description) && (
+    <header class="viz-diagram-header">
+      {eyebrow && <p class="viz-diagram-eyebrow">{eyebrow}</p>}
+      {title && <h3 class="viz-diagram-title">{title}</h3>}
+      {description && <p class="viz-diagram-description">{description}</p>}
+    </header>
+  )}
+
+  <div class="viz-diagram-canvas" style={`--diagram-height: ${height}px;`}>
+    <svg
+      class="viz-diagram-svg"
+      viewBox="0 0 100 100"
+      role="img"
+      aria-label={title}
+      preserveAspectRatio="xMidYMid meet"
+    >
+      <!-- background glow handled by CSS -->
+
+      <!-- grid -->
+      <g class="viz-diagram-grid">
+        <line x1="18" y1="22" x2="18" y2="84" />
+        <line x1="18" y1="84" x2="86" y2="84" />
+
+        <line x1="18" y1="66" x2="86" y2="66" />
+        <line x1="18" y1="48" x2="86" y2="48" />
+        <line x1="18" y1="30" x2="86" y2="30" />
+
+        <line x1="34" y1="22" x2="34" y2="84" />
+        <line x1="50" y1="22" x2="50" y2="84" />
+        <line x1="66" y1="22" x2="66" y2="84" />
+      </g>
+
+      <!-- axes -->
+      <g class="viz-diagram-axes">
+        <line x1="18" y1="84" x2="86" y2="84" />
+        <line x1="18" y1="84" x2="18" y2="22" />
+      </g>
+
+      <!-- arrows -->
+      <g class="viz-diagram-arrows">
+        <path d="M86 84 L83.9 82.9 L83.9 85.1 Z" />
+        <path d="M18 22 L16.9 24.1 L19.1 24.1 Z" />
+      </g>
+
+      <!-- labels -->
+      <text x="52" y="94" class="viz-diagram-axis-label viz-diagram-axis-label--x">
+        {xLabel}
+      </text>
+
+      <text
+        x="8"
+        y="53"
+        class="viz-diagram-axis-label viz-diagram-axis-label--y"
+        transform="rotate(-90 8 53)"
+      >
+        {yLabel}
+      </text>
+
+      <!-- connection -->
+      {positionedPoints.length >= 2 && (
+        <line
+          x1={positionedPoints[0].x}
+          y1={positionedPoints[0].y}
+          x2={positionedPoints[1].x}
+          y2={positionedPoints[1].y}
+          class="viz-diagram-connection"
+        />
+      )}
+
+      <!-- points -->
+      {positionedPoints.map((point) => (
+        <g class={`viz-diagram-point viz-diagram-point--${point.tone ?? "default"}`}>
+          <circle cx={point.x} cy={point.y} r="1.8" class="viz-diagram-point-core" />
+          <circle cx={point.x} cy={point.y} r="4.1" class="viz-diagram-point-ring" />
+
+          <text
+            x={point.labelPos.x}
+            y={point.labelPos.y}
+            class="viz-diagram-point-label"
+            text-anchor={point.labelPos.anchor}
+          >
+            {point.label}
+          </text>
+        </g>
+      ))}
+    </svg>
+  </div>
+
+  {caption && <p class="viz-diagram-caption">{caption}</p>}
+</section>

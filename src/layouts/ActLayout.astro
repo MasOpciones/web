@@ -1,0 +1,68 @@
+﻿---
+import BaseLayout from "./BaseLayout.astro";
+
+interface Props {
+  title: string;
+  description?: string;
+  pubDate?: string | Date;
+  tag?: string;
+}
+
+const { title, description, pubDate, tag = "ACTO VISUAL" } = Astro.props;
+
+function formatDate(date: string | Date | undefined) {
+  if (!date) return "";
+  return new Date(date).toLocaleDateString("es-CR", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+}
+---
+
+<BaseLayout title={title} description={description}>
+  <main class="act-page">
+    <section class="act-page-shell">
+      <div class="topbar">
+        <a href="/" class="logo-link" aria-label="Ir al inicio de MásOpciones">
+          <img
+            data-site-logo
+            src="/logo-blanco.svg"
+            alt="MásOpciones"
+            class="site-logo"
+          />
+        </a>
+
+        <button
+          class="theme-toggle"
+          onclick="toggleTheme()"
+          aria-label="Cambiar tema"
+          title="Cambiar tema"
+        >
+          <span data-theme-icon>⏾</span>
+        </button>
+      </div>
+
+      <header class="act-page-header">
+        <div class="act-page-meta">
+          <p class="eyebrow act-page-eyebrow">{tag}</p>
+          {pubDate && <p class="act-page-date">{formatDate(pubDate)}</p>}
+        </div>
+
+        <h1 class="act-page-title">{title}</h1>
+
+        {description && (
+          <p class="act-page-description">{description}</p>
+        )}
+      </header>
+
+      <div class="act-page-content">
+        <slot />
+      </div>
+      <footer class="site-footer-minimal">
+  <a href="/about">About</a>
+</footer>
+    </section>
+  </main>
+</BaseLayout>
+

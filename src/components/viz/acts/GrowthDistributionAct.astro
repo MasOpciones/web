@@ -1,0 +1,65 @@
+---
+import ActShell from "./ActShell.astro";
+import ActHero from "./ActHero.astro";
+import StatGrid from "./StatGrid.astro";
+import ActFooter from "./ActFooter.astro";
+
+import KpiCard from "../primitives/KpiCard.astro";
+import SimpleDiagram from "../charts/SimpleDiagram.astro";
+---
+
+<ActShell>
+  <ActHero
+    tag="Panorama"
+    title="El crecimiento agregado no cuenta toda la historia"
+    subtitle="Una misma cifra de PIB puede convivir con realidades salariales, territoriales y productivas muy distintas."
+  />
+
+  <StatGrid>
+    <KpiCard
+      label="Idea central"
+      value="PIB ≠ bienestar"
+      detail="El total producido no describe por sí solo quién gana, dónde gana ni cuánto mejora."
+      accent={true}
+    />
+    <KpiCard
+      label="Problema"
+      value="Promedios opacos"
+      detail="Las cifras agregadas pueden esconder concentración sectorial y desigualdad territorial."
+    />
+    <KpiCard
+      label="Lectura útil"
+      value="Mirar distribución"
+      detail="El análisis gana claridad cuando se cruza con empleo, salarios e inflación."
+    />
+  </StatGrid>
+
+  <SimpleDiagram
+    title="Crecimiento agregado vs distribución"
+    description="El PIB total puede avanzar con más fuerza que el ingreso mediano de los hogares."
+    xLabel="Ingreso mediano"
+    yLabel="PIB total"
+    caption="Diagrama conceptual para explicar una tensión analítica común: crecimiento agregado no equivale automáticamente a mejora distribuida."
+    points={[
+      {
+        x: 32,
+        y: 38,
+        label: "Ingreso mediano",
+        tone: "default",
+        labelSide: "right"
+      },
+      {
+        x: 63,
+        y: 61,
+        label: "Crecimiento agregado",
+        tone: "accent",
+        labelSide: "right"
+      }
+    ]}
+  />
+
+  <ActFooter
+    source="Visualización conceptual de prueba para el sistema reusable de MásOpciones."
+    note="Este acto todavía no usa datos reales: su función es validar la estructura visual de los formatos grandes del sitio."
+  />
+</ActShell>

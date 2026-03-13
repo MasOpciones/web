@@ -1,0 +1,24 @@
+---
+interface Props {
+  bleed?: boolean;
+  padded?: boolean;
+  class?: string;
+}
+
+const {
+  bleed = false,
+  padded = true,
+  class: className = ""
+} = Astro.props;
+---
+
+<section
+  class:list={[
+    "viz-act",
+    bleed && "viz-act--bleed",
+    padded && "viz-act--padded",
+    className
+  ]}
+>
+  <slot />
+</section>

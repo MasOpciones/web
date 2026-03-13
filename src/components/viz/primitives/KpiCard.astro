@@ -1,0 +1,21 @@
+---
+interface Props {
+  label: string;
+  value: string;
+  detail?: string;
+  accent?: boolean;
+}
+
+const {
+  label,
+  value,
+  detail,
+  accent = false
+} = Astro.props;
+---
+
+<article class:list={["viz-kpi-card", accent && "viz-kpi-card--accent"]}>
+  <p class="viz-kpi-label">{label}</p>
+  <p class="viz-kpi-value">{value}</p>
+  {detail && <p class="viz-kpi-detail">{detail}</p>}
+</article>

@@ -1,0 +1,24 @@
+---
+import { getCollection, render } from "astro:content";
+import ActLayout from "../../layouts/ActLayout.astro";
+
+export async function getStaticPaths() {
+  const acts = await getCollection("acts");
+  return acts.map((act) => ({
+    params: { slug: act.slug },
+    props: { act }
+  }));
+}
+
+const { act } = Astro.props;
+const { Content } = await render(act);
+---
+
+<ActLayout
+  title={act.data.title}
+  description={act.data.description}
+  pubDate={act.data.pubDate}
+  tag={act.data.tag}
+>
+  <Content />
+</ActLayout>

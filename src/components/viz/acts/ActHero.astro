@@ -1,0 +1,21 @@
+---
+interface Props {
+  tag?: string;
+  title: string;
+  subtitle?: string;
+  align?: "left" | "center";
+}
+
+const {
+  tag,
+  title,
+  subtitle,
+  align = "left"
+} = Astro.props;
+---
+
+<header class:list={["act-hero", align === "center" && "act-hero--center"]}>
+  {tag && <p class="act-hero-tag">{tag}</p>}
+  <h2 class="act-hero-title">{title}</h2>
+  {subtitle && <p class="act-hero-subtitle">{subtitle}</p>}
+</header>

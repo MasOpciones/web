@@ -1,0 +1,66 @@
+﻿---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+
+const acts = await getCollection("acts");
+
+const sortedActs = acts.sort(
+  (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()
+);
+---
+
+<BaseLayout
+  title="Actos | MásOpciones"
+  description="Piezas visuales autónomas, narrativas y editoriales de MásOpciones."
+>
+  <main>
+    <section class="container-wide" style="padding: 2rem 0 4rem;">
+      <div class="topbar">
+        <a href="/" class="logo-link" aria-label="Ir al inicio de MásOpciones">
+          <img
+            data-site-logo
+            src="/logo-blanco.svg"
+            alt="MásOpciones"
+            class="site-logo"
+          />
+        </a>
+
+        <button
+          class="theme-toggle"
+          onclick="toggleTheme()"
+          aria-label="Cambiar tema"
+          title="Cambiar tema"
+        >
+          <span data-theme-icon>⏾</span>
+        </button>
+      </div>
+
+      <div style="padding: 3rem 0 4rem;">
+        <p class="eyebrow">Actos visuales</p>
+        <h1 class="hero-title">Piezas que pueden vivir solas</h1>
+        <p class="lead" style="margin-top: 1.2rem; max-width: 60ch;">
+          Proyectos visuales, notas narrativas y piezas editoriales donde la visualización no acompaña el argumento: lo encarna.
+        </p>
+      </div>
+
+      <div style="display: grid; gap: 1rem;">
+        {sortedActs.map((act) => (
+          <a href={`/actos/${act.slug}/`} class="home-article-link">
+            <p class="eyebrow" style="margin-bottom: 0.65rem;">
+              {act.data.tag ?? "ACTO"}
+            </p>
+
+            <h2 class="home-article-title" style="font-size: clamp(1.8rem, 3vw, 2.6rem);">
+              {act.data.title}
+            </h2>
+
+            <p class="muted" style="margin: 0.4rem 0 0; max-width: 60ch;">
+              {act.data.description}
+            </p>
+          </a>
+        ))}
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+

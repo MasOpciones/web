@@ -1,0 +1,15 @@
+---
+interface Props {
+  class?: string;
+  narrow?: boolean;
+}
+
+const {
+  class: className = "",
+  narrow = false
+} = Astro.props;
+---
+
+<section class:list={["act-shell", narrow && "act-shell--narrow", className]}>
+  <slot />
+</section>

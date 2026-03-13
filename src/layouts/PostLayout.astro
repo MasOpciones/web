@@ -1,0 +1,81 @@
+﻿---
+import BaseLayout from "./BaseLayout.astro";
+
+interface Props {
+  title: string;
+  description?: string;
+  pubDate?: string | Date;
+}
+
+const { title, description, pubDate } = Astro.props;
+
+function formatDate(date: string | Date | undefined) {
+  if (!date) return "";
+  return new Date(date).toLocaleDateString("es-CR", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+}
+---
+
+<BaseLayout title={title} description={description}>
+  <main>
+    <section class="container" style="max-width: 720px;">
+      <div class="topbar">
+        <a href="/" class="logo-link" aria-label="Ir al inicio de MásOpciones">
+          <img
+            data-site-logo
+            src="/logo-blanco.svg"
+            alt="MásOpciones"
+            class="site-logo"
+          />
+        </a>
+
+        <button
+          class="theme-toggle"
+          onclick="toggleTheme()"
+          aria-label="Cambiar tema"
+          title="Cambiar tema"
+        >
+          <span data-theme-icon>⏾</span>
+        </button>
+      </div>
+
+      <article style="padding-bottom: 4rem;">
+        <header style="margin-bottom: 3rem;">
+          <p class="eyebrow" style="margin-bottom: 1rem;">ANÁLISIS</p>
+
+          <h1
+            class="hero-title"
+            style="font-size: clamp(2.2rem, 4vw, 3.5rem); line-height: 1.02;"
+          >
+            {title}
+          </h1>
+
+          {description && (
+            <p class="lead" style="margin-top: 1.2rem;">
+              {description}
+            </p>
+          )}
+
+          {pubDate && (
+            <p class="muted" style="margin-top: 1rem;">
+              {formatDate(pubDate)}
+            </p>
+          )}
+        </header>
+
+        <div class="prose">
+          <slot />
+        </div>
+      </article>
+
+      <footer class="site-footer-minimal">
+        <a href="/about">About</a>
+      </footer>
+    </section>
+  </main>
+</BaseLayout>
+
+

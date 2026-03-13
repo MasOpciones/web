@@ -1,0 +1,85 @@
+﻿---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+
+const posts = await getCollection("posts");
+
+const sortedPosts = posts.sort(
+  (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()
+);
+
+function formatDate(date: Date) {
+  return new Date(date).toLocaleDateString("es-CR", {
+    year: "numeric",
+    month: "long",
+    day: "numeric"
+  });
+}
+---
+
+<BaseLayout
+  title="Artículos | MásOpciones"
+  description="Archivo editorial de análisis y visualizaciones publicadas en MásOpciones."
+>
+  <main>
+    <section class="container-wide" style="padding: 2rem 0 4rem;">
+      <div class="topbar">
+        <a href="/" class="logo-link" aria-label="Ir al inicio de MásOpciones">
+          <img
+            data-site-logo
+            src="/logo-blanco.svg"
+            alt="MásOpciones"
+            class="site-logo"
+          />
+        </a>
+
+        <button
+          class="theme-toggle"
+          onclick="toggleTheme()"
+          aria-label="Cambiar tema"
+          title="Cambiar tema"
+        >
+          <span data-theme-icon>⏾</span>
+        </button>
+      </div>
+
+      <div style="padding: 3rem 0 3rem; max-width: 48rem;">
+        <p class="eyebrow">Archivo editorial</p>
+        <h1 class="hero-title" style="font-size: clamp(2.4rem, 6vw, 4.5rem);">
+          Artículos
+        </h1>
+        <p class="lead" style="margin-top: 1.25rem;">
+          Análisis, explicaciones y visualizaciones para entender mejor economía,
+          política y decisiones públicas.
+        </p>
+      </div>
+
+      <section style="display: grid; gap: 0; margin-top: 3rem;">
+        {sortedPosts.map((post) => (
+          <a
+            href={`/articulos/${post.slug}/`}
+            class="article-link"
+            style="display: block; padding: 1.5rem 0; border-top: 1px solid var(--border);"
+          >
+            <div style="display: grid; gap: 0.6rem; max-width: 52rem;">
+              <p class="eyebrow" style="margin: 0 0 0.35rem;">
+                {formatDate(post.data.pubDate)}
+              </p>
+
+              <h2
+                style="margin: 0; font-size: clamp(1.7rem, 3vw, 2.4rem); line-height: 1.05; letter-spacing: -0.03em;"
+              >
+                {post.data.title}
+              </h2>
+
+              <p class="muted" style="margin: 0; max-width: 62ch;">
+                {post.data.description}
+              </p>
+            </div>
+          </a>
+        ))}
+      </section>
+    </section>
+  </main>
+</BaseLayout>
+

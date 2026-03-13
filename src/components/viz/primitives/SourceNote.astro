@@ -1,0 +1,13 @@
+---
+interface Props {
+  source?: string;
+  note?: string;
+}
+
+const { source, note } = Astro.props;
+---
+
+<footer class="viz-source-note">
+  {source && <p><strong>Fuente:</strong> {source}</p>}
+  {note && <p>{note}</p>}
+</footer>

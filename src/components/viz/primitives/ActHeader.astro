@@ -1,0 +1,21 @@
+---
+interface Props {
+  eyebrow?: string;
+  title: string;
+  dek?: string;
+  align?: "left" | "center";
+}
+
+const {
+  eyebrow,
+  title,
+  dek,
+  align = "left"
+} = Astro.props;
+---
+
+<header class:list={["viz-header", align === "center" && "viz-header--center"]}>
+  {eyebrow && <p class="viz-header-eyebrow">{eyebrow}</p>}
+  <h2 class="viz-header-title">{title}</h2>
+  {dek && <p class="viz-header-dek">{dek}</p>}
+</header>

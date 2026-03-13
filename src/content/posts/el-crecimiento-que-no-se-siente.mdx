@@ -1,0 +1,373 @@
+---
+title: "El crecimiento que no se siente"
+description: "Costa Rica creció. Las zonas francas crecieron más. Pero los salarios reales llevan quince años sin moverse, casi la mitad de los trabajadores sigue en la informalidad, y cada año salen más de ocho mil millones de dólares como renta de las empresas. Esto es lo que los titulares del PIB no cuentan."
+pubDate: 2026-03-13
+tag: "INVESTIGACIÓN"
+featured: true
+---
+
+import ActShell from "../../components/viz/acts/ActShell.astro";
+import ActHero from "../../components/viz/acts/ActHero.astro";
+import ActFooter from "../../components/viz/acts/ActFooter.astro";
+import StatGrid from "../../components/viz/acts/StatGrid.astro";
+import KpiCard from "../../components/viz/primitives/KpiCard.astro";
+import Insight from "../../components/Insight.astro";
+import DataPoint from "../../components/DataPoint.astro";
+
+import GrowthGapHero from "../../components/viz/charts/GrowthGapHero.tsx";
+import ParticipacionZFChart from "../../components/viz/charts/ParticipacionZFChart.tsx";
+import SalarioRealChart from "../../components/viz/charts/SalarioRealChart.tsx";
+import InformalidadChart from "../../components/viz/charts/InformalidadChart.tsx";
+import DesempleoChart from "../../components/viz/charts/DesempleoChart.tsx";
+import CanastaSalarioChart from "../../components/viz/charts/CanastaSalarioChart.tsx";
+import BreachaPIBINBChart from "../../components/viz/charts/BreachaPIBINBChart.tsx";
+import EmpleoZFChart from "../../components/viz/charts/EmpleoZFChart.tsx";
+import GastoTributarioChart from "../../components/viz/charts/GastoTributarioChart.tsx";
+
+Cuando el Banco Central publica los datos del PIB, los titulares celebran el crecimiento.
+El problema no es que estén equivocados. El problema es lo que no dicen.
+
+<DataPoint
+  value="¿Para quién creció?"
+  label="Es la pregunta que este análisis intenta responder. No con un dato, sino con nueve."
+/>
+
+<ActShell>
+  <ActHero
+    tag="ACTO I · ESTRUCTURA DEL PIB"
+    title="El PIB creció. Pero no todo el PIB."
+    subtitle="Desde el año 2000, el régimen especial —las zonas francas— creció trece veces. El resto de la economía, dos veces y media. Hoy, una de cada tres unidades de producción real viene de ese régimen."
+    align="left"
+  />
+
+  <StatGrid>
+    <KpiCard
+      label="Crecimiento zona franca 2000–2026"
+      value="13×"
+      detail="El régimen especial multiplicó su tamaño trece veces en términos reales."
+      accent={true}
+    />
+    <KpiCard
+      label="Crecimiento régimen definitivo 2000–2026"
+      value="2.4×"
+      detail="La economía que no es zona franca creció cinco veces menos."
+    />
+    <KpiCard
+      label="Participación ZF en PIB real (2024)"
+      value="34%"
+      detail="En 2000 era menos del 6%. En 2024 ya es más de un tercio."
+    />
+  </StatGrid>
+
+  <GrowthGapHero client:load />
+
+  <ActFooter
+    source="BCCR, Cuadro 5787. PIB encadenado volumen, base 2022."
+    note="El índice base 2000 = 100 permite comparar crecimiento relativo entre regímenes independientemente de su tamaño absoluto."
+  />
+</ActShell>
+
+Intel llegó en 1997. Se fue en 2014. El vacío no duró.
+
+Los servicios tecnológicos y médicos especializados lo llenaron con creces — y el régimen especial aceleró. Lo que era una sexta parte del PIB se convirtió en un tercio.
+
+<ActShell>
+  <ActHero
+    tag="ACTO I · ESTRUCTURA DEL PIB"
+    title="De 1 de cada 20 a 1 de cada 3"
+    subtitle="La participación del régimen especial en el PIB real pasó de 5.5% en 2000 a 35% proyectado en 2026. El punto de inflexión fue 2014: la salida de Intel no frenó el crecimiento, lo transformó."
+    align="left"
+  />
+
+  <ParticipacionZFChart client:load />
+
+  <ActFooter
+    source="BCCR, Cuadro 5787. PIB encadenado volumen, base 2022."
+    note="2025 y 2026 son proyecciones del BCCR basadas en tendencia reciente."
+  />
+</ActShell>
+
+<Insight>
+El resto de la economía no encogió. Las zonas francas crecieron tan rápido que hoy representan una fracción del PIB que hace veinte años habría parecido inverosímil.
+</Insight>
+
+La pregunta que sigue es natural: ¿ese crecimiento se tradujo en mejores condiciones para los hogares?
+
+<ActShell>
+  <ActHero
+    tag="ACTO II · CONDICIONES DE LOS HOGARES"
+    title="Quince años. El mismo salario."
+    subtitle="El ingreso real promedio del sector privado en 2024 es casi idéntico al de 2010. Hubo inflación, hubo crecimiento, hubo titulares. Los salarios reales no se movieron."
+    align="left"
+  />
+
+  <StatGrid>
+    <KpiCard
+      label="Índice salario real privado 2024"
+      value="98.0"
+      detail="Base 2010 = 100. Quince años después, el poder adquisitivo está dos puntos debajo de donde empezó."
+      accent={true}
+    />
+    <KpiCard
+      label="Piso del período"
+      value="86.7"
+      detail="En 2022, la inflación post-pandemia pulverizó el poder adquisitivo al nivel más bajo de la serie."
+    />
+    <KpiCard
+      label="Salario nominal 2010–2024"
+      value="+40%"
+      detail="El salario nominal subió cuarenta puntos. La inflación subió cuarenta y tres. El resultado neto: negativo."
+    />
+  </StatGrid>
+
+  <SalarioRealChart client:load />
+
+  <ActFooter
+    source="INEC, Encuesta Continua de Empleo (ECE). Cuadro C1: ingreso promedio mensual real por sector institucional."
+    note="Índice base 2010 = 100. Deflactado con el IPC del INEC."
+  />
+</ActShell>
+
+> El crecimiento ocurrió. No se distribuyó.
+
+<ActShell>
+  <ActHero
+    tag="ACTO II · MERCADO LABORAL"
+    title="Casi 4 de cada 10 trabajadores, sin red de protección"
+    subtitle="La tasa de informalidad laboral lleva quince años sin bajar de forma sostenida. En 2024, 845.000 personas trabajan sin seguro social, sin pensión, sin derechos laborales formales."
+    align="left"
+  />
+
+  <StatGrid>
+    <KpiCard
+      label="Tasa de informalidad 2024"
+      value="39%"
+      detail="Prácticamente el mismo nivel que en 2010. Quince años de crecimiento económico sin reducción estructural."
+      accent={true}
+    />
+    <KpiCard
+      label="Personas en informalidad 2024"
+      value="845.000"
+      detail="Casi un millón de trabajadores fuera de la economía formal, sin seguro social ni pensión contributiva."
+    />
+    <KpiCard
+      label="Promedio 2015–2019"
+      value="44.1%"
+      detail="En el período de mayor crecimiento del PIB pre-pandemia, la informalidad fue más alta que el promedio de la serie."
+    />
+  </StatGrid>
+
+  <InformalidadChart client:load />
+
+  <ActFooter
+    source="INEC, Encuesta Continua de Empleo (ECE). Cuadro C4: condición de formalidad."
+    note="Promedio anual de los cuatro trimestres. La informalidad incluye asalariados sin seguro social y trabajadores por cuenta propia no profesionales."
+  />
+</ActShell>
+
+<Insight>
+Costa Rica creció a tasas que muchos países latinoamericanos envidiarían. Y durante esos veinte años, casi cuatro de cada diez trabajadores siguieron sin seguro social, sin pensión, sin red.
+</Insight>
+
+<ActShell>
+  <ActHero
+    tag="ACTO II · MERCADO LABORAL"
+    title="El desempleo cayó. Pero el camino fue tortuoso."
+    subtitle="Costa Rica llegó a 2024 con la tasa de desempleo más baja de la serie reciente. El recorrido incluyó un pico del 24% durante la pandemia y un punto de partida de casi 12% en 2019 —con el PIB creciendo."
+    align="left"
+  />
+
+  <StatGrid>
+    <KpiCard
+      label="Desempleo al cierre de 2024"
+      value="6.9%"
+      detail="Mínimo histórico reciente. La recuperación post-pandemia fue más rápida de lo esperado."
+      accent={true}
+    />
+    <KpiCard
+      label="Pico pandemia (II-2020)"
+      value="24%"
+      detail="Uno de cada cuatro costarricenses en edad de trabajar quedó desempleado en el segundo trimestre de 2020."
+    />
+    <KpiCard
+      label="Desempleo en 2019"
+      value="11.8%"
+      detail="El año anterior a la pandemia, con el PIB creciendo al 2.1%, el desempleo ya era estructuralmente alto."
+    />
+  </StatGrid>
+
+  <DesempleoChart client:load />
+
+  <ActFooter
+    source="INEC, Encuesta Continua de Empleo (ECE). Tasa de desempleo abierto, datos trimestrales y promedio anual."
+    note="La caída del desempleo post-2020 coincide con una recomposición del empleo hacia sectores informales."
+  />
+</ActShell>
+
+Más personas consiguieron trabajo. Eso es real.
+
+Pero los datos de salarios e informalidad muestran que ese trabajo no siempre llegó con mejores condiciones.
+
+<ActShell>
+  <ActHero
+    tag="ACTO II · PODER ADQUISITIVO"
+    title="La canasta subió más que los precios. Y los precios subieron más que los salarios."
+    subtitle="Entre 2015 y 2024, la canasta básica acumuló un alza del 25%. El IPC general subió 19%. Los salarios reales no alcanzaron a ninguno de los dos."
+    align="left"
+  />
+
+  <StatGrid>
+    <KpiCard
+      label="Alza acumulada canasta básica 2015–2024"
+      value="+24.6%"
+      detail="La canasta de alimentos básicos subió más que la inflación general en todo el período."
+      accent={true}
+    />
+    <KpiCard
+      label="Alza acumulada IPC 2015–2024"
+      value="+19.2%"
+      detail="La inflación general fue alta, pero la canasta básica la superó consistentemente."
+    />
+    <KpiCard
+      label="Año más crítico"
+      value="2022"
+      detail="La canasta subió 16.2% en un solo año. El IPC general subió 7.9%. La brecha entre ambos fue la mayor de la serie."
+    />
+  </StatGrid>
+
+  <CanastaSalarioChart client:load />
+
+  <ActFooter
+    source="INEC, Canasta Básica Alimentaria y línea de pobreza. IPC mensual INEC."
+    note="La CBA mensual se indexa al costo de una canasta de alimentos para un hogar de referencia. No incluye vivienda, transporte ni educación."
+  />
+</ActShell>
+
+La inflación no golpea igual a todos. Los hogares de menor ingreso destinan una proporción mayor de su gasto a alimentos. Cuando la canasta sube el doble que el IPC general, esa diferencia no es estadística — es lo que falta en la mesa.
+
+<ActShell>
+  <ActHero
+    tag="ACTO III · FUGA DE RENTA"
+    title="Cada año salen más de ocho mil millones de dólares"
+    subtitle="La diferencia entre lo que Costa Rica produce (PIB) y lo que efectivamente se queda en el país (INB) pasó de 3.7% del PIB en 2013 a 8.4% en 2024. Son utilidades de empresas extranjeras que salen del país."
+    align="left"
+  />
+
+  <StatGrid>
+    <KpiCard
+      label="Brecha PIB–INB en 2024"
+      value="8.4% del PIB"
+      detail="Más del doble que en 2013. El crecimiento del régimen especial es el principal motor de esta brecha."
+      accent={true}
+    />
+    <KpiCard
+      label="En dólares (2024)"
+      value="USD 8.019M"
+      detail="Renta primaria que sale del país como utilidades, dividendos e intereses. Más de lo que Costa Rica gasta en salud pública en un año."
+    />
+    <KpiCard
+      label="Evolución"
+      value="×2.3 en 11 años"
+      detail="La brecha se más que duplicó entre 2013 y 2024. El PIB sobreestima lo que realmente queda en los hogares costarricenses."
+    />
+  </StatGrid>
+
+  <BreachaPIBINBChart client:load />
+
+  <ActFooter
+    source="BCCR, Cuadros 2997 (base 2012, 2013–2019) y 5788 (base 2022, 2020–2024). USD: Balanza de Pagos BPM6."
+    note="La brecha PIB–INB refleja principalmente utilidades remitidas al exterior por empresas de inversión extranjera directa. No implica que la IED sea perjudicial; sí que el PIB sobreestima el ingreso disponible para los residentes."
+  />
+</ActShell>
+
+Que las empresas extranjeras remitan utilidades no es ilegal ni inusual. Es el resultado esperado de la IED. Lo que el gráfico muestra no es una denuncia — es una advertencia metodológica: el PIB mide lo que se produce aquí, no lo que se queda aquí.
+
+<ActShell>
+  <ActHero
+    tag="ACTO III · EMPLEO"
+    title="Zona franca: 8 de cada 100 empleos"
+    subtitle="El régimen especial emplea directamente al 8.4% de la fuerza laboral, con salarios entre 1.5 y 1.8 veces el promedio nacional. El 91.6% restante trabaja en una economía donde los salarios reales llevan quince años planos."
+    align="left"
+  />
+
+  <StatGrid>
+    <KpiCard
+      label="Empleos directos en ZF (2022)"
+      value="184.035"
+      detail="Casi el doble de los 82.000 empleos directos que reportaba el régimen en 2015."
+      accent={true}
+    />
+    <KpiCard
+      label="Salario ZF vs promedio nacional"
+      value="1.5–1.8×"
+      detail="Los trabajadores de zona franca ganan entre 50% y 80% más que el promedio. Una isla de mejores condiciones dentro de un mercado laboral estancado."
+    />
+    <KpiCard
+      label="El 91.6% restante"
+      value="Fuera de ZF"
+      detail="Más de nueve de cada diez trabajadores están en el régimen definitivo, donde los salarios reales llevan quince años sin moverse."
+    />
+  </StatGrid>
+
+  <EmpleoZFChart client:load />
+
+  <ActFooter
+    source="PROCOMER, Balance de Zonas Francas 2018–2022 (2023). 2015: Balance ZF 2011–2015 (2016)."
+    note="2016 y 2017 sin datos públicos disponibles. El empleo directo no incluye empleos indirectos en proveedores ni servicios de apoyo."
+  />
+</ActShell>
+
+184.000 personas con empleos formales y salarios por encima del promedio. Eso es genuinamente bueno.
+
+Y representa el 8.4% de la fuerza laboral.
+
+<ActShell>
+  <ActHero
+    tag="ACTO III · COSTO FISCAL"
+    title="₡782.000 millones en exoneraciones. Por año."
+    subtitle="El gasto tributario en exoneraciones al régimen especial casi se duplicó entre 2020 y 2024. Tres de cada cuatro colones que el Estado dejó de cobrar en ISR fueron por exoneraciones a zonas francas."
+    align="left"
+  />
+
+  <StatGrid>
+    <KpiCard
+      label="Exoneraciones ZF en 2024"
+      value="₡782.000M"
+      detail="De ₡344.000M en 2020 a ₡782.000M en 2024. El costo fiscal casi se duplicó en cuatro años."
+      accent={true}
+    />
+    <KpiCard
+      label="Como % del GT total de ISR"
+      value="75.1%"
+      detail="En 2020 era el 55.7%. Hoy, tres de cada cuatro colones de gasto tributario en ISR corresponden al régimen especial."
+    />
+    <KpiCard
+      label="En perspectiva"
+      value="~1.6% del PIB"
+      detail="Equivale aproximadamente a lo que Costa Rica gasta en educación preescolar y primaria combinadas."
+    />
+  </StatGrid>
+
+  <GastoTributarioChart client:load />
+
+  <ActFooter
+    source="Ministerio de Hacienda, Informes de Gasto Tributario 2020–2024 (feb 2025 y dic 2025)."
+    note="El gasto tributario es el costo de oportunidad fiscal de las exoneraciones, no un gasto presupuestario directo."
+  />
+</ActShell>
+
+Tomados por separado, cada uno de estos datos tiene una explicación razonable.
+
+Tomados juntos, construyen un patrón que es difícil de ignorar.
+
+Una parte de la economía costarricense creció trece veces en veinticinco años. Atrae inversión de primer nivel. Paga salarios por encima del promedio. Representa hoy un tercio del PIB real.
+
+La otra parte —la que viven nueve de cada diez trabajadores— creció mucho menos, pagó salarios que en términos reales no superaron los niveles de 2010, y vio cómo la canasta básica se encarecía más rápido que sus ingresos.
+
+> El crecimiento que celebran los titulares es real. Pero es el crecimiento de una parte.
+
+<Insight>
+La pregunta que Costa Rica todavía no ha respondido del todo es qué políticas son capaces de conectar esas dos economías: la que crece y la que no se siente.
+</Insight>
+
+*Este análisis usa datos públicos de BCCR, INEC, PROCOMER y el Ministerio de Hacienda. El código, los datos y la metodología están disponibles en [github.com/MasOpciones/cr-pib-zonas-francas](https://github.com/MasOpciones/cr-pib-zonas-francas).*

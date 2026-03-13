@@ -1,17 +1,145 @@
+﻿---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+
+const posts = await getCollection("posts");
+const acts = await getCollection("acts");
+
+const sortedPosts = posts.sort(
+  (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()
+);
+const sortedActs = acts.sort(
+  (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()
+);
+
+const featuredPost =
+  sortedPosts.find((post) => post.data.featured) ?? sortedPosts[0];
 ---
 
----
+<BaseLayout
+  title="MásOpciones"
+  description="Laboratorio visual de datos, análisis y explicaciones públicas."
+>
+  <main>
+    <section class="container-wide" style="padding: 2rem 0 4rem;">
+      <div class="topbar">
+        <a href="/" class="logo-link" aria-label="Ir al inicio de MásOpciones">
+          <img
+            data-site-logo
+            src="/logo-blanco.svg"
+            alt="MásOpciones"
+            class="site-logo"
+          />
+        </a>
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+        <button
+          class="theme-toggle"
+          onclick="toggleTheme()"
+          aria-label="Cambiar tema"
+          title="Cambiar tema"
+        >
+          <span data-theme-icon>⏾</span>
+        </button>
+      </div>
+
+      <div style="padding: 3rem 0 5rem;">
+        <p class="eyebrow">Laboratorio visual de datos</p>
+        <h1 class="hero-title">MásOpciones</h1>
+        <p class="lead" style="margin-top: 1.5rem;">
+          Análisis, visualizaciones y explicaciones para entender economía, política y decisiones públicas sin contaminación visual ni humo decorativo.
+        </p>
+      </div>
+
+      {featuredPost && (
+        <section class="card featured-card" style="padding: 2rem; margin-bottom: 2rem;">
+          <p class="eyebrow">Destacado</p>
+
+          <h2
+            style="font-size: clamp(2rem, 4vw, 3.2rem); line-height: 1; letter-spacing: -0.04em; margin: 0.5rem 0 1rem; max-width: 22ch;"
+          >
+            {featuredPost.data.title}
+          </h2>
+
+          <p class="lead" style="margin-bottom: 1.5rem;">
+            {featuredPost.data.description}
+          </p>
+
+          <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            <a class="button" href={`/articulos/${featuredPost.slug}/`}>
+              Explorar análisis
+            </a>
+          </div>
+        </section>
+      )}
+
+      {sortedActs.length > 0 && (
+        <section style="padding: 1rem 0 2rem;">
+          <p class="eyebrow" style="margin: 0 0 1.25rem;">ACTOS VISUALES</p>
+
+          <div style="display: grid; gap: 0.5rem;">
+            {sortedActs.slice(0, 3).map((act) => (
+              <a
+                href={`/actos/${act.slug}/`}
+                class="home-article-link"
+              >
+                <h3 class="home-article-title">
+                  {act.data.title}
+                </h3>
+
+                <p class="muted" style="margin: 0; max-width: 60ch;">
+                  {act.data.description}
+                </p>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {sortedPosts.length > 0 && (
+        <section style="padding: 1rem 0 2rem;">
+          <div
+            style="display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.25rem;"
+          >
+            <p class="eyebrow" style="margin: 0;">ÚLTIMOS ANÁLISIS</p>
+
+            <a href="/articulos/" class="button" style="padding: 0.7rem 1rem;">
+              Ver todos
+            </a>
+          </div>
+
+          <div style="display: grid; gap: 0.5rem;">
+            {sortedPosts.slice(0, 3).map((post) => (
+              <a
+                href={`/articulos/${post.slug}/`}
+                class="home-article-link"
+              >
+                <h3 class="home-article-title">
+                  {post.data.title}
+                </h3>
+
+                <p class="muted" style="margin: 0; max-width: 60ch;">
+                  {post.data.description}
+                </p>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
+
+      <section style="padding: 2rem 0 0;">
+        <p class="eyebrow">Dirección editorial</p>
+        <p
+          class="editorial"
+          style="font-size: clamp(1.3rem, 2.2vw, 1.8rem); max-width: 34ch; line-height: 1.5;"
+        >
+          Publicar modelos, noticias explicadas y análisis visuales con una idea simple: casi siempre hay más de una forma de entender el problema.
+        </p>
+      </section>
+      <footer class="site-footer-minimal">
+  <a href="/about">About</a>
+</footer>
+    </section>
+  </main>
+</BaseLayout>
+
+

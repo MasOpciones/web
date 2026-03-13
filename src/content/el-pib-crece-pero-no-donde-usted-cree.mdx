@@ -1,0 +1,137 @@
+---
+title: "El PIB crece, pero no donde usted cree"
+description: "El crecimiento agregado de la economía puede ocultar dinámicas muy distintas entre sectores."
+pubDate: 2026-03-08
+featured: true
+---
+
+import Insight from "../../components/Insight.astro";
+import DataPoint from "../../components/DataPoint.astro";
+import GrowthDistributionAct from "../../components/viz/acts/GrowthDistributionAct.astro";
+import ActFrame from "../../components/viz/primitives/ActFrame.astro";
+import ActHeader from "../../components/viz/primitives/ActHeader.astro";
+import KpiRow from "../../components/viz/primitives/KpiRow.astro";
+import KpiCard from "../../components/viz/primitives/KpiCard.astro";
+import SourceNote from "../../components/viz/primitives/SourceNote.astro";
+
+import SimpleDiagram from "../../components/viz/charts/SimpleDiagram.astro";
+
+El **PIB** es uno de los indicadores más citados cuando se habla de la economía.
+
+Pero tiene una característica curiosa: puede crecer mientras gran parte de la población siente que nada mejora.
+
+<DataPoint
+  value="PIB ≠ bienestar"
+  label="El crecimiento agregado no garantiza una mejora distribuida."
+  note="El dato total de producción debe leerse junto con salarios, empleo e inflación."
+/>
+
+## El problema del promedio
+
+El PIB mide producción total.
+
+No mide:
+
+- quién gana ese crecimiento
+- dónde ocurre
+- qué sectores lo concentran
+
+<GrowthDistributionAct />
+
+Dos economías pueden tener el mismo crecimiento del PIB y experiencias sociales completamente distintas.
+
+<Insight>
+El PIB mide producción total, no distribución del bienestar.  
+Un país puede crecer económicamente mientras gran parte de su población no percibe mejora en sus ingresos.
+</Insight>
+
+<ActFrame>
+  <ActHeader
+    eyebrow="Panorama"
+    title="El crecimiento agregado no cuenta toda la historia"
+    dek="Una misma cifra de PIB puede convivir con realidades salariales, territoriales y productivas muy distintas."
+  />
+
+  <KpiRow>
+    <KpiCard
+      label="Idea central"
+      value="PIB ≠ bienestar"
+      detail="El total producido no describe por sí solo quién gana, dónde gana ni cuánto mejora."
+      accent={true}
+    />
+    <KpiCard
+      label="Problema"
+      value="Promedios opacos"
+      detail="Las cifras agregadas pueden esconder concentración sectorial y desigualdad territorial."
+    />
+    <KpiCard
+      label="Lectura útil"
+      value="Mirar distribución"
+      detail="El análisis gana claridad cuando se cruza con empleo, salarios e inflación."
+    />
+  </KpiRow>
+
+  <SourceNote
+    source="Texto de prueba para validar el sistema visual reusable de MásOpciones."
+    note="Este bloque todavía no es la visualización final: funciona como marco editorial base para futuros actos interactivos."
+  />
+</ActFrame>
+
+## Crecimiento concentrado
+
+Imaginemos tres situaciones:
+
+- crece un sector altamente productivo que emplea poca gente
+- el crecimiento ocurre en regiones muy específicas
+- aumentan exportaciones pero los salarios reales apenas cambian
+
+En los tres casos, el titular será el mismo:
+
+> “La economía creció”.
+
+Pero la experiencia cotidiana podría ser muy diferente.
+
+<ActFrame>
+  <ActHeader
+    eyebrow="Relación conceptual"
+    title="Crecer no siempre significa distribuir mejor"
+    dek="Una cifra agregada puede subir mientras la mejora para los hogares se queda muy por detrás."
+  />
+
+  <SimpleDiagram
+    title="Crecimiento agregado vs distribución"
+    description="El PIB total puede avanzar con más fuerza que el ingreso mediano de los hogares."
+    xLabel="Ingreso mediano"
+    yLabel="PIB total"
+    caption="Diagrama conceptual para explicar una tensión analítica común: crecimiento agregado no equivale automáticamente a mejora distribuida."
+    points={[
+      {
+        x: 32,
+        y: 38,
+        label: "Ingreso mediano",
+        tone: "default",
+        labelSide: "right"
+      },
+      {
+        x: 63,
+        y: 61,
+        label: "Crecimiento agregado",
+        tone: "accent",
+        labelSide: "right"
+      }
+    ]}
+  />
+
+  <SourceNote
+    source="Visualización conceptual de prueba para el sistema reusable de MásOpciones."
+    note="Esta pieza no usa datos reales todavía; su función es validar el lenguaje visual del sistema editorial."
+  />
+</ActFrame>
+
+## La pregunta correcta
+
+La pregunta no es solo si la economía crece.
+
+La pregunta es:
+
+**dónde crece, para quién crece y cuánto de ese crecimiento se convierte en bienestar real.**

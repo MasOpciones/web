@@ -1,0 +1,105 @@
+﻿---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Sobre MásOpciones — MásOpciones">
+  <main>
+    <section class="container about-page-shell">
+      <div class="topbar">
+        <a href="/" class="logo-link" aria-label="Ir al inicio de MásOpciones">
+          <img
+            data-site-logo
+            src="/logo-blanco.svg"
+            alt="MásOpciones"
+            class="site-logo"
+          />
+        </a>
+
+        <button
+          class="theme-toggle"
+          onclick="toggleTheme()"
+          aria-label="Cambiar tema"
+          title="Cambiar tema"
+        >
+          <span data-theme-icon>⏾</span>
+        </button>
+      </div>
+
+      <section class="about-page">
+        <header class="about-header">
+          <h1>Sobre MásOpciones</h1>
+          <p class="about-lead">
+            MásOpciones es un proyecto editorial independiente dedicado al análisis económico,
+            el trabajo con datos y la explicación de fenómenos públicos desde una perspectiva
+            clara y visual.
+          </p>
+        </header>
+
+        <section class="about-block">
+          <h2>Qué es MásOpciones</h2>
+          <p>
+            MásOpciones busca analizar datos públicos, explorar fenómenos económicos y
+            construir explicaciones visuales que ayuden a entender mejor lo que ocurre en la
+            práctica.
+          </p>
+          <p>
+            El proyecto también intenta cuestionar interpretaciones simplistas de indicadores,
+            priorizando contexto, contraste y lectura crítica.
+          </p>
+        </section>
+
+        <section class="about-block">
+          <h2>Qué publicamos</h2>
+          <ul>
+            <li>
+              <strong>Actos visuales</strong><br />
+              visualizaciones interactivas que exploran una idea específica
+            </li>
+            <li>
+              <strong>Análisis</strong><br />
+              artículos que combinan interpretación económica con datos
+            </li>
+            <li>
+              <strong>Notas breves</strong><br />
+              observaciones rápidas sobre cambios en indicadores o eventos recientes
+            </li>
+          </ul>
+        </section>
+
+        <section class="about-block">
+          <h2>Metodología</h2>
+          <p>
+            El análisis se basa en datos públicos, marcos económicos e interpretación analítica,
+            con transparencia en las fuentes utilizadas en cada pieza.
+          </p>
+        </section>
+
+        <section class="about-block">
+          <h2>Autor</h2>
+          <p>
+            MásOpciones es desarrollado por Mario Salas, estudiante de Ciencia de Datos y
+            Economía Empresarial en Costa Rica.
+          </p>
+          <p>
+            El objetivo del proyecto es explorar análisis económico aplicado utilizando datos
+            públicos.
+          </p>
+        </section>
+
+        <section class="about-block">
+          <h2>Disclaimer</h2>
+          <p class="about-disclaimer">
+            Este proyecto es independiente, no representa instituciones y las interpretaciones
+            presentadas son personales.
+          </p>
+        </section>
+
+        <footer class="site-footer-minimal">
+          <a href="/">Inicio</a>
+        </footer>
+      </section>
+    </section>
+  </main>
+</BaseLayout>
+
+

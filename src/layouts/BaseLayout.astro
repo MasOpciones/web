@@ -1,0 +1,69 @@
+﻿---
+import "../styles/global.css";
+import { ClientRouter } from "astro:transitions";
+
+const {
+  title = "MásOpciones",
+  description = "Laboratorio visual de datos, análisis y explicaciones públicas."
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <ClientRouter />
+  </head>
+  <body>
+    <slot />
+
+    <script is:inline>
+      const root = document.documentElement;
+
+      function applyTheme(theme) {
+        const isLight = theme === "light";
+        root.classList.toggle("light", isLight);
+
+        document.querySelectorAll("[data-theme-icon]").forEach((icon) => {
+          icon.textContent = isLight ? "⏾" : "☀︎";
+        });
+
+        document.querySelectorAll("[data-site-logo]").forEach((logo) => {
+          logo.setAttribute("src", isLight ? "/logo-negro.svg" : "/logo-blanco.svg");
+        });
+      }
+
+      function initTheme() {
+        const savedTheme = localStorage.getItem("theme");
+        const prefersLight = window.matchMedia("(prefers-color-scheme: light)").matches;
+        const theme = savedTheme || (prefersLight ? "light" : "dark");
+        applyTheme(theme);
+      }
+
+      // Corre en carga inicial y después de cada navegación del ClientRouter
+      initTheme();
+      document.addEventListener("astro:page-load", initTheme);
+
+      window.toggleTheme = function () {
+        const icons = document.querySelectorAll("[data-theme-icon]");
+        icons.forEach((icon) => {
+          icon.classList.add("animating");
+        });
+
+        const newTheme = root.classList.contains("light") ? "dark" : "light";
+
+        setTimeout(() => {
+          localStorage.setItem("theme", newTheme);
+          applyTheme(newTheme);
+
+          icons.forEach((icon) => {
+            icon.classList.remove("animating");
+          });
+        }, 150);
+      };
+    </script>
+  </body>
+</html>
