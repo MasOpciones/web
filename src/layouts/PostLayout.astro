@@ -5,9 +5,10 @@ interface Props {
   title: string;
   description?: string;
   pubDate?: string | Date;
+  ogImage?: string;
 }
 
-const { title, description, pubDate } = Astro.props;
+const { title, description, pubDate, ogImage } = Astro.props;
 
 function formatDate(date: string | Date | undefined) {
   if (!date) return "";
@@ -20,6 +21,20 @@ function formatDate(date: string | Date | undefined) {
 ---
 
 <BaseLayout title={title} description={description}>
+  <Fragment slot="head">
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content={Astro.url} />
+    {ogImage && (
+      <>
+        <meta property="og:image" content={`https://www.masopciones.blog${ogImage}`} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+      </>
+    )}
+    <meta name="twitter:card" content="summary_large_image" />
+  </Fragment>
   <main>
     <section class="container" style="max-width: 720px;">
       <div class="topbar">

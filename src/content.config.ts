@@ -4,7 +4,8 @@ const baseSchema = z.object({
   title: z.string(),
   description: z.string(),
   pubDate: z.coerce.date(),
-  featured: z.boolean().optional()
+  featured: z.boolean().optional(),
+  ogImage: z.string().optional()
 });
 
 const posts = defineCollection({
