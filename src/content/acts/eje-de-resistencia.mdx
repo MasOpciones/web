@@ -1,0 +1,104 @@
+---
+title: "El eje de la resistencia"
+description: "Irán no pelea solo. Desde los años 90, Teherán construyó una red de actores aliados que le permite proyectar poder en toda la región sin cruzar sus propias fronteras. El 28 de febrero de 2026, esa arquitectura entró en su mayor prueba."
+pubDate: 2026-03-13
+tag: "GEOPOLÍTICA"
+featured: true
+---
+
+import ActShell from "../../components/viz/acts/ActShell.astro";
+import ActHero from "../../components/viz/acts/ActHero.astro";
+import ActFooter from "../../components/viz/acts/ActFooter.astro";
+import StatGrid from "../../components/viz/acts/StatGrid.astro";
+import KpiCard from "../../components/viz/primitives/KpiCard.astro";
+import Insight from "../../components/Insight.astro";
+
+import EjeResistenciaMap from "../../components/viz/charts/EjeResistenciaMap.tsx";
+
+Irán no pelea solo. Nunca lo ha hecho.
+
+Desde los años 90, Teherán construyó una red de grupos aliados en toda la región — en Líbano, Gaza, Yemen e Iraq — que le permite proyectar poder sin cruzar sus propias fronteras. La lógica es simple: si alguien ataca a Irán, la respuesta no viene solo de Teherán. Viene de todos lados al mismo tiempo.
+
+El modelo funcionó durante décadas. El 28 de febrero de 2026, entró en su mayor prueba.
+
+<ActShell>
+  <ActHero
+    tag="ACTO · GEOPOLÍTICA"
+    title="Una red diseñada para sobrevivir."
+    subtitle="EE.UU. e Israel lanzaron más de mil ataques contra Irán en una sola jornada. El líder supremo Ali Jamenei murió ese día. El eje no desapareció — pero nunca había estado bajo tanta presión."
+    align="left"
+  />
+
+  <StatGrid>
+    <KpiCard
+      label="Punto de quiebre"
+      value="28 feb 2026"
+      detail="EE.UU. e Israel lanzan una ofensiva aérea masiva contra Irán. Más de mil objetivos militares atacados en una sola jornada."
+      accent={true}
+    />
+    <KpiCard
+      label="Muertos en Líbano"
+      value="~700"
+      detail="En las dos semanas siguientes al 28 de febrero, los bombardeos israelíes en Líbano causaron cerca de 700 muertos."
+    />
+    <KpiCard
+      label="Operaciones PMF en 24h"
+      value="29"
+      detail="Las milicias iraquíes pro-iraníes reportaron 29 operaciones con drones y misiles en un solo día contra bases de EE.UU. en la región."
+    />
+  </StatGrid>
+
+  <EjeResistenciaMap client:load />
+
+  <ActFooter
+    source="ISW, Critical Threats, IDF, PROCOMER, Long War Journal. Datos al 13 de marzo de 2026."
+    note="La simulación muestra trayectorias representativas basadas en ataques documentados. Los arcos verdes representan ataques del eje de resistencia; los rojos, ataques de Israel y EE.UU."
+  />
+</ActShell>
+
+> El eje no es una jerarquía. Es una coalición de conveniencia.
+
+Eso lo hace más difícil de destruir — y más impredecible para Teherán.
+
+Hezbolá en Líbano es el aliado más cercano, casi una extensión directa del IRGC. Los Houthis en Yemen actúan con creciente autonomía y fabrican sus propias armas. Hamás tiene su propia agenda política. Las milicias iraquíes son una coalición de más de 50 grupos con lealtades variables.
+
+Cuando Jamenei murió el 28 de febrero, no había un botón central para apagar la red. Cada actor respondió según sus propios cálculos.
+
+<ActShell>
+  <ActHero
+    tag="ESTADO AL 13 DE MARZO"
+    title="Cuatro actores. Cuatro realidades."
+    subtitle="El mismo evento — la ofensiva del 28 de febrero — produjo respuestas muy distintas en cada nodo del eje."
+    align="left"
+  />
+
+  <StatGrid>
+    <KpiCard
+      label="Hezbolá · Líbano"
+      value="Guerra abierta"
+      detail="Desde el 2 de marzo, guerra abierta con Israel. Misiles contra bases israelíes, bombardeos masivos en Beirut y el sur del Líbano. Operativo pero con pérdidas sostenidas."
+      accent={true}
+    />
+    <KpiCard
+      label="Hamás · Gaza"
+      value="Bajo presión de desarme"
+      detail="Todavía controla la mitad occidental de Gaza, pero mediadores internacionales negocian un proceso de desmilitarización. Su capacidad militar está muy degradada."
+    />
+    <KpiCard
+      label="Houthis · Yemen"
+      value="Espera armada"
+      detail="Sin grandes ataques confirmados al mar Rojo desde el acuerdo de octubre de 2025, pero anunciaron que reanudarán si escala el conflicto con Irán."
+    />
+  </StatGrid>
+
+  <ActFooter
+    source="ISW Iran Update, Critical Threats, IDF, Long War Journal. Marzo 2026."
+    note="Las evaluaciones de estado son aproximadas y sujetas a cambio rápido dado el ritmo del conflicto."
+  />
+</ActShell>
+
+<Insight>
+Ningún actor principal — Irán, EE.UU., Israel, Hezbolá, milicias iraquíes — muestra intención clara de desescalar. La lógica de guerra regional sigue activa.
+</Insight>
+
+*Este acto visual usa datos de ISW, Critical Threats, IDF, Long War Journal y fuentes abiertas. El mapa es una simulación representativa — no un registro exacto de cada ataque.*

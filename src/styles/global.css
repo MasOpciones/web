@@ -982,7 +982,9 @@ main {
 
 .act-page-header {
   padding: clamp(2rem, 4vw, 4.5rem) 0 2.25rem;
-  max-width: 980px;
+  width: min(100%, 1120px);
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .act-page-meta {
@@ -1010,7 +1012,7 @@ main {
   margin: 0;
   max-width: 11ch;
   font-size: clamp(3rem, 10vw, 7.5rem);
-  line-height: 0.9;
+  line-height: 1.05;
   letter-spacing: -0.075em;
   font-weight: 800;
   text-wrap: balance;
@@ -1026,6 +1028,18 @@ main {
 
 .act-page-content {
   padding-bottom: 3rem;
+}
+
+.act-page-content > p,
+.act-page-content > blockquote,
+.act-page-content > h2,
+.act-page-content > h3,
+.act-page-content > ul,
+.act-page-content > ol,
+.act-page-content > .insight {
+  width: min(100%, 1120px);
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* stage del acto */
@@ -1635,6 +1649,9 @@ main {
 }
 
 .site-footer-minimal {
+  width: min(100%, 1120px);
+  margin-left: auto;
+  margin-right: auto;
   padding: 2rem 0 0.5rem;
   display: flex;
   justify-content: flex-start;
