@@ -20,7 +20,7 @@ function formatDate(date: string | Date | undefined) {
 }
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout title={title} description={description} canonical={Astro.url.href} ogType="article">
   <main class="act-page">
     <section class="act-page-shell">
       <div class="topbar">

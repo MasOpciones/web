@@ -2,9 +2,20 @@
 import "../styles/global.css";
 import { ClientRouter } from "astro:transitions";
 
+interface Props {
+  title?: string;
+  description?: string;
+  canonical?: string;
+  ogType?: string;
+  ogImage?: string;
+}
+
 const {
   title = "MásOpciones",
-  description = "Laboratorio visual de datos, análisis y explicaciones públicas."
+  description = "Laboratorio visual de datos, análisis y explicaciones públicas.",
+  canonical = Astro.url.href,
+  ogType = "website",
+  ogImage,
 } = Astro.props;
 ---
 
@@ -15,8 +26,22 @@ const {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=2" />
     <link rel="apple-touch-icon" href="/favicon.svg?v=2" />
+    <meta property="og:site_name" content="MásOpciones" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:url" content={canonical} />
+    {ogImage && (
+      <>
+        <meta property="og:image" content={ogImage} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+      </>
+    )}
+    <meta name="twitter:card" content={ogImage ? "summary_large_image" : "summary"} />
     <slot name="head" />
     <ClientRouter />
   </head>

@@ -4,6 +4,8 @@ const baseSchema = z.object({
   title: z.string(),
   description: z.string(),
   pubDate: z.coerce.date(),
+  updatedDate: z.coerce.date().optional(),
+  author: z.string().optional(),
   featured: z.boolean().optional(),
   ogImage: z.string().optional()
 });

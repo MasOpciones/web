@@ -5,10 +5,28 @@ interface Props {
   title: string;
   description?: string;
   pubDate?: string | Date;
+  updatedDate?: string | Date;
+  author?: string;
   ogImage?: string;
 }
 
-const { title, description, pubDate, ogImage } = Astro.props;
+const { title, description, pubDate, updatedDate, author = "MásOpciones", ogImage } = Astro.props;
+
+const ogImageAbsolute = ogImage ? `https://masopciones.blog${ogImage}` : undefined;
+const canonical = Astro.url.href;
+
+const jsonLd = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: title,
+  ...(description && { description }),
+  ...(pubDate && { datePublished: new Date(pubDate).toISOString() }),
+  dateModified: new Date(updatedDate ?? pubDate ?? Date.now()).toISOString(),
+  author: { "@type": "Person", name: author },
+  publisher: { "@type": "Organization", name: "MásOpciones", url: "https://masopciones.blog" },
+  url: canonical,
+  ...(ogImageAbsolute && { image: ogImageAbsolute }),
+});
 
 function formatDate(date: string | Date | undefined) {
   if (!date) return "";
@@ -20,20 +38,15 @@ function formatDate(date: string | Date | undefined) {
 }
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  ogType="article"
+  ogImage={ogImageAbsolute}
+>
   <Fragment slot="head">
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:type" content="article" />
-    <meta property="og:url" content={Astro.url} />
-    {ogImage && (
-      <>
-        <meta property="og:image" content={`https://www.masopciones.blog${ogImage}`} />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
-      </>
-    )}
-    <meta name="twitter:card" content="summary_large_image" />
+    <script is:inline type="application/ld+json" set:html={jsonLd} />
   </Fragment>
   <main>
     <section class="container" style="max-width: 720px;">
