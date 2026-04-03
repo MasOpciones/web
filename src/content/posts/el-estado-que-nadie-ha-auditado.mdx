@@ -12,7 +12,6 @@ import ActHeader from "../../components/viz/primitives/ActHeader.astro";
 import KpiCard from "../../components/viz/primitives/KpiCard.astro";
 import KpiRow from "../../components/viz/primitives/KpiRow.astro";
 import SourceNote from "../../components/viz/primitives/SourceNote.astro";
-import ActShell from "../../components/viz/acts/ActShell.astro";
 import ActHero from "../../components/viz/acts/ActHero.astro";
 import ActFooter from "../../components/viz/acts/ActFooter.astro";
 import StatGrid from "../../components/viz/acts/StatGrid.astro";
@@ -24,14 +23,6 @@ import GraficoROI from "../../components/viz/charts/GraficoROI.jsx";
 import GraficoEstructuraEncargo from "../../components/viz/charts/GraficoEstructuraEncargo.jsx";
 
 {/* ═══════════════════════════════════════════════════════════════ PREFACIO */}
-
-<ActShell>
-
-<ActHero
-  tag="Investigación MásOpciones"
-  title="El Estado que nadie ha auditado"
-  subtitle="Costa Rica tiene 332 instituciones públicas, gasta el porcentaje del PIB más alto de la OCDE en salarios, y nunca ha hecho un inventario serio de qué funciona y qué no. Esta investigación pregunta por qué — y qué haría falta para cambiarlo."
-/>
 
 Esta investigación nació de una pregunta simple: ¿por qué Costa Rica, con cuatro décadas de diagnósticos sobre el Estado, no ha podido reformarlo?
 
@@ -84,13 +75,9 @@ Los datasets utilizados en esta investigación están disponibles para descarga 
   Esta investigación no propone que el Estado sea pequeño. Propone que sea auditable — y que esa auditoría, a diferencia de todas las anteriores, venga de afuera.
 </Insight>
 
-</ActShell>
-
 ---
 
 {/* ═══════════════════════════════════════════════════════════════ ACTO 1 */}
-
-<ActShell>
 
 <ActHero
   tag="Acto 1 de 5"
@@ -189,13 +176,9 @@ Eso es lo que muestra el siguiente acto.
 
 <ActFooter />
 
-</ActShell>
-
 ---
 
 {/* ═══════════════════════════════════════════════════════════════ ACTO 2 */}
-
-<ActShell>
 
 <ActHero
   tag="Acto 2 de 5"
@@ -246,9 +229,11 @@ La cifra del 71.6% no es solo una estadística de gasto. Es una radiografía de 
 
 ---
 
-## Tres números que se refuerzan mutuamente
-
-El costo salarial no opera en el vacío. Opera junto con otros dos números que juntos describen el margen fiscal real del país — o la falta de él.
+<ActHeader
+  eyebrow="El contexto fiscal"
+  title="Tres números que se refuerzan mutuamente"
+  dek="El costo salarial no opera en el vacío. Los intereses de la deuda y la ineficiencia del gasto son del mismo orden de magnitud — y juntos describen el margen fiscal real del país."
+/>
 
 Los intereses de la deuda pública cerraron 2024 en ¢2.37 billones, equivalentes al 4.8% del PIB. Es el nivel más alto en 19 años. La deuda total llegó al 60.4% del PIB al cierre de 2025, activando el tramo más restrictivo de la regla fiscal.
 
@@ -292,13 +277,9 @@ El siguiente acto pone nombres propios a esa ineficiencia: sectores, institucion
 
 <ActFooter />
 
-</ActShell>
-
 ---
 
 {/* ═══════════════════════════════════════════════════════════════ ACTO 3 */}
-
-<ActShell>
 
 <ActHero
   tag="Acto 3 de 5"
@@ -457,13 +438,9 @@ Lo que el mapa de duplicidades muestra, entonces, no es solo ineficiencia. Muest
 
 <ActFooter />
 
-</ActShell>
-
 ---
 
 {/* ═══════════════════════════════════════════════════════════════ ACTO 4 */}
-
-<ActShell>
 
 <ActHero
   tag="Acto 4 de 5"
@@ -571,13 +548,9 @@ Y sin esa auditoría — sin saber con precisión qué hay en los 309,208 contra
 
 <ActFooter />
 
-</ActShell>
-
 ---
 
 {/* ═══════════════════════════════════════════════════════════════ ACTO 5 */}
-
-<ActShell>
 
 <ActHero
   tag="Acto 5 de 5"
@@ -631,9 +604,13 @@ Son tres pilares que se construyen en secuencia.
 
 *Pilar 3 — Mapa de estructura institucional.* Con los datos de los dos pilares anteriores: diseñar el mapa jurídico y operacional de qué fusionar, qué cerrar y en qué secuencia. Qué requiere mayoría simple, qué requiere dos tercios, qué requiere reforma constitucional. Los nueve sectores documentados por la CGR en 2022 son el punto de partida — pero el punto de llegada es un plan de implementación con costos, plazos y rutas jurídicas específicas, no otro listado de recomendaciones generales.
 
-<Insight>
-  La diferencia entre el pilar 3 de esta propuesta y los diagnósticos anteriores no es técnica. Es que este viene después de dos pilares de datos — nómina y compras — que ningún diagnóstico costarricense ha tenido antes. Las recomendaciones de estructura que se construyen sobre datos forenses son cualitativamente distintas a las que se construyen sobre análisis de mandatos.
-</Insight>
+<ActFrame>
+
+**Por qué el Pilar 3 es diferente a todos los diagnósticos anteriores**
+
+La diferencia no es técnica. Es que este viene después de dos pilares de datos — nómina y compras — que ningún diagnóstico costarricense ha tenido antes. Las recomendaciones de estructura que se construyen sobre datos forenses son cualitativamente distintas a las que se construyen sobre análisis de mandatos. Costa Rica ya tiene el análisis de mandatos. Lo que no ha tenido es los datos.
+
+</ActFrame>
 
 ---
 
@@ -724,8 +701,6 @@ Una auditoría externa no reforma el Estado. Produce los datos y la credibilidad
 Una auditoría externa tampoco es una privatización del Estado ni una entrega del diagnóstico a actores que no responden ante los costarricenses. El contrato, los términos de referencia, el acceso a la información y la publicación de resultados son decisiones del Estado costarricense. Las firmas son el instrumento, no el mandante.
 
 Y finalmente: esta propuesta no asume que todo lo que se encuentre será negativo. Un Estado que se audita con seriedad puede descubrir que algunos programas funcionan mejor de lo que los números agregados sugieren, que algunas instituciones duplicadas tienen capacidades que merecen ser conservadas, que algunas estructuras redundantes tienen razones jurídicas o históricas que una fusión rápida destruiría sin beneficio real. La auditoría forense no presupone resultados. Los produce.
-
-</ActShell>
 
 ---
 
