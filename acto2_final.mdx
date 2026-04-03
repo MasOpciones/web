@@ -1,0 +1,128 @@
+---
+title: "El Estado que nadie ha auditado"
+description: "Costa Rica tiene 332 instituciones públicas, gasta el 13.4% del PIB en salarios — el mayor de la OCDE — y nunca ha hecho un inventario serio de qué funciona y qué no."
+pubDate: 2026-04-01
+featured: true
+act: 2
+---
+
+import Insight from "../../components/Insight.astro";
+import DataPoint from "../../components/DataPoint.astro";
+import ActShell from "../../components/ActShell.astro";
+import ActHero from "../../components/ActHero.astro";
+import ActFooter from "../../components/ActFooter.astro";
+import KpiCard from "../../components/KpiCard.astro";
+import KpiRow from "../../components/KpiRow.astro";
+import SourceNote from "../../components/SourceNote.astro";
+import ActFrame from "../../components/ActFrame.astro";
+import GraficoConcentracionSalarial from "../../components/viz/charts/GraficoConcentracionSalarial.jsx";
+import GraficoDeudaInteresesIneficiencia from "../../components/viz/charts/GraficoDeudaInteresesIneficiencia.jsx";
+
+<ActShell act={2} title="Lo que cuesta">
+
+<ActHero
+  eyebrow="Acto 2 de 5"
+  title="Lo que cuesta"
+  subtitle="El problema no es que el Estado sea demasiado grande. Es que es demasiado caro por empleado — y eso no ocurrió por accidente."
+/>
+
+El problema no está en cuántas personas emplea el Estado costarricense — Noruega, Dinamarca y Finlandia tienen más empleados públicos per cápita. El problema está en cuánto pesa cada uno de esos empleos en el presupuesto. Y en esa métrica, Costa Rica no tiene equivalente en el mundo desarrollado.
+
+El costo promedio por plaza, en proporción al PIB, es significativamente mayor que en países con niveles de ingreso mucho más altos — el resultado de décadas en que los pluses e incentivos llegaron a igualar el salario base.
+
+<KpiRow>
+  <KpiCard
+    value="13.4%"
+    label="del PIB en remuneraciones"
+    note="¢6.66 billones anuales. CGR, informe de remuneraciones 2024."
+  />
+  <KpiCard
+    value="71.6%"
+    label="de los costos de producción del gobierno son salarios"
+    note="Primer lugar en toda la OCDE. Promedio OCDE: 42.1%. Government at a Glance 2025."
+  />
+  <KpiCard
+    value="309,208"
+    label="empleados públicos"
+    note="INEC ECE Q1 2024. Un aumento de 34,106 personas en un solo año — +12.4%."
+  />
+  <KpiCard
+    value="0.96"
+    label="relación incentivos / salario básico"
+    note="Por primera vez por debajo de 1.0 en décadas. Por cada colón de salario base, 96 céntimos en pluses."
+  />
+</KpiRow>
+
+---
+
+## El número que no tiene equivalente
+
+La cifra del 71.6% no es solo una estadística de gasto. Es una radiografía de cómo se construyó el empleo público costarricense durante décadas: cada negociación salarial añadió un plus, cada régimen especial consolidó sus propias reglas, cada institución autónoma definió sus incentivos. Costa Rica no llegó al primer lugar de la OCDE en concentración salarial por gastar más que todos en servicios públicos, sino porque la proporción de ese gasto que va a pagar a quienes trabajan en el Estado es la más alta del mundo desarrollado — lo que deja menos espacio para todo lo demás: infraestructura, inversión, programas sociales.
+
+<GraficoConcentracionSalarial client:load />
+
+<SourceNote>
+  Fuente: OCDE, Government at a Glance 2025. Indicador: remuneraciones como porcentaje de los costos de producción del gobierno general. Costa Rica: 71.6%. Promedio OCDE: 42.1%. México: ~71% (segundo lugar).
+</SourceNote>
+
+<Insight>
+  De cada colón que el gobierno costarricense gasta en producir servicios públicos, 71.6 céntimos van a salarios. En Noruega — con un Estado más grande y mejores servicios — ese número ronda el 25%. En Irlanda, está alrededor del 30%. La diferencia entre Costa Rica y esos países no está en cuántos empleados tienen, sino en cuánto pesa cada uno en el presupuesto.
+</Insight>
+
+---
+
+## Tres números que se refuerzan mutuamente
+
+El costo salarial no opera en el vacío. Opera junto con otros dos números que juntos describen el margen fiscal real del país — o la falta de él.
+
+Los intereses de la deuda pública cerraron 2024 en ¢2.37 billones, equivalentes al 4.8% del PIB. Es el nivel más alto en 19 años. La deuda total llegó al 60.4% del PIB al cierre de 2025, activando el tramo más restrictivo de la regla fiscal.
+
+El BID estima que la ineficiencia del gasto público costarricense equivale al 4.7% del PIB — aproximadamente ¢2.3 billones anuales. Es casi exactamente lo mismo que el país paga en intereses de la deuda. Y ambas cifras juntas son más de tres veces lo que el Estado invierte en infraestructura y capital en un año.
+
+<GraficoDeudaInteresesIneficiencia client:load />
+
+<SourceNote>
+  Fuentes: Ministerio de Hacienda, Cifras Fiscales a Diciembre 2024. BID, estimación de ineficiencia del gasto público en América Latina (2018), aplicada a Costa Rica: 4.7% del PIB. Deuda: Delfino / La Nación, cierre 2025.
+</SourceNote>
+
+<ActFrame>
+
+**El margen que casi no existe**
+
+El 95% del gasto del Gobierno Central ya está preasignado antes de que comience el año fiscal. Remuneraciones, intereses de la deuda, transferencias mandatorias a universidades y municipalidades, pensiones con cargo al Presupuesto Nacional. Lo que queda — el margen real para decidir cómo gastar — es casi nada.
+
+Eso tiene una consecuencia directa: cualquier crisis, cualquier necesidad de inversión, cualquier ajuste que requiera mover recursos, choca contra una pared de compromisos previos. El Estado no es inflexible por razones de voluntad individual. Es inflexible porque su estructura de gasto se construyó, capa por capa, para dejar muy poco espacio a la discrecionalidad.
+
+</ActFrame>
+
+---
+
+## Lo que el número no dice
+
+Hay una lectura fácil de estos datos que esta investigación quiere evitar: que el problema son los empleados públicos. No lo son. Ningún funcionario decide cuántas estructuras duplicadas existen, qué pluses se crearon hace treinta años o cómo se diseñó el sistema de pensiones. Esas son decisiones — o más frecuentemente, omisiones — de diseño institucional acumuladas durante décadas.
+
+El problema no es la gente. Es el sistema que no se ha revisado en conjunto.
+
+<DataPoint
+  value="¢2.3 billones"
+  label="ineficiencia anual estimada del gasto público"
+  note="BID, estimación para Costa Rica: 4.7% del PIB. Distribuida en servicios públicos de baja eficiencia, compras públicas con sobrecostos y programas con diseño deficiente. No existe un desglose oficial por componente."
+/>
+
+---
+
+## Si el problema fuera solo el monto
+
+Si la ineficiencia fuera solo de presupuesto — demasiado gasto en el lugar equivocado — bastaría reasignar recursos. Cortar aquí, invertir allá. Es lo que recomiendan los *spending reviews* que la OCDE propone para Costa Rica.
+
+Pero hay una capa más profunda que los números agregados no muestran: dónde específicamente se esconde esa ineficiencia. En qué instituciones, en qué contratos, en qué puestos. Esa pregunta no tiene respuesta oficial — porque el ejercicio de responderla con nombres concretos no se ha hecho.
+
+El siguiente acto pone nombres propios a esa ineficiencia: sectores, instituciones y estructuras duplicadas donde esos porcentajes se convierten en colones concretos.
+
+<ActFooter
+  nextAct={3}
+  nextTitle="Las duplicidades"
+  nextTeaser="La Contralora General presentó en 2022 un diagnóstico de duplicidades en 9 sectores del Estado. Identificó instituciones con mandatos superpuestos, créditos otorgados dos veces a las mismas personas, y 67 estructuras administrativas redundantes cuyo costo no se ha calculado."
+/>
+
+</ActShell>

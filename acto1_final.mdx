@@ -1,0 +1,130 @@
+---
+title: "El Estado que nadie ha auditado"
+description: "Costa Rica tiene 332 instituciones públicas, gasta el 13.4% del PIB en salarios — el mayor de la OCDE — y nunca ha hecho un inventario serio de qué funciona y qué no."
+pubDate: 2026-04-01
+featured: true
+act: 1
+---
+
+import Insight from "../../components/Insight.astro";
+import DataPoint from "../../components/DataPoint.astro";
+import ActShell from "../../components/ActShell.astro";
+import ActHero from "../../components/ActHero.astro";
+import ActFooter from "../../components/ActFooter.astro";
+import StatGrid from "../../components/StatGrid.astro";
+import KpiCard from "../../components/KpiCard.astro";
+import SourceNote from "../../components/SourceNote.astro";
+import ActFrame from "../../components/ActFrame.astro";
+import GraficoCrecimientoInstituciones from "../../components/viz/charts/GraficoCrecimientoInstituciones.jsx";
+import GraficoComposicionEstado from "../../components/viz/charts/GraficoComposicionEstado.jsx";
+
+<ActShell act={1} title="El inventario">
+
+<ActHero
+  eyebrow="Acto 1 de 5"
+  title="El inventario"
+  subtitle="El Estado creció por acumulación, no por diseño. Esa acumulación tiene implicaciones visibles en lo que cuesta mantenerlo."
+/>
+
+En 1950, Costa Rica tenía 98 instituciones públicas. Setenta y cinco años después, tiene 332. En el camino se crearon unas 370 entidades nuevas y solo 15 desaparecieron. Una tasa de cierre de 4% en tres cuartos de siglo no se parece a un sistema diseñado deliberadamente, sino a uno que ha crecido sin revisión periódica.
+
+Pero el detalle que termina de contar la historia no está en los años de expansión del Estado social. Está en la década que el país bautizó como "reforma del Estado".
+
+<StatGrid>
+  <KpiCard
+    value="332"
+    label="instituciones públicas"
+    note="MIDEPLAN, declaración ministra Fernández Delgado, abril 2024"
+  />
+  <KpiCard
+    value="4%"
+    label="tasa de cierre histórica"
+    note="Solo 15 de ~370 entidades creadas han desaparecido. PEN 2004."
+  />
+  <KpiCard
+    value="19"
+    label="ministerios del Ejecutivo"
+    note="Mismo número que Noruega y Dinamarca — países diez veces más ricos."
+  />
+  <KpiCard
+    value="82"
+    label="municipalidades y concejos"
+    note="Más todos los órganos adscritos, autónomas, empresas públicas y entes no estatales."
+  />
+</StatGrid>
+
+---
+
+## La paradoja de los noventa
+
+Entre 1990 y 2000 se crearon 84 instituciones públicas nuevas. Es el mayor salto de creación institucional en cualquier década desde 1900 — más que los sesenta, más que los setenta, cuando el Estado social costarricense estaba en su apogeo expansivo.
+
+Lo que hace ese número perturbador no es el tamaño. Es el momento: esa misma década, el país tenía un **Ministerio de Reforma del Estado**, estaba firmando Programas de Ajuste Estructural con el Banco Mundial, y el lenguaje oficial era de reducción, modernización y eficiencia.
+
+El Estado creció más durante el período en que oficialmente se intentaba reducirlo.
+
+<GraficoCrecimientoInstituciones client:load />
+
+<SourceNote>
+  Fuentes: Décimo Informe Estado de la Nación, "Instituciones Estatales en Costa Rica: un balance del período 1990–2003" (Alfaro, 2004). Academia de Centroamérica, "El sector público en Costa Rica: desafíos institucionales" (2016). Datos 2015–2024: MIDEPLAN.
+</SourceNote>
+
+<Insight>
+  La paradoja de los noventa no es un accidente histórico. Es el dato que más le cuesta explicar a cualquier relato simple sobre la reforma del Estado — y la pista más honesta sobre por qué ese relato simple no alcanza.
+</Insight>
+
+---
+
+## Lo que tiene adentro
+
+Las 332 instituciones no son un monolito. Tienen naturaleza jurídica distinta, grados de autonomía distintos y, crucialmente, niveles muy diferentes de protección legal frente a cualquier intento de reforma. Un inventario serio del Estado no solo cuenta cajas en un organigrama: distingue qué puede cambiarse por ley simple, qué requiere dos tercios y qué, en la práctica, está blindado.
+
+<GraficoComposicionEstado client:load />
+
+<SourceNote>
+  Fuente: MIDEPLAN, Organización del Sector Público Costarricense. Candado constitucional documentado en artículos 188–189 de la Constitución Política y jurisprudencia de la Sala Constitucional.
+</SourceNote>
+
+<ActFrame>
+
+**El candado constitucional**
+
+De las 332 instituciones, aproximadamente 70 a 80 tienen autonomía garantizada constitucionalmente — bancos del Estado, CCSS, ICE, universidades públicas, entre otras. Para suprimir o fusionar cualquiera de ellas se necesitan dos tercios de la Asamblea Legislativa. No una mayoría simple. Dos tercios. Esas 70–80 entidades, que representan entre el 20 y el 25% del total de instituciones, administran entre el 60 y el 70% del gasto público total. El Ejecutivo no puede, por decreto, fusionarlas, suprimirlas ni redirigir sus recursos. La Sala Constitucional lo ha anulado cada vez que se ha intentado.
+
+Cualquier reforma del Estado que ignore este candado — que proponga reducir instituciones sin distinguir su naturaleza jurídica — no es viable. No porque falten diagnósticos, sino porque no reconoce las reglas políticas que rigen a buena parte del aparato público. Eso tiene una consecuencia directa: cualquier proceso de revisión que no incorpore desde el inicio la lógica del candado está, en la práctica, diseñado para detenerse antes de llegar al núcleo del problema.
+
+</ActFrame>
+
+---
+
+## El número que nadie pudo defender
+
+En abril de 2024, la ministra de Planificación Laura Fernández Delgado compareció ante la Asamblea Legislativa. El proyecto en discusión proponía crear el Consejo Nacional de Productividad y Competitividad. La ministra se opuso con un argumento que resumió sin querer el estado del Estado:
+
+*"Este proyecto pretende crear una nueva institución pública — la número 333 de nuestro país — para hacer lo que ya se hace. Duplicaría funciones con entidades que ya existen bajo la rectoría del MEIC."*
+
+El diagnóstico era correcto. El Consejo no se creó. Pero las 332 instituciones que ya existían tampoco se revisaron.
+
+<DataPoint
+  value="333"
+  label="La institución que no se creó"
+  note="En abril 2024 la ministra de MIDEPLAN bloqueó la institución #333 argumentando que 'duplicaría funciones'. El diagnóstico sobre la duplicidad existe; la revisión sistemática de las 332 instituciones que ya tenemos, todavía no."
+/>
+
+---
+
+## Inventariar sirve para una sola cosa
+
+El inventario de un Estado — sus instituciones, sus mandatos, su estructura — no es un ejercicio académico. Sirve para responder una pregunta concreta: ¿cuánto cuesta mantener todo esto?
+
+La respuesta, en el caso de Costa Rica, no es simple. No es solo una cifra de presupuesto. Es una estructura de costo que, comparada con cualquier otro país de la OCDE, sitúa a Costa Rica en el primer lugar de una métrica que ningún país aspira a liderar.
+
+Eso es lo que muestra el siguiente acto.
+
+<ActFooter
+  nextAct={2}
+  nextTitle="Lo que cuesta"
+  nextTeaser="Costa Rica gasta el 13.4% del PIB en salarios públicos. De cada colón que el gobierno invierte en producir servicios, 71.6 céntimos van a remuneraciones. El promedio OCDE es 42.1. El país es número uno en esa métrica — y eso tampoco fue un diseño."
+/>
+
+</ActShell>

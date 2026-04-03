@@ -1,0 +1,81 @@
+---
+title: "El Estado que nadie ha auditado"
+description: "Costa Rica tiene 332 instituciones públicas, gasta el 13.4% del PIB en salarios — el mayor de la OCDE — y nunca ha hecho un inventario serio de qué funciona y qué no."
+pubDate: 2026-04-01
+featured: true
+act: 0
+---
+
+import Insight from "../../components/Insight.astro";
+import ActShell from "../../components/ActShell.astro";
+import ActHero from "../../components/ActHero.astro";
+import KpiCard from "../../components/KpiCard.astro";
+import KpiRow from "../../components/KpiRow.astro";
+import ActFooter from "../../components/ActFooter.astro";
+
+<ActShell act={0} title="El Estado que nadie ha auditado">
+
+<ActHero
+  eyebrow="Investigación MásOpciones"
+  title="El Estado que nadie ha auditado"
+  subtitle="Costa Rica tiene 332 instituciones públicas, gasta el porcentaje del PIB más alto de la OCDE en salarios, y nunca ha hecho un inventario serio de qué funciona y qué no. Esta investigación pregunta por qué — y qué haría falta para cambiarlo."
+/>
+
+Esta investigación nació de una pregunta simple: ¿por qué Costa Rica, con cuatro décadas de diagnósticos sobre el Estado, no ha podido reformarlo?
+
+No es una pregunta retórica. Tiene respuesta — y la respuesta no es la que suele circular en el debate público. La evidencia sugiere que el problema no está en la ausencia de diagnósticos ni en las personas dentro del sistema, sino en algo más estructural — algo que, una vez nombrado con precisión, tiene una respuesta concreta.
+
+La investigación está organizada en cinco actos que construyen uno sobre otro.
+
+<KpiRow>
+  <KpiCard
+    value="332"
+    label="instituciones públicas"
+    note="Acto 1 — El inventario"
+  />
+  <KpiCard
+    value="#1 OCDE"
+    label="en concentración salarial"
+    note="Acto 2 — Lo que cuesta"
+  />
+  <KpiCard
+    value="9 sectores"
+    label="con duplicidades documentadas"
+    note="Acto 3 — Las duplicidades"
+  />
+  <KpiCard
+    value="7 intentos"
+    label="de reforma desde 1985"
+    note="Acto 4 — Por qué siempre falla"
+  />
+</KpiRow>
+
+El **Acto 1** cuenta cómo el Estado llegó a tener 332 instituciones — no por diseño, sino por acumulación — y por qué la década con más crecimiento institucional fue exactamente la que el país bautizó como "reforma del Estado".
+
+El **Acto 2** entra en lo que cuesta mantenerlo. Costa Rica es el país número uno de la OCDE en concentración salarial: de cada colón que el gobierno gasta en producir servicios públicos, 71.6 céntimos van a remuneraciones. El promedio de la OCDE es 42.1.
+
+El **Acto 3** pone nombres concretos a la ineficiencia. En 2022, la Contralora General documentó duplicidades en 9 sectores del Estado. El diagnóstico fue claro y no produjo cambios estructurales.
+
+El **Acto 4** documenta el patrón: no es la primera vez. Costa Rica ha intentado reformar su Estado al menos siete veces desde 1985. Cada intento llegó hasta el borde y se detuvo — por razones que responden a una dinámica estructural, no a episodios aislados.
+
+El **Acto 5** propone una respuesta. No otro diagnóstico: el mecanismo que hace posible que un diagnóstico se convierta en acción.
+
+---
+
+**Una nota sobre los datos**
+
+Todos los datos verificables de esta investigación tienen fuente primaria citada. Tres cifras — el costo de las estructuras redundantes, el pasivo actuarial consolidado de los regímenes especiales de pensiones, y la serie histórica de instituciones por gobierno — no existen como cifras oficiales únicas. En esos casos, la investigación construyó estimaciones con metodología abierta y documentada. En los tres casos, que esa cifra no exista como dato oficial dice algo sobre el Estado que esta investigación documenta.
+
+Los datasets utilizados en esta investigación están disponibles para descarga y verificación independiente.
+
+<Insight>
+  Esta investigación no propone que el Estado sea pequeño. Propone que sea auditable — y que esa auditoría, a diferencia de todas las anteriores, venga de afuera.
+</Insight>
+
+<ActFooter
+  nextAct={1}
+  nextTitle="El inventario"
+  nextTeaser="En 1950, Costa Rica tenía 98 instituciones públicas. Setenta y cinco años después tiene 332. En el camino se crearon unas 370 entidades nuevas y solo 15 desaparecieron. Una tasa de cierre de 4% en tres cuartos de siglo no se parece a un diseño: se parece a un inventario que nadie revisa."
+/>
+
+</ActShell>

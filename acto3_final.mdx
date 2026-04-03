@@ -1,0 +1,192 @@
+---
+title: "El Estado que nadie ha auditado"
+description: "Costa Rica tiene 332 instituciones públicas, gasta el 13.4% del PIB en salarios — el mayor de la OCDE — y nunca ha hecho un inventario serio de qué funciona y qué no."
+pubDate: 2026-04-01
+featured: true
+act: 3
+---
+
+import Insight from "../../components/Insight.astro";
+import DataPoint from "../../components/DataPoint.astro";
+import ActShell from "../../components/ActShell.astro";
+import ActHero from "../../components/ActHero.astro";
+import ActFooter from "../../components/ActFooter.astro";
+import KpiCard from "../../components/KpiCard.astro";
+import KpiRow from "../../components/KpiRow.astro";
+import SourceNote from "../../components/SourceNote.astro";
+import ActFrame from "../../components/ActFrame.astro";
+import GraficoDuplicidades from "../../components/viz/charts/GraficoDuplicidades.jsx";
+import GraficoCostosDocumentados from "../../components/viz/charts/GraficoCostosDocumentados.jsx";
+
+<ActShell act={3} title="Las duplicidades">
+
+<ActHero
+  eyebrow="Acto 3 de 5"
+  title="Las duplicidades"
+  subtitle="La fragmentación institucional no es abstracta. Tiene nombres, tiene sectores y tiene costos que se pueden medir — cuando alguien se toma la molestia de medirlos."
+/>
+
+Los números del acto anterior son reales, pero flotan. No muestran dónde vive exactamente ese costo.
+
+En julio de 2022, la Contralora General de la República compareció ante la Asamblea Legislativa con un diagnóstico que ponía nombres propios a esa ineficiencia. Identificó duplicidades en 9 sectores del Estado costarricense — instituciones con mandatos superpuestos, recursos dispersos entre entidades que hacen variaciones de lo mismo, coordinación que existe en el papel pero no en la práctica. El diagnóstico era técnicamente sólido. Y la CGR no tenía atribuciones para actuar sobre él: auditar y diagnosticar es su mandato; fusionar instituciones y reformar estructuras es responsabilidad de la Asamblea Legislativa y del Poder Ejecutivo.
+
+<KpiRow>
+  <KpiCard
+    value="9"
+    label="sectores con duplicidades documentadas"
+    note="CGR, presentación ante Asamblea Legislativa, julio 2022."
+  />
+  <KpiCard
+    value="67"
+    label="órganos adscritos con estructuras redundantes"
+    note="Proveeduría, RRHH, asesoría legal y auditoría interna duplicadas en cada uno. CGR 2022."
+  />
+  <KpiCard
+    value="¢184,000 M"
+    label="en créditos productivos otorgados dos veces"
+    note="693 personas con crédito duplicado. 0.4% del PIB. CGR, informe DFOE-EC-IF-00006-2022."
+  />
+  <KpiCard
+    value="91%"
+    label="del fideicomiso CNP-BCR, agotado"
+    note="Junto con ¢1,096 millones en pérdidas de inventario en 2024. CGR / informes CNP."
+  />
+</KpiRow>
+
+---
+
+## El mapa de las nueve superposiciones
+
+La Contralora no presentó ante la Asamblea una teoría. Presentó un mapa. Nueve sectores del Estado costarricense donde las funciones se repiten, los recursos se dispersan y la rendición de cuentas se diluye precisamente porque hay demasiados dueños del mismo problema.
+
+<GraficoDuplicidades client:load />
+
+<SourceNote>
+  Fuente: Contraloría General de la República, presentación ante la Comisión Especial de la Asamblea Legislativa para la Reforma del Estado, julio 2022. Los sectores y las instituciones listadas corresponden al diagnóstico oficial de la CGR.
+</SourceNote>
+
+El sector **agropecuario** es el caso que mejor ilustra la lógica. El Ministerio de Agricultura y Ganadería (MAG) tiene el mandato rector. El Consejo Nacional de Producción (CNP) regula mercados y administra reservas estratégicas de granos básicos. El Instituto de Desarrollo Rural (INDER) atiende comunidades rurales. El Programa Integral de Mercadeo Agropecuario (PIMA) administra el mercado mayorista. El Instituto Nacional de Innovación y Transferencia en Tecnología Agropecuaria (INTA) hace investigación y extensión.
+
+Cinco instituciones. Cinco juntas directivas. Cinco auditorías internas. Cinco unidades de proveeduría. Cinco departamentos de recursos humanos. Cada una con su propio edificio, su propio sistema informático, su propio proceso de contratación. Y un solo agricultor al que, en principio, todas sirven.
+
+La protección **social** replica el patrón a mayor escala. La CCSS administra el Régimen No Contributivo. El IMAS atiende pobreza extrema. El PANI protege a menores en riesgo. El CONAPAM atiende adultos mayores. La JPS administra otro régimen de pensiones no contributivas. El CONAPDIS protege personas con discapacidad. Los CEN-CINAI atienden primera infancia en vulnerabilidad.
+
+Siete instituciones que comparten, en distintas proporciones, la misma población meta: las familias costarricenses en condición de pobreza. Sin un sistema integrado de información, sin criterios unificados de focalización, sin un responsable único que responda por el resultado.
+
+<Insight>
+  La fragmentación no siempre nació de mala planificación. Muchas de estas instituciones se crearon en momentos distintos para resolver problemas reales. El problema es que nunca se revisaron en conjunto — y esa omisión tiene precio, año tras año, en servicios que cuestan más de lo que producen.
+</Insight>
+
+Los otros siete sectores del diagnóstico de la CGR muestran variaciones del mismo patrón, agrupadas en tres lógicas distintas.
+
+En los sectores de **infraestructura y movilidad**, la superposición opera sobre activos físicos compartidos: el MOPT comparte funciones de conservación vial con CONAVI y funciones de transporte público con el CTP, sin una autoridad única que responda por los resultados de red. En **energía**, el ICE coexiste con empresas municipales y cooperativas sin una ley marco integradora que defina jerarquías y responsabilidades.
+
+En los sectores con **población meta superpuesta**, las tensiones son de equidad y eficiencia simultáneamente. En **pensiones**, cuatro regímenes — IVM-CCSS, Poder Judicial, MEP, Hacienda — operan con reglas y beneficios diferentes para poblaciones equivalentes, generando inequidades que nadie diseñó pero que tampoco nadie ha corregido. En **educación y formación**, el MEP, el INA y CONAPE tienen mandatos que se superponen en formación técnica; egresados del mismo programa pueden ser contados simultáneamente en las estadísticas de dos instituciones.
+
+En los sectores de **ordenamiento territorial**, el problema es de jerarquía sin resolver. En **urbanismo**, el INVU, MIDEPLAN y el ICT comparten competencias sin una autoridad rectora clara. En **vivienda**, el MIVAH, el INVU y el BANHVI convergen en el Sistema Financiero Nacional para la Vivienda sin que ninguno tenga responsabilidad exclusiva sobre los resultados. En **ambiente**, la SETENA y múltiples comisiones sectoriales tienen mecanismos de coordinación que existen en los reglamentos pero no en la práctica.
+
+En todos los casos, la constante es la misma: demasiadas instituciones alrededor del mismo problema y ninguna responsable única de los resultados.
+
+---
+
+## Tres casos con cifras exactas
+
+La superposición de mandatos es costosa por definición — más estructura para el mismo resultado. Pero en tres casos el diagnóstico de la CGR va más allá del análisis de mandatos: hay cifras concretas, auditadas, que muestran el costo en colones.
+
+<GraficoCostosDocumentados client:load />
+
+<SourceNote>
+  Fuentes: CGR, informe DFOE-EC-IF-00006-2022 (créditos duplicados). CGR, informes de auditoría al CNP 2022–2024. Metodología de estimación para estructuras redundantes: ver nota metodológica al pie.
+</SourceNote>
+
+**El CNP y el costo del inventario sin dueño**
+
+El Consejo Nacional de Producción existe para estabilizar mercados de granos básicos y garantizar el abastecimiento nacional. Tiene un mandato claro. Tiene presupuesto. Tiene bodegas.
+
+Entre 2022 y 2025, el CNP desechó 6 toneladas de arroz y 3.7 toneladas de frijoles — productos comprados con fondos públicos, almacenados, y destruidos antes de llegar a ningún consumidor. En 2024 registró ¢1,096 millones en pérdidas de inventario. El fideicomiso que le permite comprar a futuro en el mercado de capitales — el fideicomiso CNP-BCR — llegó al año con el 91% de su capacidad consumida.
+
+Esto no es una irregularidad aislada. Es el resultado observable de una institución cuyo diseño responde a condiciones económicas distintas a las actuales, que opera en un mercado que ya no responde a los supuestos de su mandato, pero que no ha sido revisada porque revisarla implicaría decidir qué hacer con ella — y esa decisión requiere voluntad política que hasta ahora no ha aparecido.
+
+<DataPoint
+  value="¢1,096 M"
+  label="en pérdidas de inventario del CNP, solo en 2024"
+  note="Más 6 toneladas de arroz y 3.7 toneladas de frijoles desechadas entre 2022 y 2025. Fideicomiso CNP-BCR al 91% de capacidad consumida. Fuente: informes CGR y CNP."
+/>
+
+**Los 693 que recibieron el mismo crédito dos veces**
+
+En 2022 la CGR publicó el informe DFOE-EC-IF-00006-2022 sobre el sistema de financiamiento al sector productivo. Lo que encontró no era una omisión técnica menor.
+
+Seiscientas noventa y tres personas habían recibido créditos de dos fuentes distintas del sistema público — simultáneamente, para el mismo propósito, en condiciones subsidiadas por el Estado — sin que ningún sistema de control lo detectara. El monto total: ¢183,972 millones. El 0.4% del PIB del año. Dentro de ese universo, 10 beneficiarios concentraron 684 créditos individuales.
+
+El problema no era que el crédito productivo existiera. El problema era que el sistema no tenía — ni tiene — un registro integrado que impida que los recursos lleguen dos veces al mismo destino mientras otros productores quedan sin acceso.
+
+<ActFrame>
+
+**El sistema que no se habla consigo mismo**
+
+Los créditos duplicados documentados por la CGR no ocurrieron porque nadie vigilaba. Ocurrieron porque las instituciones que otorgan financiamiento productivo en Costa Rica — banca pública, fondos de desarrollo, fideicomisos sectoriales — operan en compartimentos separados, sin una base de datos integrada de beneficiarios.
+
+Ese problema técnico tiene un nombre institucional: es el resultado de un sistema diseñado por acumulación, donde cada entidad creada en su momento incorporó sus propios sistemas, sus propios criterios y sus propias reglas. Integrarlos requeriría una decisión coordinada que ninguna de las partes tiene incentivos para impulsar por sí sola — porque cualquier integración implica ceder algo de control.
+
+</ActFrame>
+
+**Las 67 estructuras que nadie ha sumado**
+
+La CGR identificó 67 órganos adscritos que replican, cada uno, las mismas cuatro funciones de soporte: proveeduría institucional, recursos humanos, asesoría legal y auditoría interna. Son funciones necesarias en cualquier institución. La pregunta es si deben existir 67 veces, por separado, cuando la entidad rectora del sector ya las tiene.
+
+No existe una estimación oficial del costo de esas 67 estructuras. Ni la CGR, ni MIDEPLAN, ni el Ministerio de Hacienda han publicado una cifra consolidada. Para construir un piso referencial, esta investigación usó los salarios promedio del régimen general de empleo público para los cuatro puestos mínimos documentados por la CGR en cada estructura — más las cargas sociales correspondientes. La cifra resultante es un **piso conservador**: solo incluye cuatro puestos por estructura, no incluye bienes y servicios, infraestructura física, sistemas informáticos ni personal de apoyo secundario. El costo real es mayor. Nadie sabe cuánto más, porque nadie lo ha calculado.
+
+<DataPoint
+  value="₡6,331 M"
+  label="costo mínimo estimado de las 67 estructuras redundantes"
+  note="Estimación propia con salarios promedio MIDEPLAN/Servicio Civil para 4 puestos de soporte por estructura: proveeduría, RRHH, asesoría legal y auditoría interna, más cargas sociales del 26%. Piso conservador: no incluye bienes y servicios, infraestructura ni personal adicional. No existe cifra oficial — esa ausencia es parte del diagnóstico. Ver nota metodológica."
+/>
+
+---
+
+## El diagnóstico que nadie recogió
+
+La Contralora presentó este mapa en julio de 2022. La Comisión Legislativa para la Reforma del Estado celebró audiencias. Los sectores desfilaron. Los informes se archivaron.
+
+Ninguna ley surgió de ese proceso. Ninguna institución fue fusionada. Ninguna estructura de soporte fue consolidada. Dos años después, los 9 sectores siguen operando con las mismas superposiciones. El fideicomiso del CNP siguió consumiéndose. Los créditos duplicados siguieron sin un sistema integrado que los impidiera. Las 67 unidades de soporte separadas siguieron operando sin integración, bajo las mismas condiciones que el diagnóstico documentó.
+
+Esto no es una crítica a la CGR — hizo exactamente lo que le corresponde. La pregunta que el diagnóstico dejó abierta no era técnica: era política. Y la respuesta política no llegó.
+
+<Insight>
+  Costa Rica no tiene un déficit de diagnósticos. Tiene cuatro décadas de ellos. Lo que no ha tenido — todavía — es la arquitectura que convierte un diagnóstico en acción sin que el propio aparato lo neutralice en el proceso.
+</Insight>
+
+---
+
+## El regreso del candado
+
+Aquí es donde el Acto 1 y el Acto 3 se encuentran.
+
+El Acto 1 describió el candado constitucional: las 70 a 80 instituciones con autonomía garantizada por los artículos 188 y 189 de la Constitución Política. Para tocarlas se necesitan dos tercios de la Asamblea. El Ejecutivo no puede, por decreto, fusionarlas ni redirigir sus recursos. La Sala Constitucional lo ha dejado claro cada vez que se ha intentado.
+
+Ahora el mapa de duplicidades vuelve sobre ese candado con nombres concretos.
+
+De los 9 sectores con duplicidades documentadas, las instituciones con mayor grado de superposición funcional son, en su mayoría, autónomas con protección constitucional fuerte: la CCSS, el ICE, las universidades públicas, el BANHVI, el IMAS. No son entidades que el Ejecutivo pueda reorganizar con una directriz presidencial. No son estructuras que un decreto de austeridad pueda consolidar. Son instituciones que, para ser reformadas de fondo, requieren exactamente el consenso político que hasta ahora no ha sido posible construir.
+
+<ActFrame>
+
+**Por qué el candado importa en el Acto 3**
+
+Las instituciones con candado constitucional no son todas el problema — muchas de ellas entregan servicios esenciales de alta calidad.
+
+El candado protege a las instituciones de la arbitrariedad política. El mismo mecanismo las protege de la revisión sistemática. Esas dos cosas no son separables. Y lo que no se puede tocar representa entre el 60 y el 70% del gasto público total.
+
+Eso no es un argumento para eliminar la autonomía constitucional. Es un argumento para que cualquier proceso de revisión tenga el nivel de credibilidad y legitimidad política suficiente para que sus recomendaciones sean adoptadas voluntariamente — o para construir el consenso legislativo de dos tercios que la Constitución exige.
+
+</ActFrame>
+
+Lo que el mapa de duplicidades muestra, entonces, no es solo ineficiencia. Muestra la razón por la que la ineficiencia persiste: está incrustada en instituciones que, por diseño constitucional, solo pueden reformarse con un nivel de consenso que los diagnósticos internos no tienen la capacidad de generar. Los próximos cuarenta años de historia política de Costa Rica muestran qué ocurre cuando se intenta construir ese consenso solo con informes internos.
+
+<ActFooter
+  nextAct={4}
+  nextTitle="Por qué siempre falla"
+  nextTeaser="No es que Costa Rica no haya intentado reformar el Estado. Lo ha intentado al menos siete veces desde 1985. El patrón de fracaso tiene una causa raíz identificable — y no es falta de voluntad política. Es que todos los intentos han sido internos."
+/>
+
+</ActShell>

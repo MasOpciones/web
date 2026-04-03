@@ -1,0 +1,742 @@
+---
+title: "El Estado que nadie ha auditado"
+description: "Costa Rica tiene 332 instituciones públicas, gasta el 13.4% del PIB en salarios — el mayor de la OCDE — y nunca ha hecho un inventario serio de qué funciona y qué no."
+pubDate: 2026-04-01
+featured: true
+---
+
+import Insight from "../../components/Insight.astro";
+import DataPoint from "../../components/DataPoint.astro";
+import ActFrame from "../../components/viz/primitives/ActFrame.astro";
+import ActHeader from "../../components/viz/primitives/ActHeader.astro";
+import KpiCard from "../../components/viz/primitives/KpiCard.astro";
+import KpiRow from "../../components/viz/primitives/KpiRow.astro";
+import SourceNote from "../../components/viz/primitives/SourceNote.astro";
+import ActShell from "../../components/viz/acts/ActShell.astro";
+import ActHero from "../../components/viz/acts/ActHero.astro";
+import ActFooter from "../../components/viz/acts/ActFooter.astro";
+import StatGrid from "../../components/viz/acts/StatGrid.astro";
+import GraficoConcentracionSalarial from "../../components/viz/charts/GraficoConcentracionSalarial.jsx";
+import GraficoCrecimientoInstituciones from "../../components/viz/charts/GraficoCrecimientoInstituciones.jsx";
+import GraficoTimelineReformas from "../../components/viz/charts/GraficoTimelineReformas.jsx";
+import GraficoColombia from "../../components/viz/charts/GraficoColombia.jsx";
+import GraficoROI from "../../components/viz/charts/GraficoROI.jsx";
+import GraficoEstructuraEncargo from "../../components/viz/charts/GraficoEstructuraEncargo.jsx";
+
+{/* ═══════════════════════════════════════════════════════════════ PREFACIO */}
+
+<ActShell>
+
+<ActHero
+  tag="Investigación MásOpciones"
+  title="El Estado que nadie ha auditado"
+  subtitle="Costa Rica tiene 332 instituciones públicas, gasta el porcentaje del PIB más alto de la OCDE en salarios, y nunca ha hecho un inventario serio de qué funciona y qué no. Esta investigación pregunta por qué — y qué haría falta para cambiarlo."
+/>
+
+Esta investigación nació de una pregunta simple: ¿por qué Costa Rica, con cuatro décadas de diagnósticos sobre el Estado, no ha podido reformarlo?
+
+No es una pregunta retórica. Tiene respuesta — y la respuesta no es la que suele circular en el debate público. La evidencia sugiere que el problema no está en la ausencia de diagnósticos ni en las personas dentro del sistema, sino en algo más estructural — algo que, una vez nombrado con precisión, tiene una respuesta concreta.
+
+La investigación está organizada en cinco actos que construyen uno sobre otro.
+
+<KpiRow>
+  <KpiCard
+    value="332"
+    label="instituciones públicas"
+    detail="Acto 1 — El inventario"
+  />
+  <KpiCard
+    value="#1 OCDE"
+    label="en concentración salarial"
+    detail="Acto 2 — Lo que cuesta"
+  />
+  <KpiCard
+    value="9 sectores"
+    label="con duplicidades documentadas"
+    detail="Acto 3 — Las duplicidades"
+  />
+  <KpiCard
+    value="7 intentos"
+    label="de reforma desde 1985"
+    detail="Acto 4 — Por qué siempre falla"
+  />
+</KpiRow>
+
+El **Acto 1** cuenta cómo el Estado llegó a tener 332 instituciones — no por diseño, sino por acumulación — y por qué la década con más crecimiento institucional fue exactamente la que el país bautizó como "reforma del Estado".
+
+El **Acto 2** entra en lo que cuesta mantenerlo. Costa Rica es el país número uno de la OCDE en concentración salarial: de cada colón que el gobierno gasta en producir servicios públicos, 71.6 céntimos van a remuneraciones. El promedio de la OCDE es 42.1.
+
+El **Acto 3** pone nombres concretos a la ineficiencia. En 2022, la Contralora General documentó duplicidades en 9 sectores del Estado. El diagnóstico fue claro y no produjo cambios estructurales.
+
+El **Acto 4** documenta el patrón: no es la primera vez. Costa Rica ha intentado reformar su Estado al menos siete veces desde 1985. Cada intento llegó hasta el borde y se detuvo — por razones que responden a una dinámica estructural, no a episodios aislados.
+
+El **Acto 5** propone una respuesta. No otro diagnóstico: el mecanismo que hace posible que un diagnóstico se convierta en acción.
+
+---
+
+**Una nota sobre los datos**
+
+Todos los datos verificables de esta investigación tienen fuente primaria citada. Tres cifras — el costo de las estructuras redundantes, el pasivo actuarial consolidado de los regímenes especiales de pensiones, y la serie histórica de instituciones por gobierno — no existen como cifras oficiales únicas. En esos casos, la investigación construyó estimaciones con metodología abierta y documentada. En los tres casos, que esa cifra no exista como dato oficial dice algo sobre el Estado que esta investigación documenta.
+
+Los datasets utilizados en esta investigación están disponibles para descarga y verificación independiente.
+
+<Insight>
+  Esta investigación no propone que el Estado sea pequeño. Propone que sea auditable — y que esa auditoría, a diferencia de todas las anteriores, venga de afuera.
+</Insight>
+
+</ActShell>
+
+---
+
+{/* ═══════════════════════════════════════════════════════════════ ACTO 1 */}
+
+<ActShell>
+
+<ActHero
+  tag="Acto 1 de 5"
+  title="El inventario"
+  subtitle="El Estado creció por acumulación, no por diseño. Esa acumulación tiene implicaciones visibles en lo que cuesta mantenerlo."
+/>
+
+En 1950, Costa Rica tenía 98 instituciones públicas. Setenta y cinco años después, tiene 332. En el camino se crearon unas 370 entidades nuevas y solo 15 desaparecieron. Una tasa de cierre de 4% en tres cuartos de siglo no se parece a un sistema diseñado deliberadamente, sino a uno que ha crecido sin revisión periódica.
+
+Pero el detalle que termina de contar la historia no está en los años de expansión del Estado social. Está en la década que el país bautizó como "reforma del Estado".
+
+<StatGrid>
+  <KpiCard
+    value="332"
+    label="instituciones públicas"
+    detail="MIDEPLAN, declaración ministra Fernández Delgado, abril 2024"
+  />
+  <KpiCard
+    value="4%"
+    label="tasa de cierre histórica"
+    detail="Solo 15 de ~370 entidades creadas han desaparecido. PEN 2004."
+  />
+  <KpiCard
+    value="19"
+    label="ministerios del Ejecutivo"
+    detail="Mismo número que Noruega y Dinamarca — países diez veces más ricos."
+  />
+  <KpiCard
+    value="82"
+    label="municipalidades y concejos"
+    detail="Más todos los órganos adscritos, autónomas, empresas públicas y entes no estatales."
+  />
+</StatGrid>
+
+---
+
+## La paradoja de los noventa
+
+Entre 1990 y 2000 se crearon 84 instituciones públicas nuevas. Es el mayor salto de creación institucional en cualquier década desde 1900 — más que los sesenta, más que los setenta, cuando el Estado social costarricense estaba en su apogeo expansivo.
+
+Lo que hace ese número perturbador no es el tamaño. Es el momento: esa misma década, el país tenía un **Ministerio de Reforma del Estado**, estaba firmando Programas de Ajuste Estructural con el Banco Mundial, y el lenguaje oficial era de reducción, modernización y eficiencia.
+
+El Estado creció más durante el período en que oficialmente se intentaba reducirlo.
+
+<GraficoCrecimientoInstituciones client:load />
+
+<SourceNote note={'Fuentes: Décimo Informe Estado de la Nación, "Instituciones Estatales en Costa Rica: un balance del período 1990–2003" (Alfaro, 2004). Academia de Centroamérica, "El sector público en Costa Rica: desafíos institucionales" (2016). Datos 2015–2024: MIDEPLAN.'} />
+
+<Insight>
+  La paradoja de los noventa no es un accidente histórico. Es el dato que más le cuesta explicar a cualquier relato simple sobre la reforma del Estado — y la pista más honesta sobre por qué ese relato simple no alcanza.
+</Insight>
+
+---
+
+## Lo que tiene adentro
+
+Las 332 instituciones no son un monolito. Tienen naturaleza jurídica distinta, grados de autonomía distintos y, crucialmente, niveles muy diferentes de protección legal frente a cualquier intento de reforma. Un inventario serio del Estado no solo cuenta cajas en un organigrama: distingue qué puede cambiarse por ley simple, qué requiere dos tercios y qué, en la práctica, está blindado.
+
+<SourceNote note="Fuente: MIDEPLAN, Organización del Sector Público Costarricense. Candado constitucional documentado en artículos 188–189 de la Constitución Política y jurisprudencia de la Sala Constitucional." />
+
+<ActFrame>
+
+**El candado constitucional**
+
+De las 332 instituciones, aproximadamente 70 a 80 tienen autonomía garantizada constitucionalmente — bancos del Estado, CCSS, ICE, universidades públicas, entre otras. Para suprimir o fusionar cualquiera de ellas se necesitan dos tercios de la Asamblea Legislativa. No una mayoría simple. Dos tercios. Esas 70–80 entidades, que representan entre el 20 y el 25% del total de instituciones, administran entre el 60 y el 70% del gasto público total. El Ejecutivo no puede, por decreto, fusionarlas, suprimirlas ni redirigir sus recursos. La Sala Constitucional lo ha anulado cada vez que se ha intentado.
+
+Cualquier reforma del Estado que ignore este candado — que proponga reducir instituciones sin distinguir su naturaleza jurídica — no es viable. No porque falten diagnósticos, sino porque no reconoce las reglas políticas que rigen a buena parte del aparato público. Eso tiene una consecuencia directa: cualquier proceso de revisión que no incorpore desde el inicio la lógica del candado está, en la práctica, diseñado para detenerse antes de llegar al núcleo del problema.
+
+</ActFrame>
+
+---
+
+## El número que nadie pudo defender
+
+En abril de 2024, la ministra de Planificación Laura Fernández Delgado compareció ante la Asamblea Legislativa. El proyecto en discusión proponía crear el Consejo Nacional de Productividad y Competitividad. La ministra se opuso con un argumento que resumió sin querer el estado del Estado:
+
+*"Este proyecto pretende crear una nueva institución pública — la número 333 de nuestro país — para hacer lo que ya se hace. Duplicaría funciones con entidades que ya existen bajo la rectoría del MEIC."*
+
+El diagnóstico era correcto. El Consejo no se creó. Pero las 332 instituciones que ya existían tampoco se revisaron.
+
+<DataPoint
+  value="333"
+  label="La institución que no se creó"
+  note="En abril 2024 la ministra de MIDEPLAN bloqueó la institución #333 argumentando que 'duplicaría funciones'. El diagnóstico sobre la duplicidad existe; la revisión sistemática de las 332 instituciones que ya tenemos, todavía no."
+/>
+
+---
+
+## Inventariar sirve para una sola cosa
+
+El inventario de un Estado — sus instituciones, sus mandatos, su estructura — no es un ejercicio académico. Sirve para responder una pregunta concreta: ¿cuánto cuesta mantener todo esto?
+
+La respuesta, en el caso de Costa Rica, no es simple. No es solo una cifra de presupuesto. Es una estructura de costo que, comparada con cualquier otro país de la OCDE, sitúa a Costa Rica en el primer lugar de una métrica que ningún país aspira a liderar.
+
+Eso es lo que muestra el siguiente acto.
+
+<ActFooter />
+
+</ActShell>
+
+---
+
+{/* ═══════════════════════════════════════════════════════════════ ACTO 2 */}
+
+<ActShell>
+
+<ActHero
+  tag="Acto 2 de 5"
+  title="Lo que cuesta"
+  subtitle="El problema no es que el Estado sea demasiado grande. Es que es demasiado caro por empleado — y eso no ocurrió por accidente."
+/>
+
+El problema no está en cuántas personas emplea el Estado costarricense — Noruega, Dinamarca y Finlandia tienen más empleados públicos per cápita. El problema está en cuánto pesa cada uno de esos empleos en el presupuesto. Y en esa métrica, Costa Rica no tiene equivalente en el mundo desarrollado.
+
+El costo promedio por plaza, en proporción al PIB, es significativamente mayor que en países con niveles de ingreso mucho más altos — el resultado de décadas en que los pluses e incentivos llegaron a igualar el salario base.
+
+<KpiRow>
+  <KpiCard
+    value="13.4%"
+    label="del PIB en remuneraciones"
+    detail="¢6.66 billones anuales. CGR, informe de remuneraciones 2024."
+  />
+  <KpiCard
+    value="71.6%"
+    label="de los costos de producción del gobierno son salarios"
+    detail="Primer lugar en toda la OCDE. Promedio OCDE: 42.1%. Government at a Glance 2025."
+  />
+  <KpiCard
+    value="309,208"
+    label="empleados públicos"
+    detail="INEC ECE Q1 2024. Un aumento de 34,106 personas en un solo año — +12.4%."
+  />
+  <KpiCard
+    value="0.96"
+    label="relación incentivos / salario básico"
+    detail="Por primera vez por debajo de 1.0 en décadas. Por cada colón de salario base, 96 céntimos en pluses."
+  />
+</KpiRow>
+
+---
+
+## El número que no tiene equivalente
+
+La cifra del 71.6% no es solo una estadística de gasto. Es una radiografía de cómo se construyó el empleo público costarricense durante décadas: cada negociación salarial añadió un plus, cada régimen especial consolidó sus propias reglas, cada institución autónoma definió sus incentivos. Costa Rica no llegó al primer lugar de la OCDE en concentración salarial por gastar más que todos en servicios públicos, sino porque la proporción de ese gasto que va a pagar a quienes trabajan en el Estado es la más alta del mundo desarrollado — lo que deja menos espacio para todo lo demás: infraestructura, inversión, programas sociales.
+
+<GraficoConcentracionSalarial client:load />
+
+<SourceNote note="Fuente: OCDE, Government at a Glance 2025. Indicador: remuneraciones como porcentaje de los costos de producción del gobierno general. Costa Rica: 71.6%. Promedio OCDE: 42.1%. México: ~71% (segundo lugar)." />
+
+<Insight>
+  De cada colón que el gobierno costarricense gasta en producir servicios públicos, 71.6 céntimos van a salarios. En Noruega — con un Estado más grande y mejores servicios — ese número ronda el 25%. En Irlanda, está alrededor del 30%. La diferencia entre Costa Rica y esos países no está en cuántos empleados tienen, sino en cuánto pesa cada uno en el presupuesto.
+</Insight>
+
+---
+
+## Tres números que se refuerzan mutuamente
+
+El costo salarial no opera en el vacío. Opera junto con otros dos números que juntos describen el margen fiscal real del país — o la falta de él.
+
+Los intereses de la deuda pública cerraron 2024 en ¢2.37 billones, equivalentes al 4.8% del PIB. Es el nivel más alto en 19 años. La deuda total llegó al 60.4% del PIB al cierre de 2025, activando el tramo más restrictivo de la regla fiscal.
+
+El BID estima que la ineficiencia del gasto público costarricense equivale al 4.7% del PIB — aproximadamente ¢2.3 billones anuales. Es casi exactamente lo mismo que el país paga en intereses de la deuda. Y ambas cifras juntas son más de tres veces lo que el Estado invierte en infraestructura y capital en un año.
+
+<SourceNote note="Fuentes: Ministerio de Hacienda, Cifras Fiscales a Diciembre 2024. BID, estimación de ineficiencia del gasto público en América Latina (2018), aplicada a Costa Rica: 4.7% del PIB. Deuda: Delfino / La Nación, cierre 2025." />
+
+<ActFrame>
+
+**El margen que casi no existe**
+
+El 95% del gasto del Gobierno Central ya está preasignado antes de que comience el año fiscal. Remuneraciones, intereses de la deuda, transferencias mandatorias a universidades y municipalidades, pensiones con cargo al Presupuesto Nacional. Lo que queda — el margen real para decidir cómo gastar — es casi nada.
+
+Eso tiene una consecuencia directa: cualquier crisis, cualquier necesidad de inversión, cualquier ajuste que requiera mover recursos, choca contra una pared de compromisos previos. El Estado no es inflexible por razones de voluntad individual. Es inflexible porque su estructura de gasto se construyó, capa por capa, para dejar muy poco espacio a la discrecionalidad.
+
+</ActFrame>
+
+---
+
+## Lo que el número no dice
+
+Hay una lectura fácil de estos datos que esta investigación quiere evitar: que el problema son los empleados públicos. No lo son. Ningún funcionario decide cuántas estructuras duplicadas existen, qué pluses se crearon hace treinta años o cómo se diseñó el sistema de pensiones. Esas son decisiones — o más frecuentemente, omisiones — de diseño institucional acumuladas durante décadas.
+
+El problema no es la gente. Es el sistema que no se ha revisado en conjunto.
+
+<DataPoint
+  value="¢2.3 billones"
+  label="ineficiencia anual estimada del gasto público"
+  note="BID, estimación para Costa Rica: 4.7% del PIB. Distribuida en servicios públicos de baja eficiencia, compras públicas con sobrecostos y programas con diseño deficiente. No existe un desglose oficial por componente."
+/>
+
+---
+
+## Si el problema fuera solo el monto
+
+Si la ineficiencia fuera solo de presupuesto — demasiado gasto en el lugar equivocado — bastaría reasignar recursos. Cortar aquí, invertir allá. Es lo que recomiendan los *spending reviews* que la OCDE propone para Costa Rica.
+
+Pero hay una capa más profunda que los números agregados no muestran: dónde específicamente se esconde esa ineficiencia. En qué instituciones, en qué contratos, en qué puestos. Esa pregunta no tiene respuesta oficial — porque el ejercicio de responderla con nombres concretos no se ha hecho.
+
+El siguiente acto pone nombres propios a esa ineficiencia: sectores, instituciones y estructuras duplicadas donde esos porcentajes se convierten en colones concretos.
+
+<ActFooter />
+
+</ActShell>
+
+---
+
+{/* ═══════════════════════════════════════════════════════════════ ACTO 3 */}
+
+<ActShell>
+
+<ActHero
+  tag="Acto 3 de 5"
+  title="Las duplicidades"
+  subtitle="La fragmentación institucional no es abstracta. Tiene nombres, tiene sectores y tiene costos que se pueden medir — cuando alguien se toma la molestia de medirlos."
+/>
+
+Los números del acto anterior son reales, pero flotan. No muestran dónde vive exactamente ese costo.
+
+En julio de 2022, la Contralora General de la República compareció ante la Asamblea Legislativa con un diagnóstico que ponía nombres propios a esa ineficiencia. Identificó duplicidades en 9 sectores del Estado costarricense — instituciones con mandatos superpuestos, recursos dispersos entre entidades que hacen variaciones de lo mismo, coordinación que existe en el papel pero no en la práctica. El diagnóstico era técnicamente sólido. Y la CGR no tenía atribuciones para actuar sobre él: auditar y diagnosticar es su mandato; fusionar instituciones y reformar estructuras es responsabilidad de la Asamblea Legislativa y del Poder Ejecutivo.
+
+<KpiRow>
+  <KpiCard
+    value="9"
+    label="sectores con duplicidades documentadas"
+    detail="CGR, presentación ante Asamblea Legislativa, julio 2022."
+  />
+  <KpiCard
+    value="67"
+    label="órganos adscritos con estructuras redundantes"
+    detail="Proveeduría, RRHH, asesoría legal y auditoría interna duplicadas en cada uno. CGR 2022."
+  />
+  <KpiCard
+    value="¢184,000 M"
+    label="en créditos productivos otorgados dos veces"
+    detail="693 personas con crédito duplicado. 0.4% del PIB. CGR, informe DFOE-EC-IF-00006-2022."
+  />
+  <KpiCard
+    value="91%"
+    label="del fideicomiso CNP-BCR, agotado"
+    detail="Junto con ¢1,096 millones en pérdidas de inventario en 2024. CGR / informes CNP."
+  />
+</KpiRow>
+
+---
+
+## El mapa de las nueve superposiciones
+
+La Contralora no presentó ante la Asamblea una teoría. Presentó un mapa. Nueve sectores del Estado costarricense donde las funciones se repiten, los recursos se dispersan y la rendición de cuentas se diluye precisamente porque hay demasiados dueños del mismo problema.
+
+<SourceNote note="Fuente: Contraloría General de la República, presentación ante la Comisión Especial de la Asamblea Legislativa para la Reforma del Estado, julio 2022. Los sectores y las instituciones listadas corresponden al diagnóstico oficial de la CGR." />
+
+El sector **agropecuario** es el caso que mejor ilustra la lógica. El Ministerio de Agricultura y Ganadería (MAG) tiene el mandato rector. El Consejo Nacional de Producción (CNP) regula mercados y administra reservas estratégicas de granos básicos. El Instituto de Desarrollo Rural (INDER) atiende comunidades rurales. El Programa Integral de Mercadeo Agropecuario (PIMA) administra el mercado mayorista. El Instituto Nacional de Innovación y Transferencia en Tecnología Agropecuaria (INTA) hace investigación y extensión.
+
+Cinco instituciones. Cinco juntas directivas. Cinco auditorías internas. Cinco unidades de proveeduría. Cinco departamentos de recursos humanos. Cada una con su propio edificio, su propio sistema informático, su propio proceso de contratación. Y un solo agricultor al que, en principio, todas sirven.
+
+La protección **social** replica el patrón a mayor escala. La CCSS administra el Régimen No Contributivo. El IMAS atiende pobreza extrema. El PANI protege a menores en riesgo. El CONAPAM atiende adultos mayores. La JPS administra otro régimen de pensiones no contributivas. El CONAPDIS protege personas con discapacidad. Los CEN-CINAI atienden primera infancia en vulnerabilidad.
+
+Siete instituciones que comparten, en distintas proporciones, la misma población meta: las familias costarricenses en condición de pobreza. Sin un sistema integrado de información, sin criterios unificados de focalización, sin un responsable único que responda por el resultado.
+
+<Insight>
+  La fragmentación no siempre nació de mala planificación. Muchas de estas instituciones se crearon en momentos distintos para resolver problemas reales. El problema es que nunca se revisaron en conjunto — y esa omisión tiene precio, año tras año, en servicios que cuestan más de lo que producen.
+</Insight>
+
+Los otros siete sectores del diagnóstico de la CGR muestran variaciones del mismo patrón, agrupadas en tres lógicas distintas.
+
+En los sectores de **infraestructura y movilidad**, la superposición opera sobre activos físicos compartidos: el MOPT comparte funciones de conservación vial con CONAVI y funciones de transporte público con el CTP, sin una autoridad única que responda por los resultados de red. En **energía**, el ICE coexiste con empresas municipales y cooperativas sin una ley marco integradora que defina jerarquías y responsabilidades.
+
+En los sectores con **población meta superpuesta**, las tensiones son de equidad y eficiencia simultáneamente. En **pensiones**, cuatro regímenes — IVM-CCSS, Poder Judicial, MEP, Hacienda — operan con reglas y beneficios diferentes para poblaciones equivalentes, generando inequidades que nadie diseñó pero que tampoco nadie ha corregido. En **educación y formación**, el MEP, el INA y CONAPE tienen mandatos que se superponen en formación técnica; egresados del mismo programa pueden ser contados simultáneamente en las estadísticas de dos instituciones.
+
+En los sectores de **ordenamiento territorial**, el problema es de jerarquía sin resolver. En **urbanismo**, el INVU, MIDEPLAN y el ICT comparten competencias sin una autoridad rectora clara. En **vivienda**, el MIVAH, el INVU y el BANHVI convergen en el Sistema Financiero Nacional para la Vivienda sin que ninguno tenga responsabilidad exclusiva sobre los resultados. En **ambiente**, la SETENA y múltiples comisiones sectoriales tienen mecanismos de coordinación que existen en los reglamentos pero no en la práctica.
+
+En todos los casos, la constante es la misma: demasiadas instituciones alrededor del mismo problema y ninguna responsable única de los resultados.
+
+---
+
+## Tres casos con cifras exactas
+
+La superposición de mandatos es costosa por definición — más estructura para el mismo resultado. Pero en tres casos el diagnóstico de la CGR va más allá del análisis de mandatos: hay cifras concretas, auditadas, que muestran el costo en colones.
+
+<SourceNote note="Fuentes: CGR, informe DFOE-EC-IF-00006-2022 (créditos duplicados). CGR, informes de auditoría al CNP 2022–2024. Metodología de estimación para estructuras redundantes: ver nota metodológica al pie." />
+
+**El CNP y el costo del inventario sin dueño**
+
+El Consejo Nacional de Producción existe para estabilizar mercados de granos básicos y garantizar el abastecimiento nacional. Tiene un mandato claro. Tiene presupuesto. Tiene bodegas.
+
+Entre 2022 y 2025, el CNP desechó 6 toneladas de arroz y 3.7 toneladas de frijoles — productos comprados con fondos públicos, almacenados, y destruidos antes de llegar a ningún consumidor. En 2024 registró ¢1,096 millones en pérdidas de inventario. El fideicomiso que le permite comprar a futuro en el mercado de capitales — el fideicomiso CNP-BCR — llegó al año con el 91% de su capacidad consumida.
+
+Esto no es una irregularidad aislada. Es el resultado observable de una institución cuyo diseño responde a condiciones económicas distintas a las actuales, que opera en un mercado que ya no responde a los supuestos de su mandato, pero que no ha sido revisada porque revisarla implicaría decidir qué hacer con ella — y esa decisión requiere voluntad política que hasta ahora no ha aparecido.
+
+<DataPoint
+  value="¢1,096 M"
+  label="en pérdidas de inventario del CNP, solo en 2024"
+  note="Más 6 toneladas de arroz y 3.7 toneladas de frijoles desechadas entre 2022 y 2025. Fideicomiso CNP-BCR al 91% de capacidad consumida. Fuente: informes CGR y CNP."
+/>
+
+**Los 693 que recibieron el mismo crédito dos veces**
+
+En 2022 la CGR publicó el informe DFOE-EC-IF-00006-2022 sobre el sistema de financiamiento al sector productivo. Lo que encontró no era una omisión técnica menor.
+
+Seiscientas noventa y tres personas habían recibido créditos de dos fuentes distintas del sistema público — simultáneamente, para el mismo propósito, en condiciones subsidiadas por el Estado — sin que ningún sistema de control lo detectara. El monto total: ¢183,972 millones. El 0.4% del PIB del año. Dentro de ese universo, 10 beneficiarios concentraron 684 créditos individuales.
+
+El problema no era que el crédito productivo existiera. El problema era que el sistema no tenía — ni tiene — un registro integrado que impida que los recursos lleguen dos veces al mismo destino mientras otros productores quedan sin acceso.
+
+<ActFrame>
+
+**El sistema que no se habla consigo mismo**
+
+Los créditos duplicados documentados por la CGR no ocurrieron porque nadie vigilaba. Ocurrieron porque las instituciones que otorgan financiamiento productivo en Costa Rica — banca pública, fondos de desarrollo, fideicomisos sectoriales — operan en compartimentos separados, sin una base de datos integrada de beneficiarios.
+
+Ese problema técnico tiene un nombre institucional: es el resultado de un sistema diseñado por acumulación, donde cada entidad creada en su momento incorporó sus propios sistemas, sus propios criterios y sus propias reglas. Integrarlos requeriría una decisión coordinada que ninguna de las partes tiene incentivos para impulsar por sí sola — porque cualquier integración implica ceder algo de control.
+
+</ActFrame>
+
+**Las 67 estructuras que nadie ha sumado**
+
+La CGR identificó 67 órganos adscritos que replican, cada uno, las mismas cuatro funciones de soporte: proveeduría institucional, recursos humanos, asesoría legal y auditoría interna. Son funciones necesarias en cualquier institución. La pregunta es si deben existir 67 veces, por separado, cuando la entidad rectora del sector ya las tiene.
+
+No existe una estimación oficial del costo de esas 67 estructuras. Ni la CGR, ni MIDEPLAN, ni el Ministerio de Hacienda han publicado una cifra consolidada. Para construir un piso referencial, esta investigación usó los salarios promedio del régimen general de empleo público para los cuatro puestos mínimos documentados por la CGR en cada estructura — más las cargas sociales correspondientes. La cifra resultante es un **piso conservador**: solo incluye cuatro puestos por estructura, no incluye bienes y servicios, infraestructura física, sistemas informáticos ni personal de apoyo secundario. El costo real es mayor. Nadie sabe cuánto más, porque nadie lo ha calculado.
+
+<DataPoint
+  value="₡6,331 M"
+  label="costo mínimo estimado de las 67 estructuras redundantes"
+  note="Estimación propia con salarios promedio MIDEPLAN/Servicio Civil para 4 puestos de soporte por estructura: proveeduría, RRHH, asesoría legal y auditoría interna, más cargas sociales del 26%. Piso conservador: no incluye bienes y servicios, infraestructura ni personal adicional. No existe cifra oficial — esa ausencia es parte del diagnóstico. Ver nota metodológica."
+/>
+
+---
+
+## El diagnóstico que nadie recogió
+
+La Contralora presentó este mapa en julio de 2022. La Comisión Legislativa para la Reforma del Estado celebró audiencias. Los sectores desfilaron. Los informes se archivaron.
+
+Ninguna ley surgió de ese proceso. Ninguna institución fue fusionada. Ninguna estructura de soporte fue consolidada. Dos años después, los 9 sectores siguen operando con las mismas superposiciones. El fideicomiso del CNP siguió consumiéndose. Los créditos duplicados siguieron sin un sistema integrado que los impidiera. Las 67 unidades de soporte separadas siguieron operando sin integración, bajo las mismas condiciones que el diagnóstico documentó.
+
+Esto no es una crítica a la CGR — hizo exactamente lo que le corresponde. La pregunta que el diagnóstico dejó abierta no era técnica: era política. Y la respuesta política no llegó.
+
+<Insight>
+  Costa Rica no tiene un déficit de diagnósticos. Tiene cuatro décadas de ellos. Lo que no ha tenido — todavía — es la arquitectura que convierte un diagnóstico en acción sin que el propio aparato lo neutralice en el proceso.
+</Insight>
+
+---
+
+## El regreso del candado
+
+Aquí es donde el Acto 1 y el Acto 3 se encuentran.
+
+El Acto 1 describió el candado constitucional: las 70 a 80 instituciones con autonomía garantizada por los artículos 188 y 189 de la Constitución Política. Para tocarlas se necesitan dos tercios de la Asamblea. El Ejecutivo no puede, por decreto, fusionarlas ni redirigir sus recursos. La Sala Constitucional lo ha dejado claro cada vez que se ha intentado.
+
+Ahora el mapa de duplicidades vuelve sobre ese candado con nombres concretos.
+
+De los 9 sectores con duplicidades documentadas, las instituciones con mayor grado de superposición funcional son, en su mayoría, autónomas con protección constitucional fuerte: la CCSS, el ICE, las universidades públicas, el BANHVI, el IMAS. No son entidades que el Ejecutivo pueda reorganizar con una directriz presidencial. No son estructuras que un decreto de austeridad pueda consolidar. Son instituciones que, para ser reformadas de fondo, requieren exactamente el consenso político que hasta ahora no ha sido posible construir.
+
+<ActFrame>
+
+**Por qué el candado importa en el Acto 3**
+
+Las instituciones con candado constitucional no son todas el problema — muchas de ellas entregan servicios esenciales de alta calidad.
+
+El candado protege a las instituciones de la arbitrariedad política. El mismo mecanismo las protege de la revisión sistemática. Esas dos cosas no son separables. Y lo que no se puede tocar representa entre el 60 y el 70% del gasto público total.
+
+Eso no es un argumento para eliminar la autonomía constitucional. Es un argumento para que cualquier proceso de revisión tenga el nivel de credibilidad y legitimidad política suficiente para que sus recomendaciones sean adoptadas voluntariamente — o para construir el consenso legislativo de dos tercios que la Constitución exige.
+
+</ActFrame>
+
+Lo que el mapa de duplicidades muestra, entonces, no es solo ineficiencia. Muestra la razón por la que la ineficiencia persiste: está incrustada en instituciones que, por diseño constitucional, solo pueden reformarse con un nivel de consenso que los diagnósticos internos no tienen la capacidad de generar. Los próximos cuarenta años de historia política de Costa Rica muestran qué ocurre cuando se intenta construir ese consenso solo con informes internos.
+
+<ActFooter />
+
+</ActShell>
+
+---
+
+{/* ═══════════════════════════════════════════════════════════════ ACTO 4 */}
+
+<ActShell>
+
+<ActHero
+  tag="Acto 4 de 5"
+  title="Por qué siempre falla"
+  subtitle="No es que Costa Rica no haya intentado. Lo ha intentado al menos siete veces desde 1985. El problema no es la falta de voluntad — es que todos los intentos comparten una misma causa raíz."
+/>
+
+Si los diagnósticos fueran suficientes para producir cambio, el problema ya estaría resuelto. No faltan diagnósticos. Lo que el país tiene es un patrón — y ese patrón tiene causas identificables.
+
+---
+
+## Siete intentos, el mismo resultado
+
+<GraficoTimelineReformas client:load />
+
+<SourceNote note={'Fuentes: ICAP, "Reforma del Estado en Costa Rica: balance y perspectivas" (Aguilar, 2006). Ley 9635 (Fortalecimiento de las Finanzas Públicas, 2018). Ley 10159 (Marco de Empleo Público, 2021). CGR, informe sobre Comisión Legislativa de Reforma del Estado, 2022.'} />
+
+**1985 — PAE I.** El Banco Mundial financia el primer Programa de Ajuste Estructural. El objetivo declarado incluye reestructurar el aparato productivo del Estado. Lo que se ejecutó fue la apertura comercial. La reforma institucional no se tocó.
+
+**1988 — COREC.** La Comisión de Reforma del Estado y de la Administración Pública produce el diagnóstico más completo que el país había tenido hasta entonces — bipartidista, técnico, con recomendaciones concretas. El documento existe. Describe con precisión problemas que todavía existen. Fue archivado porque, según el propio registro de la época, "no le gustó a la empresa privada ni a la cúpula política". Ninguno de los dos extremos del sistema quería lo que el diagnóstico recomendaba.
+
+**1990 — Ministerio de Reforma del Estado.** Se crea para implementar la COREC. Acompañó el ajuste macroeconómico. La reforma profunda del aparato institucional, que era el mandato original, no se ejecutó. El mismo gobierno que creó el ministerio para reducir el Estado fue el gobierno bajo el cual el Estado creció más en toda su historia — 84 instituciones nuevas en esa década.
+
+**1990–1994 — PAE II y PAE III.** Más ajuste estructural. La liberalización comercial y financiera sí avanzó. La reforma institucional siguió pendiente. El patrón se repite con tanta exactitud que parece diseñado: reformar lo que tiene menos resistencia política, diferir lo que tiene más.
+
+**2018 — Ley 9635.** La Ley de Fortalecimiento de las Finanzas Públicas introduce la regla fiscal. Es la reforma más significativa en décadas en materia de control del gasto. Está vigente. Y el 95% del gasto ya estaba preasignado antes de que existiera — lo que significa que la regla opera sobre el margen, no sobre la estructura.
+
+**2021 — Ley Marco de Empleo Público.** El objetivo era unificar los regímenes salariales del sector público y poner orden en la dispersión de pluses e incentivos. La ley existe. Su implementación es parcial. Ha sido apelada sistemáticamente. La relación entre incentivos y salario básico bajó de 1.0 a 0.96 — un movimiento real, pero marginal frente a décadas de acumulación.
+
+**2022 — Comisión Legislativa de Reforma del Estado.** La Asamblea crea una comisión especial. La CGR presenta el diagnóstico de los 9 sectores con duplicidades documentadas — el mismo mapa del Acto 3. Se celebran audiencias. Desfilan instituciones, expertos, ministros. Al cierre: ninguna ley. Ninguna fusión. Ningún cierre.
+
+En conjunto, los siete episodios cuentan la misma historia: cada vez que el país se acerca a tocar la estructura del Estado, el resultado es un ajuste en los márgenes y una postergación del fondo.
+
+<Insight>
+  Siete iniciativas en cuarenta años. Cada una con diagnóstico, con respaldo político inicial, con lenguaje de urgencia. Ninguna produjo una reforma estructural del aparato institucional. Lo que eso sugiere no es una secuencia de fracasos individuales, sino una dinámica estructural con causas identificables.
+</Insight>
+
+---
+
+## Las cinco causas que se repiten
+
+El Instituto Centroamericano de Administración Pública documentó en 2006 por qué las reformas del Estado en Costa Rica no se sostienen. Las causas que identificó no han cambiado — porque las condiciones estructurales que las producen tampoco han cambiado.
+
+**Primera: El bloqueo político estructural.** Reformar el Estado requiere leyes. Las leyes requieren mayorías. Y en un sistema de múltiples partidos con instituciones constitucionalmente autónomas, construir mayorías para reformas que tocan intereses consolidados es estructuralmente difícil — no imposible, pero difícil de forma predecible y repetida.
+
+**Segunda: La doble resistencia.** La COREC de 1988 no fue archivada por un solo grupo: fue rechazada simultáneamente por los sindicatos del sector público y por la cúpula empresarial, cada uno por razones distintas. Esa pinza — resistencia desde la izquierda institucional y desde la derecha económica al mismo tiempo — es una característica estructural del sistema político costarricense, no una anomalía de 1988.
+
+**Tercera: El diagnóstico sin coalición.** Los mejores diagnósticos costarricenses — COREC, los informes de la CGR, las recomendaciones de la OCDE — son técnicamente sólidos. Ninguno incluyó una estrategia explícita para construir la coalición política necesaria para implementarlos. El diagnóstico y la implementación se trataron como problemas separados. No lo son.
+
+**Cuarta: El reinicio perpetuo.** Cada administración reinicia el diagnóstico. No porque el anterior fuera incorrecto, sino porque apropiarse del diagnóstico del gobierno anterior tiene costo político y no tiene beneficio electoral. El resultado es que el país acumula diagnósticos en lugar de implementaciones — y cada nuevo diagnóstico llega a conclusiones muy similares al anterior, porque el problema no ha cambiado.
+
+**Quinta: El candado de los dos tercios.** Ya apareció en el Acto 1 y en el Acto 3. Aparece aquí también porque es transversal a todas las iniciativas de reforma: el 60–70% del gasto público está en instituciones que requieren dos tercios de la Asamblea para ser tocadas. Ninguna de las siete iniciativas listadas construyó esa mayoría. En la práctica, ninguna incorporó desde el inicio una estrategia explícita para alcanzarla.
+
+<ActFrame>
+
+**Por qué la causa raíz no está en esa lista**
+
+Las cinco causas son reales y cada una opera con independencia. Lo que las conecta, sin embargo, es algo que el análisis del ICAP no nombra de forma explícita: todos los intentos de reforma han sido internos.
+
+El diagnóstico lo hizo el propio gobierno. La recomendación la elaboró una comisión legislativa o un ministerio. La implementación quedó en manos de las mismas instituciones que debían ser reformadas.
+
+Cuando el proceso es completamente interno, el sistema tiene todos los instrumentos para neutralizarlo: apelar el diagnóstico, responder con un plan de mejora en 90 días, esperar al siguiente gobierno, financiar estudios alternativos que lleguen a conclusiones más convenientes. Ese comportamiento responde a incentivos institucionales previsibles — no requiere mala fe, solo la lógica de cualquier organización que percibe una amenaza a su existencia o a sus recursos.
+
+La COREC diagnosticó en 1988 exactamente lo que la OCDE diagnosticó en 2025. En treinta y siete años, el diagnóstico no cambió. Lo que no existió, en ninguno de los dos casos, fue la arquitectura política que convierte un diagnóstico correcto en presión suficiente para actuar sobre él.
+
+</ActFrame>
+
+---
+
+## Lo que enseña la región
+
+El patrón costarricense no es único. Dos casos regionales recientes muestran el rango de lo que puede ocurrir cuando se intenta reformar desde adentro — y los límites que esa lógica impone.
+
+**Colombia, 2002: la fusión que no ahorró**
+
+<GraficoColombia client:load />
+
+<SourceNote note="Fuente: Ley 790 de 2002 (Colombia). Datos de planta y gasto por cartera: Departamento Administrativo de la Función Pública, pesos constantes 2002. La reversión de las fusiones se ejecutó mediante Ley 1444 de 2011, gobierno Santos." />
+
+En 2002, el gobierno de Álvaro Uribe fusionó ministerios con mandato explícito de reducir el tamaño del Estado. El resultado fue documentado con precisión: la planta total bajó 7.9%. El gasto de personal subió 8.5% en términos reales.
+
+Los números por cartera lo explican. Interior y Justicia: de 749 a 524 empleados, gasto de $20.8 a $21.5 mil millones. Salud y Trabajo: de 1,741 a 1,683 empleados, gasto de $46 a $47.1 mil millones. Ambiente y Vivienda: de 300 a 362 empleados — más personas después de la fusión — gasto de $9.2 a $13.9 mil millones.
+
+El propio ponente de la ley reconoció después: *"nos equivocamos, el propósito fiscal no se cumplió."* En 2011, el gobierno de Juan Manuel Santos revirtió las fusiones mediante la Ley 1444. El Estado colombiano había dado un círculo completo en nueve años.
+
+La lección no es que las fusiones sean imposibles. Es que fusionar estructuras sin auditar previamente qué hay adentro de cada una produce, con frecuencia, el resultado colombiano: menos cajas en el organigrama, el mismo costo o más.
+
+**Ecuador, 2025: el ajuste que mide en décimas**
+
+En enero de 2025, el gobierno de Daniel Noboa redujo los ministerios de 20 a 14 y anunció 5,000 despidos en el sector público. El caso ecuatoriano no es un fracaso — es una reforma real con impacto real. A diferencia del caso colombiano, los datos disponibles sobre Ecuador no permiten el mismo nivel de desglose. Lo que ilustra el caso ecuatoriano, con los datos disponibles, es el orden de magnitud concreto: 6 ministerios menos y 5,000 despidos producen un ahorro proyectado de 0.1% del PIB. La ineficiencia documentada en Costa Rica equivale a 4.7% del PIB. La distancia entre esos dos números es el argumento.
+
+<DataPoint
+  value="0.1%"
+  label="del PIB: el ahorro proyectado de la reforma ministerial de Ecuador 2025"
+  note="20 ministerios reducidos a 14. 5,000 despidos. Ahorro anual proyectado: $142.5M. Fuente: Ministerio de Finanzas de Ecuador, enero 2025."
+/>
+
+---
+
+## El patrón, resumido
+
+Cuarenta años de intentos costarricenses más los casos regionales apuntan a la misma conclusión: las reformas que vienen del mismo sistema que se intenta reformar tienen un techo predecible. Pueden reorganizar. Pueden legislar en los márgenes. No pueden auditar con credibilidad lo que ellas mismas administran.
+
+Y sin esa auditoría — sin saber con precisión qué hay en los 309,208 contratos de empleo público, en los años de compras públicas, en el costo real de las 67 estructuras redundantes — cualquier reforma opera sobre supuestos, no sobre datos. Puede acertar. Puede producir el resultado colombiano. Pero mientras el propio Estado sea el único que se audita a sí mismo, no tiene forma de saberlo de antemano.
+
+<ActFooter />
+
+</ActShell>
+
+---
+
+{/* ═══════════════════════════════════════════════════════════════ ACTO 5 */}
+
+<ActShell>
+
+<ActHero
+  tag="Acto 5 de 5"
+  title="La propuesta"
+  subtitle="Costa Rica no necesita otro diagnóstico. Necesita la arquitectura que convierte el diagnóstico en acción — y esa arquitectura no puede provenir exclusivamente del mismo aparato que se intenta revisar."
+/>
+
+Cuatro actos de evidencia apuntan a la misma conclusión: el Estado costarricense no ha podido reformarse porque cada vez que lo ha intentado, el proceso ha sido completamente interno. Y un sistema que se audita a sí mismo tiene todos los instrumentos para neutralizar esa auditoría sin producir cambios.
+
+La propuesta de este acto no es un diagnóstico más. Es una respuesta específica a esa causa raíz.
+
+---
+
+## Tres rutas posibles
+
+Antes de presentar la propuesta concreta, vale la pena nombrar las alternativas que Costa Rica ha tenido — y tiene — sobre la mesa.
+
+**Ruta 1 — Auditoría interna fortalecida.** Dotar a la CGR de más recursos, más personal y más dientes para sus recomendaciones. Es la ruta con menor costo político. También es la que el Acto 4 documentó en extenso: la CGR ya produjo el diagnóstico correcto en 2022. El problema no fue la calidad del diagnóstico; el diagnóstico era sólido. Lo que opera en contra de esta ruta es que el sistema tiene instrumentos para responder a informes internos sin producir cambios estructurales: planes de mejora en 90 días, recursos de inconstitucionalidad, espera al siguiente gobierno.
+
+**Ruta 2 — Comisión nacional independiente.** Un panel de expertos costarricenses nombrados por la Asamblea o la Presidencia, con mandato explícito de revisión institucional. Es una mejora sobre la ruta 1: gana algo de distancia del Ejecutivo. Pero mantiene una vulnerabilidad central: su credibilidad depende de la percepción pública de independencia, y en el contexto político costarricense, cualquier comisión nombrada por actores internos es susceptible a cuestionamientos sobre su composición y sus resultados.
+
+**Ruta 3 — Auditoría externa internacional.** Una o varias firmas con experiencia documentada en auditorías de Estado de esta escala, bajo contrato con términos de referencia públicos y obligación contractual de publicar lo que encuentren. Es la ruta con mayor costo político inicial y mayor credibilidad estructural ante los actores que el sistema no puede responder de la misma forma que a un informe interno.
+
+De las tres rutas, la literatura sobre reformas de Estado exitosas en países con arquitectura política similar a Costa Rica — pluralismo de partidos, instituciones con autonomía constitucional, resistencia organizada desde múltiples flancos — muestra un patrón consistente: las que llegaron a producir cambios estructurales contaron con alguna forma de ancla externa que el propio sistema no podía absorber con sus mecanismos habituales. Jamaica entre 2013 y 2019 es el caso más documentado en América Latina reciente. La propuesta que sigue parte de ese patrón documentado.
+
+---
+
+## Dos capas, un encargo
+
+El encargo que este artículo propone tiene dos capas que se complementan. Ninguna es suficiente sin la otra.
+
+### Capa 1 — Spending review
+
+El primero es un instrumento que la OCDE ya recomendó para Costa Rica y que Hacienda podría liderar: una revisión sistemática del gasto que evalúe qué programas producen resultados medibles y cuáles no, vinculada al ciclo presupuestario de mediano plazo.
+
+No es una idea nueva. Irlanda lo hizo después de su crisis fiscal de 2008 y reasignó el equivalente a varios puntos del PIB en tres años. Portugal replicó el modelo entre 2011 y 2014. Chile lleva una década construyendo capacidad institucional para hacerlo de forma permanente. El instrumento existe, tiene metodología probada y produce resultados documentados.
+
+Lo que distingue a los casos exitosos de los que no funcionaron no es el método: es que en todos los casos que funcionaron, el proceso tuvo un ancla de credibilidad externa. Alguien que no era parte del sistema decía qué programas no producían resultados — y eso hacía políticamente posible cerrarlos.
+
+El instrumento no compite con las capacidades internas: las ordena. Es, precisamente, la forma en que otros países han convertido sus propios diagnósticos en reasignaciones concretas de presupuesto.
+
+### Capa 2 — Auditoría forense operacional
+
+La segunda capa es lo que nunca se ha hecho. No una revisión de eficiencia de programas, sino una auditoría con metodología forense de lo que hay adentro del aparato: los contratos, la nómina, la estructura.
+
+Son tres pilares que se construyen en secuencia.
+
+*Pilar 1 — Auditoría de nómina y funciones.* 309,208 empleados distribuidos en 19 regímenes distintos, con pluses que en algunos casos igualaron al salario base durante décadas. La auditoría identifica plazas que cobran pero no cotizan correctamente a la CCSS, evalúa si el perfil de cada puesto justifica su clasificación salarial, y mapea duplicidad de funciones entre instituciones que el Acto 3 documentó en términos de mandatos pero que nadie ha revisado a nivel de puestos individuales.
+
+*Pilar 2 — Auditoría de compras públicas.* Los contratos de los últimos diez años, analizados con herramientas estadísticas que detectan patrones: proveedores que ganan sistemáticamente manteniéndose justo por debajo de los umbrales de licitación, pliegos diseñados para un proveedor específico, contratos fraccionados para evitar controles. Un auditor interno que detecta un cartel de proveedores no puede publicarlo sin exponer a su institución. Una firma externa bajo contrato formal, con los términos de referencia y las condiciones de publicación establecidos contractualmente, puede tener mayores incentivos estructurales y reputacionales para documentar lo que encuentra.
+
+*Pilar 3 — Mapa de estructura institucional.* Con los datos de los dos pilares anteriores: diseñar el mapa jurídico y operacional de qué fusionar, qué cerrar y en qué secuencia. Qué requiere mayoría simple, qué requiere dos tercios, qué requiere reforma constitucional. Los nueve sectores documentados por la CGR en 2022 son el punto de partida — pero el punto de llegada es un plan de implementación con costos, plazos y rutas jurídicas específicas, no otro listado de recomendaciones generales.
+
+<Insight>
+  La diferencia entre el pilar 3 de esta propuesta y los diagnósticos anteriores no es técnica. Es que este viene después de dos pilares de datos — nómina y compras — que ningún diagnóstico costarricense ha tenido antes. Las recomendaciones de estructura que se construyen sobre datos forenses son cualitativamente distintas a las que se construyen sobre análisis de mandatos.
+</Insight>
+
+---
+
+## La estructura del encargo
+
+<GraficoEstructuraEncargo client:load />
+
+<SourceNote note="Estructura posible, no prescriptiva. Una licitación pública internacional podría producir una distribución distinta de firmas y roles. Lo que no es negociable es la independencia contractual y el acceso real a la información." />
+
+El encargo probablemente requiere principalmente consultores senior con experiencia en auditorías de Estado de esta escala — los casos de referencia son europeos y norteamericanos — complementados con una minoría de profesionales locales con conocimiento del marco jurídico costarricense y del contexto institucional específico.
+
+Las tarifas de mercado para este perfil están documentadas. Los GSA Federal Supply Schedule de EE.UU. para 2024 registran partners senior en las firmas grandes entre $1,000 y $1,200 por hora. Senior managers entre $600 y $850. Consultores senior entre $350 y $500. El componente local de apoyo, entre $90 y $160.
+
+Con esas tarifas y los equipos que una auditoría de esta complejidad requiere, el costo total a tres años se estima entre $450 y $560 millones. Dicho de otra forma: el país gastaría en todo el encargo, repartido en tres años, lo que hoy pierde en ineficiencia en alrededor de seis semanas.
+
+<ActFrame>
+
+**Una advertencia honesta sobre el costo**
+
+Setenta por ciento de los proyectos de consultoría de gran escala con las firmas Big Four exceden el presupuesto inicial estimado. Eso no es un argumento para no hacerlo — es un argumento para estructurar el contrato con hitos verificables, pagos por entregable y cláusulas de desempeño. Pero ignorarlo sería deshonesto con el lector.
+
+Lo que sí está documentado con precisión es el denominador: la ineficiencia del gasto público costarricense equivale a aproximadamente $4,500 millones anuales, según la estimación del BID. Eso es $375 millones por mes. $12.5 millones por día.
+
+Si la auditoría recupera el equivalente a tres semanas de ineficiencia en todo su período de tres años — no en un año, en tres — pagó su propio costo. Eso no garantiza que lo haga. Pero encuadra correctamente la pregunta.
+
+</ActFrame>
+
+---
+
+## El costo enmarcado correctamente
+
+<GraficoROI client:load />
+
+<SourceNote note={'Fuentes: Costo del encargo — estimación propia con tarifas US GSA Federal Supply Schedule 2024 y benchmarks europeos. Ineficiencia anual — BID, "Better Spending for Better Lives" (2018), estimación para Costa Rica: 4.7% del PIB ≈ $4,500M al tipo de cambio 2024. Nota: el gráfico muestra órdenes de magnitud, no proyecciones de recuperación garantizada.'} />
+
+<KpiRow>
+  <KpiCard
+    value="$500 M"
+    label="costo estimado del encargo (3 años)"
+    detail="Rango: $450–$560M. Tarifas Big Four sector público, US GSA 2024."
+  />
+  <KpiCard
+    value="$4,500 M"
+    label="ineficiencia anual documentada"
+    detail="BID, estimación para Costa Rica: 4.7% del PIB. Equivale a $375M por mes."
+  />
+  <KpiCard
+    value="3 semanas"
+    label="de ineficiencia recuperada = costo total pagado"
+    detail="Si la auditoría recupera el equivalente a 3 semanas de ineficiencia en sus 3 años de duración, se financia a sí misma."
+  />
+</KpiRow>
+
+---
+
+## La ventaja estructural del componente externo
+
+Aquí está el argumento que los cuatro actos anteriores construyeron para llegar a esta sección: la diferencia entre el informe que la CGR presentó en julio de 2022 y un informe producido por una firma externa bajo contrato formal no es técnica. El diagnóstico de la CGR era correcto. La diferencia es política.
+
+Un informe interno puede ser absorbido por el sistema con instrumentos que el sistema domina: apelarlo ante la Sala Constitucional, responder con un plan de mejora en 90 días, esperar que el siguiente gobierno lo archive con cortesía, financiar un estudio alternativo que llegue a conclusiones más convenientes. Todos esos movimientos son legítimos dentro del sistema. Y todos son efectivos para detener una reforma.
+
+Un informe externo con credibilidad internacional es estructuralmente más difícil de enterrar. Requiere una respuesta pública con argumentos, no solo con procedimientos. Genera cobertura periodística y política para quienes quieren actuar sobre sus hallazgos. Y produce un costo reputacional real para quienes deciden ignorarlo — un costo que en el sistema político costarricense, donde la imagen institucional importa, no es trivial.
+
+Este mecanismo tiene nombre en la literatura sobre reformas de Estado: ancla de credibilidad externa. El caso más documentado en América Latina reciente es Jamaica entre 2013 y 2019: el FMI como ancla externa, combinado con el EPOC — un comité mixto de sindicatos, sector privado e iglesias — produjo el ajuste fiscal más exitoso de la región en ese período. No porque el diagnóstico fuera distinto al de años anteriores. Porque la arquitectura política que rodeaba al diagnóstico era diferente. La diferencia con Costa Rica no está en el tipo de diagnóstico, sino en esa arquitectura: un ancla externa que fija la ruta y un comité interno representativo que hace políticamente costoso desviarse de ella.
+
+<ActFrame>
+
+**La condición que Ecuador enseñó**
+
+En 2022, las cuatro firmas Big Four rechazaron auditar Petroecuador. Las condiciones de acceso a la información eran demasiado opacas, la independencia contractual no estaba garantizada y no había señales creíbles de que los resultados inconvenientes serían publicados.
+
+Esa negativa es, en sí misma, un dato relevante para Costa Rica. Una auditoría externa en la práctica requiere tres condiciones: acceso real y sin restricciones a la información, independencia contractual garantizada por ley o por tratado, y voluntad política demostrable de publicar lo que se encuentre — incluyendo lo que sea políticamente incómodo.
+
+Si el Estado costarricense no puede garantizar esas tres condiciones, esa incapacidad diría más sobre el Estado que cualquier informe interno jamás podría decir.
+
+</ActFrame>
+
+Si esas tres condiciones se garantizan, la propuesta tiene forma concreta — y también tiene límites que vale la pena nombrar.
+
+---
+
+## Lo que esto no es
+
+Esta propuesta tiene límites que vale la pena nombrar explícitamente, porque ignorarlos sería repetir el error de los diagnósticos anteriores: presentar una solución como más completa de lo que es.
+
+Una auditoría externa no reforma el Estado. Produce los datos y la credibilidad política para que una reforma sea posible. Significa que después de la auditoría seguirá habiendo resistencia legislativa, seguirá existiendo el candado constitucional, seguirán operando los grupos de interés que bloquearon la COREC en 1988. Lo que cambia es que esa resistencia tendrá que operar frente a datos públicos, auditados por una firma con nombre y reputación — no frente a estimaciones internas que cualquier institución puede disputar.
+
+Una auditoría externa tampoco es una privatización del Estado ni una entrega del diagnóstico a actores que no responden ante los costarricenses. El contrato, los términos de referencia, el acceso a la información y la publicación de resultados son decisiones del Estado costarricense. Las firmas son el instrumento, no el mandante.
+
+Y finalmente: esta propuesta no asume que todo lo que se encuentre será negativo. Un Estado que se audita con seriedad puede descubrir que algunos programas funcionan mejor de lo que los números agregados sugieren, que algunas instituciones duplicadas tienen capacidades que merecen ser conservadas, que algunas estructuras redundantes tienen razones jurídicas o históricas que una fusión rápida destruiría sin beneficio real. La auditoría forense no presupone resultados. Los produce.
+
+</ActShell>
+
+---
+
+## La pregunta que queda
+
+Costa Rica tiene 332 instituciones. Gasta en salarios públicos el porcentaje del PIB más alto de la OCDE. Tiene nueve sectores con duplicidades documentadas por su propia Contraloría. Ha intentado reformarse al menos siete veces en cuarenta años. Y nunca ha auditado su propio Estado de forma sistemática e independiente.
+
+El argumento de esta investigación no es que una auditoría externa resuelva todo eso. Es más modesto y más preciso: sin ese paso, ninguna reforma tiene los datos ni la legitimidad política para sostenerse; con ese paso, por primera vez, el sistema tendría que responder a evidencia que él mismo no produjo y que no puede simplemente archivar.
+
+La pregunta que queda no es técnica. Es fiscal y política a la vez: mientras el Estado sigue sin auditarse, alguien está pagando esa ineficiencia — y ese alguien tiene nombre en cada factura, en cada servicio que costó más de lo que produjo.
+
+---
+
+*Nota metodológica — Estimación del costo de las 67 estructuras redundantes:* La cifra de ₡6,331 millones anuales se construye con salarios promedio del régimen general de empleo público para cuatro puestos de soporte institucional (proveedor/a: ₡1,350,000 bruto mensual; profesional en RRHH: ₡1,150,000; asesor/a legal: ₡1,500,000; auditor/a interno/a: ₡2,250,000), más cargas sociales del 26%, multiplicados por 12 meses y 67 estructuras. Fuente de referencia salarial: escalas MIDEPLAN/Servicio Civil, 2024. No existe ninguna fuente oficial que haya calculado este costo — lo que es, en sí mismo, parte del problema que esta investigación documenta.
