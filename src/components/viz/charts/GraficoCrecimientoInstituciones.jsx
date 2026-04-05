@@ -82,7 +82,7 @@ export default function GraficoCrecimientoInstituciones() {
   const [pathLen,    setPathLen]    = useState(5000);
   const [animated,   setAnimated]   = useState(false);
   const [areaVis,    setAreaVis]    = useState(false);
-  const [tooltip,    setTooltip]    = useState(null); // { x, y, año, val, side }
+  const [tooltip,    setTooltip]    = useState(null); // { x, y, año, val, right }
 
   // ResizeObserver
   useEffect(() => {
@@ -109,7 +109,6 @@ export default function GraficoCrecimientoInstituciones() {
     const id1 = requestAnimationFrame(() =>
       requestAnimationFrame(() => {
         setAnimated(true);
-        // Area appears after line finishes (~1.5s)
         const id2 = setTimeout(() => setAreaVis(true), 1400);
         return () => clearTimeout(id2);
       })
@@ -139,12 +138,32 @@ export default function GraficoCrecimientoInstituciones() {
   const yBot   = SVG_H - MG.bottom;
   const bandMidX = (x1990 + x2000) / 2;
 
-  function handleDotEnter(e, d) {
+  // ─── GrowthGapHero-style mouse tracking ───────────────────────────────────
+  function handleMouseMove(e) {
     if (!wrapRef.current) return;
     const rect = wrapRef.current.getBoundingClientRect();
-    const px   = e.clientX - rect.left;
-    const py   = e.clientY - rect.top;
-    setTooltip({ x: px, y: py, año: d.año, val: d.instituciones, right: px > rect.width / 2 });
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    const relX = mouseX - MG.left;
+    if (relX < 0 || relX > plotW) {
+      setTooltip(null);
+      return;
+    }
+    const ratio = relX / plotW;
+    const year = AÑO_MIN + ratio * (AÑO_MAX - AÑO_MIN);
+    let closest = DATA[0];
+    let minDist = Infinity;
+    for (const d of DATA) {
+      const dist = Math.abs(d.año - year);
+      if (dist < minDist) { minDist = dist; closest = d; }
+    }
+    setTooltip({
+      x: mouseX,
+      y: mouseY,
+      año: closest.año,
+      val: closest.instituciones,
+      right: mouseX > rect.width / 2,
+    });
   }
 
   return (
@@ -195,12 +214,7 @@ export default function GraficoCrecimientoInstituciones() {
             width={x2000 - x1990} height={plotH}
             fill="rgba(96,255,18,0.07)"
           />
-          {/* Amber dashed top border of the band at y(250) entry level */}
-          <line
-            x1={x1990} y1={MG.top}
-            x2={x2000} y2={MG.top}
-            stroke="#f59e0b" strokeWidth={1} strokeDasharray="4 3" strokeOpacity={0.6}
-          />
+          {/* Dashed borders of band */}
           <line
             x1={x2000} y1={MG.top}
             x2={x2000} y2={yBot}
@@ -211,19 +225,6 @@ export default function GraficoCrecimientoInstituciones() {
             x2={x1990} y2={yBot}
             stroke="#f59e0b" strokeWidth={0.8} strokeDasharray="3 3" strokeOpacity={0.35}
           />
-          {/* Band label */}
-          <text
-            x={bandMidX} y={MG.top - 18}
-            textAnchor="middle"
-            style={{ ...txtBase, fontSize: 10, fill: "#f59e0b", fontWeight: 600 }}
-          >
-            84 nuevas — mayor aumento en cualquier década
-          </text>
-          <line
-            x1={bandMidX} y1={MG.top - 12}
-            x2={bandMidX} y2={MG.top - 2}
-            stroke="#f59e0b" strokeWidth={1} strokeOpacity={0.5}
-          />
 
           {/* ── COREC 1988 vertical line ── */}
           <line
@@ -232,20 +233,29 @@ export default function GraficoCrecimientoInstituciones() {
             stroke="#f59e0b" strokeWidth={1.2}
             strokeDasharray="5 4" strokeOpacity={0.75}
           />
-          {/* COREC label — two lines, positioned above chart */}
+          {/* COREC label — inside chart area, left of the line */}
           <text
-            x={x1988 - 6} y={MG.top - 26}
+            x={x1988 - 6} y={MG.top + 14}
             textAnchor="end"
             style={{ ...txtBase, fontSize: 10, fill: "#fbbf24", fontWeight: 700 }}
           >
             COREC 1988
           </text>
           <text
-            x={x1988 - 6} y={MG.top - 14}
+            x={x1988 - 6} y={MG.top + 26}
             textAnchor="end"
             style={{ ...txtBase, fontSize: 9, fill: "#9ca3af" }}
           >
-            Ministerio de Reforma del Estado
+            Ministerio de Reforma
+          </text>
+
+          {/* Band label — inside chart area, centered over band */}
+          <text
+            x={bandMidX} y={MG.top + 14}
+            textAnchor="middle"
+            style={{ ...txtBase, fontSize: 10, fill: "#f59e0b", fontWeight: 600 }}
+          >
+            84 nuevas — mayor aumento en cualquier década
           </text>
 
           {/* ── Area fill ── */}
@@ -297,64 +307,48 @@ export default function GraficoCrecimientoInstituciones() {
             stroke="#6b7280" strokeWidth={0.8}
           />
 
-          {/* ── Data point dots (hover targets) ── */}
-          {DATA.map((d, i) => {
-            const px = pts[i][0];
-            const py = pts[i][1];
-            const isEnd = d.año === 2024;
-            return (
-              <circle
-                key={d.año}
-                cx={px} cy={py}
-                r={isEnd ? 0 : 5}          // end-point has its own dot above
-                fill="transparent"
-                stroke="transparent"
-                style={{ cursor: "crosshair" }}
-                onMouseEnter={(e) => handleDotEnter(e, d)}
-                onMouseLeave={() => setTooltip(null)}
-              >
-                {/* invisible hit target */}
-              </circle>
-            );
-          })}
-
           {/* ── Visible small dots on data points ── */}
           {DATA.map((d, i) => {
             const px = pts[i][0];
             const py = pts[i][1];
-            if (d.año === 2024) return null; // handled separately
+            if (d.año === 2024) return null;
             return (
               <circle
                 key={`vis-${d.año}`}
                 cx={px} cy={py} r={3}
                 style={{
-                  fill:        "#0b0b0b",
-                  stroke:      "#60ff12",
-                  strokeWidth: 1.5,
-                  fillOpacity: areaVis ? 1 : 0,
+                  fill:          "#0b0b0b",
+                  stroke:        "#60ff12",
+                  strokeWidth:   1.5,
+                  fillOpacity:   areaVis ? 1 : 0,
                   strokeOpacity: areaVis ? 1 : 0,
-                  transition:  "fill-opacity 0.4s ease, stroke-opacity 0.4s ease",
+                  transition:    "fill-opacity 0.4s ease, stroke-opacity 0.4s ease",
                   pointerEvents: "none",
                 }}
               />
             );
           })}
 
-          {/* ── Hover hit areas (larger, transparent circles) ── */}
-          {DATA.map((d, i) => {
-            const px = pts[i][0];
-            const py = pts[i][1];
-            return (
-              <circle
-                key={`hit-${d.año}`}
-                cx={px} cy={py} r={10}
-                fill="transparent"
-                style={{ cursor: "crosshair" }}
-                onMouseEnter={(e) => handleDotEnter(e, d)}
-                onMouseLeave={() => setTooltip(null)}
+          {/* ── Active hover crosshair ── */}
+          {tooltip && (
+            <>
+              <line
+                x1={xScale(tooltip.año)} y1={MG.top}
+                x2={xScale(tooltip.año)} y2={yBot}
+                stroke="var(--viz-grid)" strokeWidth={1} opacity={0.5}
               />
-            );
-          })}
+              <circle
+                cx={xScale(tooltip.año)} cy={yScale(tooltip.val)}
+                r={7}
+                fill="#60ff12" fillOpacity={0.15}
+              />
+              <circle
+                cx={xScale(tooltip.año)} cy={yScale(tooltip.val)}
+                r={3}
+                fill="#60ff12"
+              />
+            </>
+          )}
 
           {/* ── Y-axis labels ── */}
           {Y_TICKS.map((tick) => (
@@ -385,6 +379,16 @@ export default function GraficoCrecimientoInstituciones() {
             x1={MG.left} y1={yBot}
             x2={MG.left + plotW} y2={yBot}
             stroke="var(--border)" strokeWidth={1}
+          />
+
+          {/* ── Mouse capture rect (GrowthGapHero pattern) ── */}
+          <rect
+            x={MG.left} y={MG.top}
+            width={plotW} height={plotH}
+            fill="transparent"
+            style={{ cursor: "crosshair" }}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={() => setTooltip(null)}
           />
         </svg>
 

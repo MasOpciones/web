@@ -64,12 +64,9 @@ const REFORMAS = [
   },
 ];
 
-const DOT_COLOR  = { fallida: "#ef4444", parcial: "#f59e0b" };
-const BADGE_CFG  = {
-  fallida: { label: "sin reforma estructural", bg: "rgba(239,68,68,0.1)",  border: "rgba(239,68,68,0.3)",  text: "#f87171" },
-  parcial: { label: "parcial",                 bg: "rgba(245,158,11,0.1)", border: "rgba(245,158,11,0.3)", text: "#fbbf24" },
-};
-const RES_COLOR  = { fallida: "#fca5a5", parcial: "#fcd34d" };
+const DOT_COLOR = { fallida: "#ef4444", parcial: "#f59e0b" };
+const BADGE_TEXT = { fallida: "#f87171", parcial: "#fbbf24" };
+const BADGE_LABEL = { fallida: "sin reforma estructural", parcial: "parcial" };
 
 const sectionStyle = {
   width: "100%",
@@ -130,14 +127,14 @@ export default function GraficoTimelineReformas() {
         {/* Timeline track */}
         <div style={{ position: "relative", paddingLeft: 36 }}>
 
-          {/* Vertical spine */}
+          {/* Vertical spine — single color, no gradient */}
           <div style={{
-            position: "absolute",
-            left: 10,
-            top: 6,
-            bottom: 6,
-            width: 2,
-            background: "linear-gradient(to bottom, #374151 0%, #1f2937 100%)",
+            position:     "absolute",
+            left:         10,
+            top:          6,
+            bottom:       6,
+            width:        2,
+            background:   "var(--border)",
             borderRadius: 1,
           }} />
 
@@ -145,119 +142,106 @@ export default function GraficoTimelineReformas() {
             const isLast   = i === REFORMAS.length - 1;
             const isHov    = hovered === i;
             const dotColor = DOT_COLOR[r.tipo];
-            const badge    = BADGE_CFG[r.tipo];
-            const resColor = RES_COLOR[r.tipo];
             const delay    = `${i * 0.08}s`;
 
             return (
               <div
                 key={r.año}
                 style={{
-                  position:   "relative",
+                  position:     "relative",
                   marginBottom: isLast ? 0 : 28,
-                  opacity:    mounted ? 1 : 0,
-                  transform:  mounted ? "translateY(0)" : "translateY(14px)",
-                  transition: `opacity 0.45s ease ${delay}, transform 0.45s ease ${delay}`,
+                  opacity:      mounted ? 1 : 0,
+                  transform:    mounted ? "translateY(0)" : "translateY(14px)",
+                  transition:   `opacity 0.45s ease ${delay}, transform 0.45s ease ${delay}`,
                 }}
                 onMouseEnter={() => setHovered(i)}
                 onMouseLeave={() => setHovered(null)}
               >
-                {/* Dot */}
+                {/* Dot — smaller, no outline, glow only on hover */}
                 <div style={{
-                  position:     "absolute",
-                  left:         -36 + 4,   // center on spine (spine at left:10, dot width:14 → left: 10 - 7 = 3 from container edge, accounting for paddingLeft:36)
-                  top:          5,
-                  width:        14,
-                  height:       14,
-                  borderRadius: "50%",
-                  background:   dotColor,
-                  boxShadow:    `0 0 ${isHov ? 10 : 5}px ${dotColor}${isHov ? "cc" : "66"}`,
-                  transition:   "box-shadow 0.2s ease",
-                  zIndex:       1,
-                  border:       `2px solid ${dotColor}`,
-                  backgroundColor: "#0d1117",
-                  outline:      `3px solid ${dotColor}`,
-                  outlineOffset: 0,
+                  position:        "absolute",
+                  left:            -36 + 5,
+                  top:             4,
+                  width:           10,
+                  height:          10,
+                  borderRadius:    "50%",
+                  background:      "#0d1117",
+                  border:          `2px solid ${dotColor}`,
+                  boxShadow:       isHov ? `0 0 8px ${dotColor}99` : "none",
+                  transition:      "box-shadow 0.2s ease",
+                  zIndex:          1,
                 }} />
 
                 {/* Card */}
                 <div style={{
-                  borderLeft:       `3px solid ${isHov ? dotColor : "#1f2937"}`,
-                  paddingLeft:      14,
-                  paddingTop:       2,
-                  paddingBottom:    2,
-                  transition:       "border-color 0.2s ease",
-                  cursor:           "default",
+                  borderLeft:    `3px solid ${isHov ? dotColor : "transparent"}`,
+                  paddingLeft:   14,
+                  paddingTop:    2,
+                  paddingBottom: 2,
+                  transition:    "border-color 0.2s ease",
+                  cursor:        "default",
                 }}>
-                  {/* Year + name row */}
+                  {/* Year + name + badge row */}
                   <div style={{ display: "flex", flexWrap: "wrap", alignItems: "baseline", gap: "6px 10px", marginBottom: 4 }}>
                     <span style={{
-                      fontFamily: "var(--font-sans)", fontSize: 15,
-                      fontWeight: 800, color: "#60ff12",
+                      fontFamily:         "var(--font-sans)",
+                      fontSize:           15,
+                      fontWeight:         800,
+                      color:              "#60ff12",
                       fontVariantNumeric: "tabular-nums",
                     }}>
                       {r.año}
                     </span>
                     <span style={{
-                      fontFamily: "var(--font-sans)", fontSize: 14,
-                      fontWeight: 700, color: "#f3f4f6",
+                      fontFamily: "var(--font-sans)",
+                      fontSize:   14,
+                      fontWeight: 700,
+                      color:      "#f3f4f6",
                     }}>
                       {r.nombre}
                     </span>
-                    {/* Badge */}
+                    {/* Badge — text only, no border, no background */}
                     <span style={{
-                      fontFamily:   "var(--font-sans)",
-                      fontSize:     9.5,
-                      fontWeight:   600,
-                      letterSpacing:"0.06em",
-                      textTransform:"uppercase",
-                      color:        badge.text,
-                      background:   badge.bg,
-                      border:       `1px solid ${badge.border}`,
-                      borderRadius: 4,
-                      padding:      "1px 6px",
-                      lineHeight:   "1.6",
+                      fontFamily:    "var(--font-sans)",
+                      fontSize:      9.5,
+                      fontWeight:    600,
+                      letterSpacing: "0.06em",
+                      textTransform: "uppercase",
+                      color:         BADGE_TEXT[r.tipo],
+                      opacity:       0.6,
                     }}>
-                      {badge.label}
+                      {BADGE_LABEL[r.tipo]}
                     </span>
                   </div>
 
                   {/* Descripcion */}
                   <p style={{
-                    margin: "0 0 5px",
-                    fontFamily: "var(--font-sans)",
-                    fontSize: 12.5,
-                    lineHeight: 1.5,
-                    color: "#9ca3af",
+                    margin:      "0 0 5px",
+                    fontFamily:  "var(--font-sans)",
+                    fontSize:    12.5,
+                    lineHeight:  1.5,
+                    color:       "#9ca3af",
                   }}>
                     {r.descripcion}
                   </p>
 
-                  {/* Resultado */}
-                  <div style={{
-                    display:      "flex",
-                    alignItems:   "flex-start",
-                    gap:          7,
-                    background:   `${dotColor}0d`,
-                    borderRadius: 6,
-                    padding:      "5px 9px",
-                  }}>
+                  {/* Resultado — plain text, color as prefix dot */}
+                  <div style={{ display: "flex", alignItems: "flex-start", gap: 7 }}>
                     <span style={{
-                      flexShrink: 0,
-                      marginTop:  2,
-                      width:      6,
-                      height:     6,
+                      flexShrink:   0,
+                      marginTop:    5,
+                      width:        5,
+                      height:       5,
                       borderRadius: "50%",
-                      background: dotColor,
-                      opacity:    0.8,
+                      background:   dotColor,
+                      opacity:      0.6,
                     }} />
                     <p style={{
-                      margin: 0,
+                      margin:     0,
                       fontFamily: "var(--font-sans)",
-                      fontSize: 12,
+                      fontSize:   12,
                       lineHeight: 1.5,
-                      color: resColor,
-                      opacity: 0.9,
+                      color:      "var(--text-muted)",
                     }}>
                       {r.resultado}
                     </p>
@@ -268,19 +252,17 @@ export default function GraficoTimelineReformas() {
           })}
         </div>
 
-        {/* Bottom callout */}
+        {/* Bottom callout — no red background */}
         <div style={{
-          marginTop:    28,
-          padding:      "10px 14px",
-          borderLeft:   "3px solid #ef4444",
-          background:   "rgba(239,68,68,0.05)",
-          borderRadius: "0 8px 8px 0",
-          fontFamily:   "var(--font-sans)",
-          fontSize:     13,
-          lineHeight:   1.55,
-          color:        "var(--text-muted)",
-          opacity:      mounted ? 1 : 0,
-          transition:   `opacity 0.45s ease ${REFORMAS.length * 0.08 + 0.1}s`,
+          marginTop:  28,
+          paddingTop: 14,
+          borderTop:  "1px solid var(--border)",
+          fontFamily: "var(--font-sans)",
+          fontSize:   13,
+          lineHeight: 1.55,
+          color:      "var(--text-muted)",
+          opacity:    mounted ? 1 : 0,
+          transition: `opacity 0.45s ease ${REFORMAS.length * 0.08 + 0.1}s`,
         }}>
           El patrón se repite en cada intento: diagnóstico, comisión, propuesta,{" "}
           <strong style={{ color: "#f87171", fontWeight: 700 }}>archivo</strong>.
@@ -290,10 +272,17 @@ export default function GraficoTimelineReformas() {
 
       {/* Footer */}
       <footer style={{
-        display: "flex", justifyContent: "space-between", alignItems: "center",
-        gap: 12, marginTop: 10, fontSize: 10, textTransform: "uppercase",
-        color: "var(--text-muted)", fontFamily: "var(--font-sans)",
-        fontVariantNumeric: "tabular-nums", letterSpacing: "0.04em",
+        display:            "flex",
+        justifyContent:     "space-between",
+        alignItems:         "center",
+        gap:                12,
+        marginTop:          10,
+        fontSize:           10,
+        textTransform:      "uppercase",
+        color:              "var(--text-muted)",
+        fontFamily:         "var(--font-sans)",
+        fontVariantNumeric: "tabular-nums",
+        letterSpacing:      "0.04em",
       }}>
         <span>FUENTE: MIDEPLAN, CGR, Asamblea Legislativa</span>
         <span>PROYECTO: MÁSOPCIONES</span>
