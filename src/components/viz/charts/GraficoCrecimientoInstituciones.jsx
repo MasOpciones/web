@@ -14,11 +14,11 @@ const DATA = [
 
 // Fixed viewBox dimensions — same pattern as InformalidadChart / GrowthGapHero
 const WIDTH  = 960;
-const HEIGHT = 440;
-const MG     = { top: 76, right: 180, bottom: 54, left: 60 };
+const HEIGHT = 500;
+const MG     = { top: 76, right: 160, bottom: 62, left: 64 };
 
-const PLOT_W = WIDTH  - MG.left - MG.right;  // 720
-const PLOT_H = HEIGHT - MG.top  - MG.bottom; // 310
+const PLOT_W = WIDTH  - MG.left - MG.right;  // 736
+const PLOT_H = HEIGHT - MG.top  - MG.bottom; // 362
 
 const AÑO_MIN = 1900;
 const AÑO_MAX = 2024;
@@ -56,7 +56,6 @@ const x2000    = xScale(2000);
 const x2024    = xScale(2024);
 const y2024    = yScale(332);
 const yBot     = HEIGHT - MG.bottom;
-const bandMidX = (x1990 + x2000) / 2;
 
 // ─── styles ───────────────────────────────────────────────────────────────────
 
@@ -200,16 +199,6 @@ export default function GraficoCrecimientoInstituciones() {
           <text x={x1988 - 7} y={MG.top + 28} textAnchor="end"
             style={{ ...chartTxt, fontSize: 9 }}>
             Ministerio de Reforma
-          </text>
-
-          {/* Annotation: band — two lines, lower in band to avoid overlap */}
-          <text x={bandMidX} y={MG.top + 60} textAnchor="middle"
-            style={{ ...chartTxt, fill: "#f59e0b", fontWeight: 600, fontSize: 10 }}>
-            84 nuevas — mayor aumento
-          </text>
-          <text x={bandMidX} y={MG.top + 73} textAnchor="middle"
-            style={{ ...chartTxt, fill: "#f59e0b", fontWeight: 600, fontSize: 10 }}>
-            en cualquier década
           </text>
 
           {/* Area fill */}
