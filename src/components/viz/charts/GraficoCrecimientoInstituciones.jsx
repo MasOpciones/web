@@ -55,7 +55,7 @@ const panelStyle = {
   padding: "4px 0 16px",
   border: "1px solid var(--border)",
   boxShadow: "var(--viz-shadow)",
-  overflow: "hidden",
+  overflow: "visible",
 };
 
 const txtBase = { fontFamily: "var(--font-sans)", fontVariantNumeric: "tabular-nums" };
@@ -233,29 +233,29 @@ export default function GraficoCrecimientoInstituciones() {
             stroke="#f59e0b" strokeWidth={1.2}
             strokeDasharray="5 4" strokeOpacity={0.75}
           />
-          {/* COREC label — inside chart area, left of the line */}
-          <text
-            x={x1988 - 6} y={MG.top + 14}
-            textAnchor="end"
-            style={{ ...txtBase, fontSize: 10, fill: "#fbbf24", fontWeight: 700 }}
-          >
-            COREC 1988
-          </text>
-          <text
-            x={x1988 - 6} y={MG.top + 26}
-            textAnchor="end"
-            style={{ ...txtBase, fontSize: 9, fill: "#9ca3af" }}
-          >
-            Ministerio de Reforma
-          </text>
-
-          {/* Band label — inside chart area, centered over band */}
+          {/* Band label — top of chart area, centered over band */}
           <text
             x={bandMidX} y={MG.top + 14}
             textAnchor="middle"
             style={{ ...txtBase, fontSize: 10, fill: "#f59e0b", fontWeight: 600 }}
           >
             84 nuevas — mayor aumento en cualquier década
+          </text>
+
+          {/* COREC label — 32px below band label to avoid overlap */}
+          <text
+            x={x1988 - 6} y={MG.top + 46}
+            textAnchor="end"
+            style={{ ...txtBase, fontSize: 10, fill: "#fbbf24", fontWeight: 700 }}
+          >
+            COREC 1988
+          </text>
+          <text
+            x={x1988 - 6} y={MG.top + 58}
+            textAnchor="end"
+            style={{ ...txtBase, fontSize: 9, fill: "#9ca3af" }}
+          >
+            Ministerio de Reforma
           </text>
 
           {/* ── Area fill ── */}
