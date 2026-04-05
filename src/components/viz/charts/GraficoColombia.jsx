@@ -1,27 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 
 const DATA = [
-  {
-    cartera:          "Interior + Justicia",
-    empleadosAntes:   749,
-    empleadosDespues: 524,
-    gastoAntes:       20.8,
-    gastoDespues:     21.5,
-  },
-  {
-    cartera:          "Salud + Trabajo",
-    empleadosAntes:   1741,
-    empleadosDespues: 1683,
-    gastoAntes:       46.0,
-    gastoDespues:     47.1,
-  },
-  {
-    cartera:          "Ambiente + Vivienda",
-    empleadosAntes:   300,
-    empleadosDespues: 362,
-    gastoAntes:       9.2,
-    gastoDespues:     13.8,
-  },
+  { cartera: "Interior + Justicia", empleadosAntes: 749,  empleadosDespues: 524,  gastoAntes: 20.8, gastoDespues: 21.5 },
+  { cartera: "Salud + Trabajo",     empleadosAntes: 1741, empleadosDespues: 1683, gastoAntes: 46.0, gastoDespues: 47.1 },
+  { cartera: "Ambiente + Vivienda", empleadosAntes: 300,  empleadosDespues: 362,  gastoAntes: 9.2,  gastoDespues: 13.8 },
 ];
 
 const TOTALES = {
@@ -31,89 +13,71 @@ const TOTALES = {
   gastoDespues:     82.5,
 };
 
-const CHART_H   = 284;
-const MG        = { top: 32, right: 14, bottom: 76, left: 52 };
-const C_BEFORE  = "#374151";
+// Fixed viewBox per panel
+const PANEL_W  = 460;
+const CHART_H  = 260;
+const MG       = { top: 28, right: 14, bottom: 72, left: 50 };
+const PLOT_H   = CHART_H - MG.top - MG.bottom; // 160
+
+const C_BEFORE  = "rgba(156,163,175,0.35)";
 const C_EMP_AFT = "rgba(96,255,18,0.55)";
-const C_GAS_AFT = "rgba(239,68,68,0.65)";
+const C_GAS_AFT = "rgba(239,68,68,0.55)";
 const TXT       = { fontFamily: "var(--font-sans)", fontVariantNumeric: "tabular-nums" };
 
-// ─── helpers ──────────────────────────────────────────────────────────────────
+const chartTxt = {
+  fontFamily:         "var(--font-sans)",
+  fontVariantNumeric: "tabular-nums",
+  fontSize:           10,
+  fill:               "var(--text-muted)",
+};
 
-function yTx(val, yMax, plotH) {
-  return MG.top + (1 - val / yMax) * plotH;
+function yTx(val, yMax) {
+  return MG.top + (1 - val / yMax) * PLOT_H;
 }
 function groupCX(i, plotW) {
   return MG.left + (i + 0.5) * (plotW / DATA.length);
 }
-
 function splitLabel(str) {
   const idx = str.indexOf(" + ");
   if (idx < 0) return [str];
-  return [str.slice(0, idx + 2), str.slice(idx + 3)]; // keeps "+"" on first line
+  return [str.slice(0, idx + 2), str.slice(idx + 3)];
 }
 
-// ─── PanelChart ───────────────────────────────────────────────────────────────
+// ─── PanelChart — pure SVG, viewBox-based ─────────────────────────────────────
 
-function PanelChart({
-  panelW, title, subtitle,
-  yMax, yTicks, formatVal,
-  colorAfter,
-  valAntes, valDespues,   // arrays of numbers indexed to DATA
-  animated, wrapRef,
-  onHover, onLeave,
-}) {
-  const plotW = Math.max(panelW - MG.left - MG.right, 10);
-  const plotH = CHART_H - MG.top - MG.bottom;
-  const groupW = plotW / DATA.length;
-  const barW   = Math.min(26, (groupW - 10) / 2);
-  const yBot   = MG.top + plotH;
-
-  function handleBarEnter(e, d, type, val) {
-    if (!wrapRef.current) return;
-    const rect = wrapRef.current.getBoundingClientRect();
-    onHover({
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
-      cartera: d.cartera,
-      type,
-      val,
-    });
-  }
+function PanelChart({ title, subtitle, yMax, yTicks, formatVal, colorAfter,
+  valAntes, valDespues, animated, onHover, onLeave, svgRef }) {
+  const plotW = PANEL_W - MG.left - MG.right; // 396
+  const barW  = Math.min(28, (plotW / DATA.length - 10) / 2);
+  const yBot  = MG.top + PLOT_H;
 
   return (
-    <div style={{ position: "relative", flex: "1 1 0", minWidth: 0 }}>
-      {/* Panel title */}
-      <div style={{ marginBottom: 6, paddingLeft: MG.left }}>
+    <div style={{ flex: "1 1 0", minWidth: 0 }}>
+      <div style={{ marginBottom: 8 }}>
         <p style={{ margin: 0, ...TXT, fontSize: 12, fontWeight: 700, color: "var(--text)" }}>
           {title}
         </p>
         {subtitle && (
-          <p style={{ margin: "1px 0 0", ...TXT, fontSize: 10, color: "var(--text-muted)" }}>
+          <p style={{ margin: "2px 0 0", ...TXT, fontSize: 10, color: "var(--text-muted)" }}>
             {subtitle}
           </p>
         )}
       </div>
 
       <svg
-        width={panelW}
-        height={CHART_H}
-        style={{ display: "block", overflow: "visible" }}
+        ref={svgRef}
+        viewBox={`0 0 ${PANEL_W} ${CHART_H}`}
+        width="100%"
+        style={{ display: "block", height: "auto", overflow: "visible" }}
       >
-        {/* Grid lines + Y labels */}
+        {/* Grid + Y labels */}
         {yTicks.map((tick) => {
-          const ty = yTx(tick, yMax, plotH);
+          const ty = yTx(tick, yMax);
           return (
-            <g key={`g-${tick}`}>
-              <line
-                x1={MG.left} y1={ty} x2={MG.left + plotW} y2={ty}
-                stroke="#1f2937" strokeWidth={1}
-              />
-              <text
-                x={MG.left - 7} y={ty + 4}
-                textAnchor="end"
-                style={{ ...TXT, fontSize: 9.5, fill: "var(--text-muted)" }}
-              >
+            <g key={tick}>
+              <line x1={MG.left} y1={ty} x2={MG.left + plotW} y2={ty}
+                stroke="var(--viz-grid)" strokeWidth={1} opacity={0.5} />
+              <text x={MG.left - 7} y={ty + 4} textAnchor="end" style={chartTxt}>
                 {formatVal(tick)}
               </text>
             </g>
@@ -121,91 +85,52 @@ function PanelChart({
         })}
 
         {/* Baseline */}
-        <line
-          x1={MG.left} y1={yBot}
-          x2={MG.left + plotW} y2={yBot}
-          stroke="#374151" strokeWidth={1}
-        />
+        <line x1={MG.left} y1={yBot} x2={MG.left + plotW} y2={yBot}
+          stroke="var(--border)" strokeWidth={1} />
 
-        {/* Bars + x labels */}
+        {/* Bars */}
         {DATA.map((d, i) => {
-          const cx     = groupCX(i, plotW);
-          const vA     = valAntes[i];
-          const vD     = valDespues[i];
-          const hA     = Math.max(0, yBot - yTx(vA, yMax, plotH));
-          const hD     = Math.max(0, yBot - yTx(vD, yMax, plotH));
-          const xA     = cx - barW - 2;
-          const xD     = cx + 2;
-          const delay1 = `${i * 0.1}s`;
-          const delay2 = `${i * 0.1 + 0.06}s`;
-          const parts  = splitLabel(d.cartera);
-
+          const cx   = groupCX(i, plotW);
+          const vA   = valAntes[i];
+          const vD   = valDespues[i];
+          const hA   = Math.max(0, yBot - yTx(vA, yMax));
+          const hD   = Math.max(0, yBot - yTx(vD, yMax));
+          const xA   = cx - barW - 2;
+          const xD   = cx + 2;
+          const d1   = `${i * 0.1}s`;
+          const d2   = `${i * 0.1 + 0.07}s`;
+          const lblColorD = colorAfter === C_EMP_AFT ? "#86efac" : "#fca5a5";
+          const parts = splitLabel(d.cartera);
           return (
             <g key={d.cartera}>
-              {/* Antes bar */}
-              <rect
-                x={xA} y={yBot - hA} width={barW} height={hA}
-                fill={C_BEFORE}
-                style={{
-                  transformBox:    "fill-box",
-                  transformOrigin: "50% 100%",
-                  transform:       animated ? "scaleY(1)" : "scaleY(0)",
-                  transition:      `transform 0.55s ease ${delay1}`,
-                  cursor:          "crosshair",
-                }}
-                onMouseEnter={(e) => handleBarEnter(e, d, "Antes", vA)}
+              <rect x={xA} y={yBot - hA} width={barW} height={hA} fill={C_BEFORE}
+                style={{ transformBox: "fill-box", transformOrigin: "50% 100%",
+                  transform: animated ? "scaleY(1)" : "scaleY(0)",
+                  transition: `transform 0.55s ease ${d1}` }}
+                onMouseEnter={(e) => onHover(e, d, "Antes", vA)}
                 onMouseLeave={onLeave}
               />
-
-              {/* Después bar */}
-              <rect
-                x={xD} y={yBot - hD} width={barW} height={hD}
-                fill={colorAfter}
-                style={{
-                  transformBox:    "fill-box",
-                  transformOrigin: "50% 100%",
-                  transform:       animated ? "scaleY(1)" : "scaleY(0)",
-                  transition:      `transform 0.55s ease ${delay2}`,
-                  cursor:          "crosshair",
-                }}
-                onMouseEnter={(e) => handleBarEnter(e, d, "Después", vD)}
+              <rect x={xD} y={yBot - hD} width={barW} height={hD} fill={colorAfter}
+                style={{ transformBox: "fill-box", transformOrigin: "50% 100%",
+                  transform: animated ? "scaleY(1)" : "scaleY(0)",
+                  transition: `transform 0.55s ease ${d2}` }}
+                onMouseEnter={(e) => onHover(e, d, "Después", vD)}
                 onMouseLeave={onLeave}
               />
-
-              {/* Value labels above bars (visible after animation) */}
-              <text
-                x={xA + barW / 2} y={yBot - hA - 4}
-                textAnchor="middle"
-                style={{
-                  ...TXT, fontSize: 9, fill: "#6b7280",
-                  opacity: animated ? 1 : 0,
-                  transition: `opacity 0.3s ease ${delay1}`,
-                }}
-              >
+              {/* Value labels */}
+              <text x={xA + barW / 2} y={yBot - hA - 5} textAnchor="middle"
+                style={{ ...chartTxt, opacity: animated ? 1 : 0,
+                  transition: `opacity 0.3s ease ${d1}` }}>
                 {formatVal(vA)}
               </text>
-              <text
-                x={xD + barW / 2} y={yBot - hD - 4}
-                textAnchor="middle"
-                style={{
-                  ...TXT, fontSize: 9,
-                  fill: colorAfter === C_EMP_AFT ? "#86efac" : "#fca5a5",
-                  fontWeight: 600,
-                  opacity: animated ? 1 : 0,
-                  transition: `opacity 0.3s ease ${delay2}`,
-                }}
-              >
+              <text x={xD + barW / 2} y={yBot - hD - 5} textAnchor="middle"
+                style={{ ...chartTxt, fill: lblColorD, fontWeight: 600,
+                  opacity: animated ? 1 : 0, transition: `opacity 0.3s ease ${d2}` }}>
                 {formatVal(vD)}
               </text>
-
-              {/* X-axis label (2 lines) */}
+              {/* X labels */}
               {parts.map((line, li) => (
-                <text
-                  key={li}
-                  x={cx} y={yBot + 16 + li * 13}
-                  textAnchor="middle"
-                  style={{ ...TXT, fontSize: 9.5, fill: "var(--text-muted)" }}
-                >
+                <text key={li} x={cx} y={yBot + 16 + li * 13} textAnchor="middle" style={chartTxt}>
                   {line}
                 </text>
               ))}
@@ -215,68 +140,64 @@ function PanelChart({
       </svg>
 
       {/* Legend */}
-      <div style={{
-        display: "flex", gap: 14, paddingLeft: MG.left,
-        marginTop: -4,
-      }}>
-        {[
-          { color: C_BEFORE,   label: "Antes" },
-          { color: colorAfter, label: "Después" },
-        ].map(({ color, label }) => (
-          <span key={label} style={{ display: "inline-flex", alignItems: "center", gap: 5, ...TXT, fontSize: 10, color: "var(--text-muted)" }}>
-            <span style={{ width: 10, height: 10, borderRadius: 2, background: color, flexShrink: 0 }} />
-            {label}
-          </span>
-        ))}
+      <div style={{ display: "flex", gap: 14, marginTop: 4 }}>
+        {[{ color: C_BEFORE, label: "Antes" }, { color: colorAfter, label: "Después" }].map(
+          ({ color, label }) => (
+            <span key={label} style={{ display: "inline-flex", alignItems: "center",
+              gap: 5, ...TXT, fontSize: 10, color: "var(--text-muted)" }}>
+              <span style={{ width: 10, height: 10, borderRadius: 2,
+                background: color, flexShrink: 0 }} />
+              {label}
+            </span>
+          )
+        )}
       </div>
     </div>
   );
 }
 
-// ─── Main component ───────────────────────────────────────────────────────────
+// ─── Main component ────────────────────────────────────────────────────────────
 
 const sectionStyle = {
-  width: "100%",
-  margin: "2.8rem 0 3.2rem",
-  padding: "0.15rem 0",
+  width:      "100%",
+  margin:     "2.8rem 0 3.2rem",
+  padding:    "0.15rem 0",
   fontFamily: "var(--font-sans)",
-  color: "var(--text)",
+  color:      "var(--text)",
 };
 
 const panelStyle = {
-  position: "relative",
-  width: "100%",
+  position:     "relative",
+  overflow:     "visible",
+  width:        "100%",
   background:
     "radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 8%, transparent), transparent 36%), " +
     "linear-gradient(160deg, var(--viz-panel-strong) 0%, var(--viz-panel) 100%)",
   borderRadius: "16px",
-  padding: "20px 16px 20px",
-  border: "1px solid var(--border)",
-  boxShadow: "var(--viz-shadow)",
+  padding:      "20px 16px 20px",
+  border:       "1px solid var(--border)",
+  boxShadow:    "var(--viz-shadow)",
+};
+
+const tooltipStyle = {
+  position:             "absolute",
+  background:           "var(--viz-tooltip-bg)",
+  border:               "1px solid var(--viz-tooltip-border)",
+  borderRadius:         6,
+  padding:              "8px 12px",
+  boxShadow:            "var(--viz-tooltip-shadow)",
+  backdropFilter:       "var(--viz-tooltip-backdrop)",
+  WebkitBackdropFilter: "var(--viz-tooltip-backdrop)",
+  pointerEvents:        "none",
+  minWidth:             150,
 };
 
 export default function GraficoColombia() {
-  const wrapRef = useRef(null);
-  const [contW,    setContW]    = useState(640);
+  const wrapRef  = useRef(null);
+  const svg1Ref  = useRef(null);
   const [animated, setAnimated] = useState(false);
   const [tooltip,  setTooltip]  = useState(null);
 
-  // ResizeObserver
-  useEffect(() => {
-    const el = wrapRef.current;
-    if (!el) return;
-    const measure = () => {
-      const w = el.getBoundingClientRect().width;
-      if (w > 0) setContW(w);
-    };
-    measure();
-    if (typeof ResizeObserver === "undefined") return;
-    const ro = new ResizeObserver(measure);
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, []);
-
-  // Animate on mount
   useEffect(() => {
     const id = requestAnimationFrame(() =>
       requestAnimationFrame(() => setAnimated(true))
@@ -284,28 +205,28 @@ export default function GraficoColombia() {
     return () => cancelAnimationFrame(id);
   }, []);
 
-  const isMobile = contW < 520;
-  const gap      = isMobile ? 0 : 20;
-  const panelW   = isMobile ? contW - 32 : Math.floor((contW - 32 - gap) / 2);
-
-  const empDelta   = TOTALES.empleadosDespues - TOTALES.empleadosAntes; // −221
+  const empDelta   = TOTALES.empleadosDespues - TOTALES.empleadosAntes;
   const empPct     = ((empDelta / TOTALES.empleadosAntes) * 100).toFixed(1);
-  const gastoDelta = (TOTALES.gastoDespues - TOTALES.gastoAntes).toFixed(1); // +6.4
-  const gastoPct   = ((( TOTALES.gastoDespues - TOTALES.gastoAntes) / TOTALES.gastoAntes) * 100).toFixed(1);
+  const gastoDelta = (TOTALES.gastoDespues - TOTALES.gastoAntes).toFixed(1);
+  const gastoPct   = (((TOTALES.gastoDespues - TOTALES.gastoAntes) / TOTALES.gastoAntes) * 100).toFixed(1);
+
+  function handleHover(e, d, type, val) {
+    if (!wrapRef.current) return;
+    const rect = wrapRef.current.getBoundingClientRect();
+    setTooltip({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+      cartera: d.cartera, type, val,
+      contW: rect.width,
+    });
+  }
 
   return (
     <section style={sectionStyle}>
-      {/* Panel */}
+      {/* Panel — contains only the two bar charts */}
       <div style={panelStyle} ref={wrapRef} onMouseLeave={() => setTooltip(null)}>
-        {/* Charts row */}
-        <div style={{
-          display: "flex",
-          flexDirection: isMobile ? "column" : "row",
-          gap: gap,
-          alignItems: "flex-start",
-        }}>
+        <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
           <PanelChart
-            panelW={panelW}
             title="Planta de personal"
             subtitle="número de empleados"
             yMax={2000}
@@ -315,22 +236,11 @@ export default function GraficoColombia() {
             valAntes={DATA.map((d) => d.empleadosAntes)}
             valDespues={DATA.map((d) => d.empleadosDespues)}
             animated={animated}
-            wrapRef={wrapRef}
-            onHover={setTooltip}
+            onHover={handleHover}
             onLeave={() => setTooltip(null)}
+            svgRef={svg1Ref}
           />
-
-          {/* Vertical divider (desktop only) */}
-          {!isMobile && (
-            <div style={{ width: 1, background: "#1f2937", alignSelf: "stretch", flexShrink: 0 }} />
-          )}
-
-          {isMobile && (
-            <div style={{ height: 1, background: "#1f2937", width: "100%", margin: "8px 0" }} />
-          )}
-
           <PanelChart
-            panelW={panelW}
             title="Gasto de personal"
             subtitle="miles de millones COP · pesos constantes 2002"
             yMax={55}
@@ -340,103 +250,27 @@ export default function GraficoColombia() {
             valAntes={DATA.map((d) => d.gastoAntes)}
             valDespues={DATA.map((d) => d.gastoDespues)}
             animated={animated}
-            wrapRef={wrapRef}
-            onHover={setTooltip}
+            onHover={handleHover}
             onLeave={() => setTooltip(null)}
           />
-        </div>
-
-        {/* KPI cards */}
-        <div style={{
-          display: "flex",
-          flexWrap: "wrap",
-          gap: 12,
-          marginTop: 20,
-          paddingTop: 16,
-          borderTop: "1px solid #1f2937",
-        }}>
-          {/* KPI: empleados */}
-          <div style={{
-            flex: "1 1 180px",
-            background: "rgba(96,255,18,0.06)",
-            border: "1px solid rgba(96,255,18,0.18)",
-            borderRadius: 10,
-            padding: "12px 16px",
-          }}>
-            <p style={{ margin: "0 0 2px", ...TXT, fontSize: 10, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
-              Planta total
-            </p>
-            <p style={{ margin: 0, ...TXT, fontSize: 20, fontWeight: 800, color: "#86efac", lineHeight: 1.1 }}>
-              {empDelta.toLocaleString("es-CR")} empleados
-            </p>
-            <p style={{ margin: "3px 0 0", ...TXT, fontSize: 12, color: "#9ca3af" }}>
-              {empPct}% · parece un éxito
-            </p>
-          </div>
-
-          {/* KPI: gasto */}
-          <div style={{
-            flex: "1 1 180px",
-            background: "rgba(239,68,68,0.06)",
-            border: "1px solid rgba(239,68,68,0.22)",
-            borderRadius: 10,
-            padding: "12px 16px",
-          }}>
-            <p style={{ margin: "0 0 2px", ...TXT, fontSize: 10, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
-              Gasto de personal
-            </p>
-            <p style={{ margin: 0, ...TXT, fontSize: 20, fontWeight: 800, color: "#fca5a5", lineHeight: 1.1 }}>
-              +${gastoDelta}B en gasto
-            </p>
-            <p style={{ margin: "3px 0 0", ...TXT, fontSize: 12, color: "#9ca3af" }}>
-              +{gastoPct}% · este es el problema
-            </p>
-          </div>
-        </div>
-
-        {/* Editorial annotation */}
-        <div style={{
-          marginTop: 16,
-          padding: "10px 14px",
-          borderLeft: "3px solid #f59e0b",
-          background: "rgba(245,158,11,0.05)",
-          borderRadius: "0 8px 8px 0",
-          fontFamily: "var(--font-sans)",
-          fontSize: 13,
-          lineHeight: 1.6,
-          color: "var(--text-muted)",
-          fontStyle: "italic",
-        }}>
-          "El ponente de la ley reconoció el fracaso. En 2011, el gobierno Santos revirtió las
-          fusiones mediante la{" "}
-          <strong style={{ fontStyle: "normal", color: "#fbbf24", fontWeight: 600 }}>
-            Ley 1444
-          </strong>."
         </div>
 
         {/* Tooltip */}
         {tooltip && (
           <div style={{
-            position:       "absolute",
-            background:     "var(--viz-tooltip-bg-bar)",
-            border:         "1px solid var(--viz-tooltip-border)",
-            borderRadius:   6,
-            padding:        "7px 11px",
-            boxShadow:      "var(--viz-tooltip-shadow)",
-            backdropFilter: "var(--viz-tooltip-backdrop)",
-            WebkitBackdropFilter: "var(--viz-tooltip-backdrop)",
-            pointerEvents:  "none",
-            minWidth:       140,
-            left:           `${tooltip.x + (tooltip.x > contW / 2 ? -160 : 14)}px`,
-            top:            `${tooltip.y - 14}px`,
-            fontFamily:     "var(--font-sans)",
+            ...tooltipStyle,
+            left: `${tooltip.x + (tooltip.x > tooltip.contW / 2 ? -170 : 14)}px`,
+            top:  `${tooltip.y - 14}px`,
           }}>
-            <div style={{ fontSize: 10, color: "var(--text-muted)", marginBottom: 4 }}>
+            <div style={{ fontSize: 10, color: "var(--text-muted)", marginBottom: 4,
+              fontFamily: "var(--font-sans)" }}>
               {tooltip.cartera}
             </div>
             <div style={{ display: "flex", justifyContent: "space-between", gap: 12 }}>
-              <span style={{ fontSize: 11, color: "var(--text-muted)" }}>{tooltip.type}</span>
-              <strong style={{ fontSize: 11, color: "var(--text)", fontVariantNumeric: "tabular-nums" }}>
+              <span style={{ fontSize: 11, color: "var(--text-muted)",
+                fontFamily: "var(--font-sans)" }}>{tooltip.type}</span>
+              <strong style={{ fontSize: 11, color: "var(--text)",
+                fontVariantNumeric: "tabular-nums", fontFamily: "var(--font-sans)" }}>
                 {typeof tooltip.val === "number" && tooltip.val < 100
                   ? `$${tooltip.val}B`
                   : tooltip.val.toLocaleString("es-CR")}
@@ -446,10 +280,49 @@ export default function GraficoColombia() {
         )}
       </div>
 
-      {/* Footer */}
+      {/* KPI summary — outside the panel */}
+      <div style={{ display: "flex", gap: 12, marginTop: 12, flexWrap: "wrap" }}>
+        <div style={{ flex: "1 1 160px", padding: "14px 16px",
+          border: "1px solid var(--border)", borderRadius: 12 }}>
+          <p style={{ margin: "0 0 2px", ...TXT, fontSize: 10,
+            color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+            Planta total
+          </p>
+          <p style={{ margin: 0, ...TXT, fontSize: 20, fontWeight: 800,
+            color: "#86efac", lineHeight: 1.1 }}>
+            {empDelta.toLocaleString("es-CR")} empleados
+          </p>
+          <p style={{ margin: "3px 0 0", ...TXT, fontSize: 12, color: "var(--text-muted)" }}>
+            {empPct}% · parece un éxito
+          </p>
+        </div>
+        <div style={{ flex: "1 1 160px", padding: "14px 16px",
+          border: "1px solid var(--border)", borderRadius: 12 }}>
+          <p style={{ margin: "0 0 2px", ...TXT, fontSize: 10,
+            color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+            Gasto de personal
+          </p>
+          <p style={{ margin: 0, ...TXT, fontSize: 20, fontWeight: 800,
+            color: "#fca5a5", lineHeight: 1.1 }}>
+            +${gastoDelta}B en gasto
+          </p>
+          <p style={{ margin: "3px 0 0", ...TXT, fontSize: 12, color: "var(--text-muted)" }}>
+            +{gastoPct}% · este es el problema
+          </p>
+        </div>
+      </div>
+
+      {/* Editorial quote — outside the panel, plain text */}
+      <p style={{ margin: "12px 0 0", ...TXT, fontSize: 13, lineHeight: 1.6,
+        color: "var(--text-muted)", fontStyle: "italic" }}>
+        "El ponente de la ley reconoció el fracaso. En 2011, el gobierno Santos revirtió las
+        fusiones mediante la{" "}
+        <span style={{ fontStyle: "normal", color: "#fbbf24", fontWeight: 600 }}>Ley 1444</span>."
+      </p>
+
       <footer style={{
         display: "flex", justifyContent: "space-between", alignItems: "center",
-        gap: 12, marginTop: 10, fontSize: 10, textTransform: "uppercase",
+        gap: 12, marginTop: 12, fontSize: 10, textTransform: "uppercase",
         color: "var(--text-muted)", fontFamily: "var(--font-sans)",
         fontVariantNumeric: "tabular-nums", letterSpacing: "0.04em",
       }}>

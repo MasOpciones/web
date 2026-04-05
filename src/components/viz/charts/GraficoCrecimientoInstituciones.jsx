@@ -12,157 +12,140 @@ const DATA = [
   { año: 2024, instituciones: 332 },
 ];
 
-const Y_MAX    = 360;
-const Y_MIN    = 0;
-const AÑO_MIN  = 1900;
-const AÑO_MAX  = 2024;
-const SVG_H    = 420;
-const MG       = { top: 76, right: 44, bottom: 48, left: 58 };
+// Fixed viewBox dimensions — same pattern as InformalidadChart / GrowthGapHero
+const WIDTH  = 960;
+const HEIGHT = 440;
+const MG     = { top: 76, right: 180, bottom: 54, left: 60 };
 
-const Y_TICKS  = [0, 50, 100, 150, 200, 250, 300, 350];
-const X_TICKS  = [1900, 1920, 1940, 1960, 1980, 2000, 2024];
+const PLOT_W = WIDTH  - MG.left - MG.right;  // 720
+const PLOT_H = HEIGHT - MG.top  - MG.bottom; // 310
 
-// ─── helpers ──────────────────────────────────────────────────────────────────
+const AÑO_MIN = 1900;
+const AÑO_MAX = 2024;
+const Y_MIN   = 0;
+const Y_MAX   = 360;
 
-function buildPaths(data, xScale, yScale) {
-  const pts = data.map((d) => [xScale(d.año), yScale(d.instituciones)]);
+const Y_TICKS = [0, 50, 100, 150, 200, 250, 300, 350];
+const X_TICKS = [1900, 1920, 1940, 1960, 1980, 2000, 2024];
+
+// Pure scale functions — fixed viewBox, no dynamic width needed
+function xScale(año) {
+  return MG.left + ((año - AÑO_MIN) / (AÑO_MAX - AÑO_MIN)) * PLOT_W;
+}
+function yScale(val) {
+  return MG.top + (1 - (val - Y_MIN) / (Y_MAX - Y_MIN)) * PLOT_H;
+}
+
+function buildPaths() {
+  const pts   = DATA.map((d) => [xScale(d.año), yScale(d.instituciones)]);
   const lineD = pts.map((p, i) => `${i === 0 ? "M" : "L"}${p[0]},${p[1]}`).join(" ");
-  const plotBottom = SVG_H - MG.bottom;
+  const yBot  = HEIGHT - MG.bottom;
   const areaD =
-    `M${xScale(AÑO_MIN)},${plotBottom} ` +
+    `M${xScale(AÑO_MIN)},${yBot} ` +
     pts.map((p) => `L${p[0]},${p[1]}`).join(" ") +
-    ` L${xScale(AÑO_MAX)},${plotBottom} Z`;
+    ` L${xScale(AÑO_MAX)},${yBot} Z`;
   return { lineD, areaD, pts };
 }
+
+const { lineD, areaD, pts } = buildPaths();
+
+// Pre-computed annotation positions
+const x1988    = xScale(1988);
+const x1990    = xScale(1990);
+const x2000    = xScale(2000);
+const x2024    = xScale(2024);
+const y2024    = yScale(332);
+const yBot     = HEIGHT - MG.bottom;
+const bandMidX = (x1990 + x2000) / 2;
 
 // ─── styles ───────────────────────────────────────────────────────────────────
 
 const sectionStyle = {
-  width: "100%",
-  margin: "2.8rem 0 3.2rem",
-  padding: "0.15rem 0",
+  width:      "100%",
+  margin:     "2.8rem 0 3.2rem",
+  padding:    "0.15rem 0",
   fontFamily: "var(--font-sans)",
-  color: "var(--text)",
+  color:      "var(--text)",
 };
 
 const panelStyle = {
-  position: "relative",
-  width: "100%",
+  position:     "relative",
+  overflow:     "visible",
+  width:        "100%",
   background:
     "radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 8%, transparent), transparent 36%), " +
     "linear-gradient(160deg, var(--viz-panel-strong) 0%, var(--viz-panel) 100%)",
   borderRadius: "16px",
-  padding: "4px 0 16px",
-  border: "1px solid var(--border)",
-  boxShadow: "var(--viz-shadow)",
-  overflow: "visible",
+  padding:      "20px 16px 16px",
+  border:       "1px solid var(--border)",
+  boxShadow:    "var(--viz-shadow)",
 };
 
-const txtBase = { fontFamily: "var(--font-sans)", fontVariantNumeric: "tabular-nums" };
+const chartTxt = {
+  fontFamily:         "var(--font-sans)",
+  fontVariantNumeric: "tabular-nums",
+  fontSize:           11,
+  fill:               "var(--text-muted)",
+};
 
 const tooltipStyle = {
   position:             "absolute",
-  background:           "var(--viz-tooltip-bg-bar)",
+  background:           "var(--viz-tooltip-bg)",
   border:               "1px solid var(--viz-tooltip-border)",
   borderRadius:         6,
-  padding:              "6px 10px",
+  padding:              "10px 14px",
   boxShadow:            "var(--viz-tooltip-shadow)",
   backdropFilter:       "var(--viz-tooltip-backdrop)",
   WebkitBackdropFilter: "var(--viz-tooltip-backdrop)",
   pointerEvents:        "none",
-  minWidth:             120,
-  zIndex:               10,
+  minWidth:             140,
 };
 
 // ─── component ────────────────────────────────────────────────────────────────
 
 export default function GraficoCrecimientoInstituciones() {
-  const wrapRef  = useRef(null);  // panel div — used by ResizeObserver
-  const svgRef   = useRef(null);  // svg element — used by mouse handler (GrowthGapHero pattern)
-  const pathRef  = useRef(null);
+  const svgRef  = useRef(null);
+  const pathRef = useRef(null);
 
-  const [width,      setWidth]      = useState(680);
-  const [pathLen,    setPathLen]    = useState(5000);
-  const [animated,   setAnimated]   = useState(false);
-  const [areaVis,    setAreaVis]    = useState(false);
+  const [pathLen,  setPathLen]  = useState(5000);
+  const [animated, setAnimated] = useState(false);
+  const [areaVis,  setAreaVis]  = useState(false);
 
-  // Hover state — matches GrowthGapHero exactly
-  const [activeData, setActiveData] = useState(null); // { año, val }
+  const [activeData, setActiveData] = useState(null);
   const [tooltipX,   setTooltipX]   = useState(0);
   const [tooltipY,   setTooltipY]   = useState(0);
   const [isRight,    setIsRight]    = useState(false);
 
-  // ResizeObserver — watches the panel div
-  useEffect(() => {
-    const el = wrapRef.current;
-    if (!el) return;
-    const measure = () => {
-      const w = el.getBoundingClientRect().width;
-      if (w > 0) setWidth(w);
-    };
-    measure();
-    if (typeof ResizeObserver === "undefined") return;
-    const ro = new ResizeObserver(measure);
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, []);
-
-  // Measure path length on each width change, then animate
+  // Measure path length once on mount, then animate
   useEffect(() => {
     if (!pathRef.current) return;
     const len = pathRef.current.getTotalLength() || 5000;
     setPathLen(len);
-    setAnimated(false);
-    setAreaVis(false);
-    const id1 = requestAnimationFrame(() =>
+    const id = requestAnimationFrame(() =>
       requestAnimationFrame(() => {
         setAnimated(true);
-        const id2 = setTimeout(() => setAreaVis(true), 1400);
-        return () => clearTimeout(id2);
+        const t = setTimeout(() => setAreaVis(true), 1400);
+        return () => clearTimeout(t);
       })
     );
-    return () => cancelAnimationFrame(id1);
-  }, [width]);
+    return () => cancelAnimationFrame(id);
+  }, []);
 
-  // Scales
-  const plotW = Math.max(width - MG.left - MG.right, 40);
-  const plotH = SVG_H - MG.top - MG.bottom;
-
-  function xScale(año) {
-    return MG.left + ((año - AÑO_MIN) / (AÑO_MAX - AÑO_MIN)) * plotW;
-  }
-  function yScale(val) {
-    return MG.top + (1 - (val - Y_MIN) / (Y_MAX - Y_MIN)) * plotH;
-  }
-
-  const { lineD, areaD, pts } = buildPaths(DATA, xScale, yScale);
-
-  // Annotation positions
-  const x1988    = xScale(1988);
-  const x1990    = xScale(1990);
-  const x2000    = xScale(2000);
-  const x2024    = xScale(2024);
-  const y2024    = yScale(332);
-  const yBot     = SVG_H - MG.bottom;
-  const bandMidX = (x1990 + x2000) / 2;
-
-  // ─── GrowthGapHero-identical mouse handler ────────────────────────────────
-  // Uses svgRef (the <svg> element), not wrapRef (the panel div).
-  // SVG width === panel width (set by ResizeObserver), so no scaleX needed.
+  // Mouse handler — identical to InformalidadChart / GrowthGapHero
+  // Uses scaleX to correct for responsive viewBox scaling
   function handleMouseMove(e) {
     if (!svgRef.current) return;
     const rect   = svgRef.current.getBoundingClientRect();
     const mouseX = e.clientX - rect.left;
     const mouseY = e.clientY - rect.top;
-    const relX   = mouseX - MG.left;
-    if (relX < 0 || relX > plotW) {
-      setActiveData(null);
-      return;
-    }
-    const ratio = relX / plotW;
+    const scaleX = rect.width / WIDTH;
+    const chartLeft  = MG.left * scaleX;
+    const chartWidth = PLOT_W * scaleX;
+    const relX = mouseX - chartLeft;
+    if (relX < 0 || relX > chartWidth) { setActiveData(null); return; }
+    const ratio = relX / chartWidth;
     const year  = AÑO_MIN + ratio * (AÑO_MAX - AÑO_MIN);
-    let closest = DATA[0];
-    let minDist = Infinity;
+    let closest = DATA[0], minDist = Infinity;
     for (const d of DATA) {
       const dist = Math.abs(d.año - year);
       if (dist < minDist) { minDist = dist; closest = d; }
@@ -175,97 +158,75 @@ export default function GraficoCrecimientoInstituciones() {
 
   return (
     <section style={sectionStyle}>
-      {/* Panel — position:relative anchors the absolute tooltip */}
-      <div style={panelStyle} ref={wrapRef} onMouseLeave={() => setActiveData(null)}>
+      <div style={panelStyle} onMouseLeave={() => setActiveData(null)}>
         <svg
           ref={svgRef}
-          width={width}
-          height={SVG_H}
+          viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
+          width="100%"
           role="img"
-          aria-label="Gráfico de área que muestra el crecimiento de instituciones públicas en Costa Rica de 39 en 1900 a 332 en 2024, con estancamiento desde el año 2000."
-          style={{ display: "block", overflow: "visible" }}
+          aria-label="Crecimiento de instituciones públicas en Costa Rica de 39 en 1900 a 332 en 2024"
+          style={{ display: "block", width: "100%", height: "auto" }}
         >
-          {/* ── Horizontal grid lines ── */}
+          {/* Grid lines */}
           {Y_TICKS.map((tick) => (
             <line
               key={`hg-${tick}`}
               x1={MG.left} y1={yScale(tick)}
-              x2={MG.left + plotW} y2={yScale(tick)}
-              stroke="var(--viz-grid)" strokeWidth={1} strokeOpacity={0.4}
+              x2={MG.left + PLOT_W} y2={yScale(tick)}
+              stroke="var(--viz-grid)" strokeWidth={1} opacity={0.65}
             />
           ))}
 
-          {/* ── Band 1990–2000 ── */}
+          {/* Band 1990–2000 */}
           <rect
             x={x1990} y={MG.top}
-            width={x2000 - x1990} height={plotH}
-            fill="rgba(96,255,18,0.07)"
+            width={x2000 - x1990} height={PLOT_H}
+            fill="var(--viz-accent)" fillOpacity={0.05}
           />
-          <line
-            x1={x2000} y1={MG.top} x2={x2000} y2={yBot}
-            stroke="#f59e0b" strokeWidth={0.8} strokeDasharray="3 3" strokeOpacity={0.35}
-          />
-          <line
-            x1={x1990} y1={MG.top} x2={x1990} y2={yBot}
-            stroke="#f59e0b" strokeWidth={0.8} strokeDasharray="3 3" strokeOpacity={0.35}
-          />
+          <line x1={x1990} y1={MG.top} x2={x1990} y2={yBot}
+            stroke="var(--viz-grid)" strokeWidth={1} strokeDasharray="4 3" opacity={0.5} />
+          <line x1={x2000} y1={MG.top} x2={x2000} y2={yBot}
+            stroke="var(--viz-grid)" strokeWidth={1} strokeDasharray="4 3" opacity={0.5} />
 
-          {/* ── COREC 1988 vertical line ── */}
-          <line
-            x1={x1988} y1={MG.top} x2={x1988} y2={yBot}
-            stroke="#f59e0b" strokeWidth={1.2} strokeDasharray="5 4" strokeOpacity={0.75}
-          />
+          {/* COREC 1988 line */}
+          <line x1={x1988} y1={MG.top} x2={x1988} y2={yBot}
+            stroke="#f59e0b" strokeWidth={1.2} strokeDasharray="5 4" strokeOpacity={0.7} />
 
-          {/* COREC label — top row, left of the 1988 line */}
-          <text
-            x={x1988 - 6} y={MG.top + 16}
-            textAnchor="end"
-            style={{ ...txtBase, fontSize: 10, fill: "#fbbf24", fontWeight: 700 }}
-          >
+          {/* Annotation: COREC — left of line, top of plot */}
+          <text x={x1988 - 7} y={MG.top + 16} textAnchor="end"
+            style={{ ...chartTxt, fill: "#fbbf24", fontWeight: 700, fontSize: 10 }}>
             COREC 1988
           </text>
-          <text
-            x={x1988 - 6} y={MG.top + 28}
-            textAnchor="end"
-            style={{ ...txtBase, fontSize: 9, fill: "#9ca3af" }}
-          >
+          <text x={x1988 - 7} y={MG.top + 28} textAnchor="end"
+            style={{ ...chartTxt, fontSize: 9 }}>
             Ministerio de Reforma
           </text>
 
-          {/* Band label — two lines, lower in the area to avoid overlap with COREC */}
-          <text
-            x={bandMidX} y={MG.top + 58}
-            textAnchor="middle"
-            style={{ ...txtBase, fontSize: 10, fill: "#f59e0b", fontWeight: 600 }}
-          >
+          {/* Annotation: band — two lines, lower in band to avoid overlap */}
+          <text x={bandMidX} y={MG.top + 60} textAnchor="middle"
+            style={{ ...chartTxt, fill: "#f59e0b", fontWeight: 600, fontSize: 10 }}>
             84 nuevas — mayor aumento
           </text>
-          <text
-            x={bandMidX} y={MG.top + 70}
-            textAnchor="middle"
-            style={{ ...txtBase, fontSize: 10, fill: "#f59e0b", fontWeight: 600 }}
-          >
+          <text x={bandMidX} y={MG.top + 73} textAnchor="middle"
+            style={{ ...chartTxt, fill: "#f59e0b", fontWeight: 600, fontSize: 10 }}>
             en cualquier década
           </text>
 
-          {/* ── Area fill ── */}
-          <path
-            d={areaD}
-            style={{
-              fill:        "rgba(96,255,18,0.06)",
-              fillOpacity: areaVis ? 1 : 0,
-              transition:  "fill-opacity 0.9s ease",
-            }}
-          />
+          {/* Area fill */}
+          <path d={areaD} style={{
+            fill:        "var(--viz-accent)",
+            fillOpacity: areaVis ? 0.06 : 0,
+            transition:  "fill-opacity 0.9s ease",
+          }} />
 
-          {/* ── Main line ── */}
+          {/* Main line — stroke-dashoffset draw animation */}
           <path
             ref={pathRef}
             d={lineD}
             style={{
               fill:             "none",
-              stroke:           "#60ff12",
-              strokeWidth:      2,
+              stroke:           "var(--viz-accent)",
+              strokeWidth:      2.5,
               strokeLinecap:    "round",
               strokeLinejoin:   "round",
               strokeDasharray:  pathLen,
@@ -274,41 +235,15 @@ export default function GraficoCrecimientoInstituciones() {
             }}
           />
 
-          {/* ── 2024 end-point annotation ── */}
-          <circle
-            cx={x2024} cy={y2024} r={5}
-            style={{
-              fill:        "#60ff12",
-              fillOpacity: areaVis ? 1 : 0,
-              filter:      "drop-shadow(0 0 6px rgba(96,255,18,0.7))",
-              transition:  "fill-opacity 0.4s ease",
-            }}
-          />
-          <text
-            x={x2024 - 10} y={y2024 - 14}
-            textAnchor="end"
-            style={{ ...txtBase, fontSize: 10, fill: "#9ca3af" }}
-          >
-            Solo 15 han cerrado en 75 años
-          </text>
-          <line
-            x1={x2024 - 8} y1={y2024 - 11}
-            x2={x2024 - 2} y2={y2024 - 6}
-            stroke="#6b7280" strokeWidth={0.8}
-          />
-
-          {/* ── Visible small dots on data points ── */}
+          {/* Data point dots */}
           {DATA.map((d, i) => {
-            const px = pts[i][0];
-            const py = pts[i][1];
-            if (d.año === 2024) return null;
+            const [px, py] = pts[i];
             return (
-              <circle
-                key={`vis-${d.año}`}
+              <circle key={`dot-${d.año}`}
                 cx={px} cy={py} r={3}
                 style={{
-                  fill:          "#0b0b0b",
-                  stroke:        "#60ff12",
+                  fill:          "var(--viz-panel-strong)",
+                  stroke:        "var(--viz-accent)",
                   strokeWidth:   1.5,
                   fillOpacity:   areaVis ? 1 : 0,
                   strokeOpacity: areaVis ? 1 : 0,
@@ -319,92 +254,88 @@ export default function GraficoCrecimientoInstituciones() {
             );
           })}
 
-          {/* ── Active hover crosshair (matches GrowthGapHero) ── */}
+          {/* 2024 endpoint — accent dot */}
+          <circle cx={x2024} cy={y2024} r={5} style={{
+            fill:        "var(--viz-accent)",
+            fillOpacity: areaVis ? 1 : 0,
+            filter:      "drop-shadow(0 0 6px rgba(96,255,18,0.6))",
+            transition:  "fill-opacity 0.4s ease",
+          }} />
+
+          {/* End-label in right margin */}
+          <text x={x2024 + 12} y={y2024 + 4} textAnchor="start"
+            style={{ ...chartTxt, fill: "var(--viz-accent)", fontWeight: 700, fontSize: 11 }}>
+            332 · 2024
+          </text>
+          <text x={x2024 + 12} y={y2024 + 17} textAnchor="start"
+            style={{ ...chartTxt, fontSize: 10 }}>
+            solo 15 han cerrado
+          </text>
+
+          {/* Active hover crosshair */}
           {activeData && (
             <>
               <line
                 x1={xScale(activeData.año)} y1={MG.top}
                 x2={xScale(activeData.año)} y2={yBot}
-                stroke="var(--viz-grid)" strokeWidth={1} opacity={0.5}
+                stroke="var(--viz-grid)" strokeWidth={1} opacity={0.48}
               />
-              <circle
-                cx={xScale(activeData.año)} cy={yScale(activeData.val)}
-                r={7} fill="#60ff12" fillOpacity={0.15}
-              />
-              <circle
-                cx={xScale(activeData.año)} cy={yScale(activeData.val)}
-                r={3} fill="#60ff12"
-              />
+              <circle cx={xScale(activeData.año)} cy={yScale(activeData.val)}
+                r={7} fill="var(--viz-accent)" fillOpacity={0.14} />
+              <circle cx={xScale(activeData.año)} cy={yScale(activeData.val)}
+                r={2.8} fill="var(--viz-accent)" />
             </>
           )}
 
-          {/* ── Y-axis labels ── */}
+          {/* Y axis labels */}
           {Y_TICKS.map((tick) => (
-            <text
-              key={`yl-${tick}`}
-              x={MG.left - 8} y={yScale(tick) + 4}
-              textAnchor="end"
-              style={{ ...txtBase, fontSize: 10, fill: "var(--text-muted)" }}
-            >
+            <text key={`yl-${tick}`}
+              x={MG.left - 10} y={yScale(tick) + 4}
+              textAnchor="end" style={chartTxt}>
               {tick}
             </text>
           ))}
 
-          {/* ── X-axis labels ── */}
+          {/* X axis labels */}
           {X_TICKS.map((año) => (
-            <text
-              key={`xl-${año}`}
-              x={xScale(año)} y={SVG_H - MG.bottom + 18}
-              textAnchor="middle"
-              style={{ ...txtBase, fontSize: 10, fill: "var(--text-muted)" }}
-            >
+            <text key={`xl-${año}`}
+              x={xScale(año)} y={HEIGHT - MG.bottom + 22}
+              textAnchor="middle" style={chartTxt}>
               {año}
             </text>
           ))}
 
-          {/* ── Baseline ── */}
-          <line
-            x1={MG.left} y1={yBot}
-            x2={MG.left + plotW} y2={yBot}
-            stroke="var(--border)" strokeWidth={1}
-          />
+          {/* Baseline */}
+          <line x1={MG.left} y1={yBot} x2={MG.left + PLOT_W} y2={yBot}
+            stroke="var(--border)" strokeWidth={1} />
 
-          {/* ── Mouse capture rect — last element so it's on top ── */}
+          {/* Mouse capture rect — last element, on top */}
           <rect
             x={MG.left} y={MG.top}
-            width={plotW} height={plotH}
+            width={PLOT_W} height={PLOT_H}
             fill="transparent"
-            style={{ cursor: "crosshair" }}
             onMouseMove={handleMouseMove}
             onMouseLeave={() => setActiveData(null)}
           />
         </svg>
 
-        {/* Tooltip — positioned relative to panelStyle (position:relative) */}
         {activeData && (
-          <div
-            style={{
-              ...tooltipStyle,
-              left: `${tooltipX + (isRight ? -140 : 16)}px`,
-              top:  `${tooltipY - 36}px`,
-            }}
-          >
-            <div style={{
-              fontSize: 11, fontWeight: 700, color: "var(--text)",
-              marginBottom: 3, fontFamily: "var(--font-sans)",
-            }}>
+          <div style={{
+            ...tooltipStyle,
+            left: `${tooltipX + (isRight ? -160 : 16)}px`,
+            top:  `${tooltipY - 10}px`,
+          }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: "var(--text)", marginBottom: 6,
+              fontFamily: "var(--font-sans)" }}>
               {activeData.año}
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-              <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#60ff12", flexShrink: 0 }} />
-              <span style={{ fontSize: 11, color: "var(--text-muted)", fontFamily: "var(--font-sans)" }}>
-                Instituciones
-              </span>
-              <strong style={{
-                fontSize: 11, color: "var(--text)",
-                fontVariantNumeric: "tabular-nums",
-                marginLeft: "auto", fontFamily: "var(--font-sans)",
-              }}>
+              <span style={{ width: 8, height: 8, borderRadius: "50%",
+                background: "var(--viz-accent)", flexShrink: 0 }} />
+              <span style={{ fontSize: 12, color: "var(--text-muted)", fontFamily: "var(--font-sans)",
+                flexGrow: 1 }}>Instituciones</span>
+              <strong style={{ fontSize: 12, color: "var(--text)", fontVariantNumeric: "tabular-nums",
+                fontFamily: "var(--font-sans)" }}>
                 {activeData.val}
               </strong>
             </div>
@@ -412,10 +343,9 @@ export default function GraficoCrecimientoInstituciones() {
         )}
       </div>
 
-      {/* Footer */}
       <footer style={{
         display: "flex", justifyContent: "space-between", alignItems: "center",
-        gap: 12, marginTop: 10, fontSize: 10, textTransform: "uppercase",
+        gap: 12, marginTop: 12, fontSize: 10, textTransform: "uppercase",
         color: "var(--text-muted)", fontFamily: "var(--font-sans)",
         fontVariantNumeric: "tabular-nums", letterSpacing: "0.04em",
       }}>
