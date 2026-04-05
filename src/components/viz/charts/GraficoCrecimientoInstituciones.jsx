@@ -103,10 +103,8 @@ const tooltipStyle = {
 // ─── component ────────────────────────────────────────────────────────────────
 
 export default function GraficoCrecimientoInstituciones() {
-  const svgRef  = useRef(null);
-  const pathRef = useRef(null);
+  const svgRef = useRef(null);
 
-  const [pathLen,  setPathLen]  = useState(5000);
   const [animated, setAnimated] = useState(false);
   const [areaVis,  setAreaVis]  = useState(false);
 
@@ -115,16 +113,12 @@ export default function GraficoCrecimientoInstituciones() {
   const [tooltipY,   setTooltipY]   = useState(0);
   const [isRight,    setIsRight]    = useState(false);
 
-  // Measure path length once on mount, then animate
+  // Trigger animation on mount
   useEffect(() => {
-    if (!pathRef.current) return;
-    const len = pathRef.current.getTotalLength() || 5000;
-    setPathLen(len);
     const id = requestAnimationFrame(() =>
       requestAnimationFrame(() => {
         setAnimated(true);
-        const t = setTimeout(() => setAreaVis(true), 1400);
-        return () => clearTimeout(t);
+        setTimeout(() => setAreaVis(true), 800);
       })
     );
     return () => cancelAnimationFrame(id);
@@ -208,19 +202,17 @@ export default function GraficoCrecimientoInstituciones() {
             transition:  "fill-opacity 0.9s ease",
           }} />
 
-          {/* Main line — stroke-dashoffset draw animation */}
+          {/* Main line — opacity fade animation */}
           <path
-            ref={pathRef}
             d={lineD}
             style={{
-              fill:             "none",
-              stroke:           "var(--viz-accent)",
-              strokeWidth:      2.5,
-              strokeLinecap:    "round",
-              strokeLinejoin:   "round",
-              strokeDasharray:  pathLen,
-              strokeDashoffset: animated ? 0 : pathLen,
-              transition:       "stroke-dashoffset 1.5s ease-in-out",
+              fill:          "none",
+              stroke:        "var(--viz-accent)",
+              strokeWidth:   2.5,
+              strokeLinecap: "round",
+              strokeLinejoin:"round",
+              opacity:       animated ? 1 : 0,
+              transition:    "opacity 1.2s ease-in-out",
             }}
           />
 

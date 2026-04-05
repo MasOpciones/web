@@ -237,30 +237,36 @@ export default function GraficoROI() {
         <div style={{ display: "flex", flexWrap: "wrap", gap: 12, marginBottom: 16 }}>
           {[
             {
-              valor:     "$15M",
-              label:     "Costo estimado del encargo",
-              sub:       "Big Four · escala de Estado",
-              valColor:  "var(--text-muted)",
-              hoverBorder: "rgba(156,163,175,0.35)",
-              hoverBg:   "rgba(156,163,175,0.04)",
+              valor:       "$15M",
+              label:       "Costo estimado del encargo",
+              sub:         "Big Four · escala de Estado",
+              valColor:    "var(--text-muted)",
+              defaultBorder: "rgba(156,163,175,0.2)",
+              hoverBorder:   "rgba(156,163,175,0.5)",
+              defaultBg:   "rgba(156,163,175,0.02)",
+              hoverBg:     "rgba(156,163,175,0.06)",
             },
             {
-              valor:     "$2,300M",
-              label:     "Ineficiencia anual estimada",
-              sub:       "BID · 4.7% del PIB",
-              valColor:  ACCENT,
-              hoverBorder: "rgba(96,255,18,0.35)",
-              hoverBg:   "rgba(96,255,18,0.04)",
+              valor:       "$2,300M",
+              label:       "Ineficiencia anual estimada",
+              sub:         "BID · 4.7% del PIB",
+              valColor:    ACCENT,
+              defaultBorder: "rgba(96,255,18,0.22)",
+              hoverBorder:   "rgba(96,255,18,0.55)",
+              defaultBg:   "rgba(96,255,18,0.02)",
+              hoverBg:     "rgba(96,255,18,0.06)",
             },
             {
-              valor:     "$2,370M",
-              label:     "Intereses de la deuda en 2024",
-              sub:       "Máximo histórico · 19 años",
-              valColor:  "#f87171",
-              hoverBorder: "rgba(248,113,113,0.35)",
-              hoverBg:   "rgba(248,113,113,0.04)",
+              valor:       "$2,370M",
+              label:       "Intereses de la deuda en 2024",
+              sub:         "Máximo histórico · 19 años",
+              valColor:    "#f87171",
+              defaultBorder: "rgba(248,113,113,0.22)",
+              hoverBorder:   "rgba(248,113,113,0.55)",
+              defaultBg:   "rgba(248,113,113,0.02)",
+              hoverBg:     "rgba(248,113,113,0.06)",
             },
-          ].map(({ valor, label, sub, valColor, hoverBorder, hoverBg }, ci) => {
+          ].map(({ valor, label, sub, valColor, defaultBorder, hoverBorder, defaultBg, hoverBg }, ci) => {
             const isHov = hoveredCard === ci;
             return (
             <div
@@ -269,8 +275,8 @@ export default function GraficoROI() {
               onMouseLeave={() => setHoveredCard(null)}
               style={{
                 flex:         "1 1 160px",
-                background:   isHov ? hoverBg : "transparent",
-                border:       `1px solid ${isHov ? hoverBorder : "var(--border)"}`,
+                background:   isHov ? hoverBg : defaultBg,
+                border:       `1px solid ${isHov ? hoverBorder : defaultBorder}`,
                 borderRadius: 12,
                 padding:      "14px 16px",
                 cursor:       "default",

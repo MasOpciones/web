@@ -135,14 +135,14 @@ export default function GraficoTimelineReformas() {
         {/* Timeline track */}
         <div style={{ position: "relative", paddingLeft: 36 }}>
 
-          {/* Vertical spine — single color, no gradient */}
+          {/* Vertical spine */}
           <div style={{
             position:     "absolute",
             left:         10,
             top:          6,
             bottom:       6,
             width:        2,
-            background:   "var(--border)",
+            background:   "rgba(107,114,128,0.35)",
             borderRadius: 1,
           }} />
 
@@ -166,19 +166,18 @@ export default function GraficoTimelineReformas() {
                 onMouseMove={(e) => handleMouseMove(e, i)}
                 onMouseLeave={() => setHovered(null)}
               >
-                {/* Dot — smaller, no outline, glow only on hover */}
+                {/* Dot — all same green, brightens on hover */}
                 <div style={{
-                  position:        "absolute",
-                  left:            -36 + 5,
-                  top:             4,
-                  width:           10,
-                  height:          10,
-                  borderRadius:    "50%",
-                  background:      "var(--viz-panel)",
-                  border:          `2px solid ${dotColor}`,
-                  boxShadow:       isHov ? `0 0 8px ${dotColor}99` : "none",
-                  transition:      "box-shadow 0.2s ease",
-                  zIndex:          1,
+                  position:     "absolute",
+                  left:         -31,
+                  top:          6,
+                  width:        8,
+                  height:       8,
+                  borderRadius: "50%",
+                  background:   isHov ? "var(--accent)" : "rgba(96,255,18,0.25)",
+                  boxShadow:    isHov ? "0 0 8px rgba(96,255,18,0.65)" : "none",
+                  transition:   "background 0.2s ease, box-shadow 0.2s ease",
+                  zIndex:       1,
                 }} />
 
                 {/* Card */}

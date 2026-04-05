@@ -289,8 +289,8 @@ export default function GraficoColombia() {
           onMouseLeave={() => setHoveredKPI(null)}
           style={{
             flex: "1 1 160px", padding: "14px 16px", borderRadius: 12, cursor: "default",
-            border: `1px solid ${hoveredKPI === 0 ? "rgba(96,255,18,0.35)" : "var(--border)"}`,
-            background: hoveredKPI === 0 ? "rgba(96,255,18,0.04)" : "transparent",
+            border: `1px solid ${hoveredKPI === 0 ? "rgba(96,255,18,0.55)" : "rgba(96,255,18,0.22)"}`,
+            background: hoveredKPI === 0 ? "rgba(96,255,18,0.06)" : "rgba(96,255,18,0.02)",
             transition: "border-color 0.2s ease, background 0.2s ease",
           }}>
           <p style={{ margin: "0 0 2px", ...TXT, fontSize: 10,
@@ -312,8 +312,8 @@ export default function GraficoColombia() {
           onMouseLeave={() => setHoveredKPI(null)}
           style={{
             flex: "1 1 160px", padding: "14px 16px", borderRadius: 12, cursor: "default",
-            border: `1px solid ${hoveredKPI === 1 ? "rgba(248,113,113,0.35)" : "var(--border)"}`,
-            background: hoveredKPI === 1 ? "rgba(248,113,113,0.04)" : "transparent",
+            border: `1px solid ${hoveredKPI === 1 ? "rgba(248,113,113,0.55)" : "rgba(248,113,113,0.22)"}`,
+            background: hoveredKPI === 1 ? "rgba(248,113,113,0.06)" : "rgba(248,113,113,0.02)",
             transition: "border-color 0.2s ease, background 0.2s ease",
           }}>
           <p style={{ margin: "0 0 2px", ...TXT, fontSize: 10,
