@@ -61,30 +61,38 @@ const panelStyle = {
 const txtBase = { fontFamily: "var(--font-sans)", fontVariantNumeric: "tabular-nums" };
 
 const tooltipStyle = {
-  position:       "absolute",
-  background:     "var(--viz-tooltip-bg-bar)",
-  border:         "1px solid var(--viz-tooltip-border)",
-  borderRadius:   6,
-  padding:        "6px 10px",
-  boxShadow:      "var(--viz-tooltip-shadow)",
-  backdropFilter: "var(--viz-tooltip-backdrop)",
+  position:             "absolute",
+  background:           "var(--viz-tooltip-bg-bar)",
+  border:               "1px solid var(--viz-tooltip-border)",
+  borderRadius:         6,
+  padding:              "6px 10px",
+  boxShadow:            "var(--viz-tooltip-shadow)",
+  backdropFilter:       "var(--viz-tooltip-backdrop)",
   WebkitBackdropFilter: "var(--viz-tooltip-backdrop)",
-  pointerEvents:  "none",
-  minWidth:       120,
+  pointerEvents:        "none",
+  minWidth:             120,
+  zIndex:               10,
 };
 
 // ─── component ────────────────────────────────────────────────────────────────
 
 export default function GraficoCrecimientoInstituciones() {
-  const wrapRef   = useRef(null);
-  const pathRef   = useRef(null);
+  const wrapRef  = useRef(null);  // panel div — used by ResizeObserver
+  const svgRef   = useRef(null);  // svg element — used by mouse handler (GrowthGapHero pattern)
+  const pathRef  = useRef(null);
+
   const [width,      setWidth]      = useState(680);
   const [pathLen,    setPathLen]    = useState(5000);
   const [animated,   setAnimated]   = useState(false);
   const [areaVis,    setAreaVis]    = useState(false);
-  const [tooltip,    setTooltip]    = useState(null); // { x, y, año, val, right }
 
-  // ResizeObserver
+  // Hover state — matches GrowthGapHero exactly
+  const [activeData, setActiveData] = useState(null); // { año, val }
+  const [tooltipX,   setTooltipX]   = useState(0);
+  const [tooltipY,   setTooltipY]   = useState(0);
+  const [isRight,    setIsRight]    = useState(false);
+
+  // ResizeObserver — watches the panel div
   useEffect(() => {
     const el = wrapRef.current;
     if (!el) return;
@@ -117,8 +125,8 @@ export default function GraficoCrecimientoInstituciones() {
   }, [width]);
 
   // Scales
-  const plotW  = Math.max(width - MG.left - MG.right, 40);
-  const plotH  = SVG_H - MG.top - MG.bottom;
+  const plotW = Math.max(width - MG.left - MG.right, 40);
+  const plotH = SVG_H - MG.top - MG.bottom;
 
   function xScale(año) {
     return MG.left + ((año - AÑO_MIN) / (AÑO_MAX - AÑO_MIN)) * plotW;
@@ -130,68 +138,47 @@ export default function GraficoCrecimientoInstituciones() {
   const { lineD, areaD, pts } = buildPaths(DATA, xScale, yScale);
 
   // Annotation positions
-  const x1988  = xScale(1988);
-  const x1990  = xScale(1990);
-  const x2000  = xScale(2000);
-  const x2024  = xScale(2024);
-  const y2024  = yScale(332);
-  const yBot   = SVG_H - MG.bottom;
+  const x1988    = xScale(1988);
+  const x1990    = xScale(1990);
+  const x2000    = xScale(2000);
+  const x2024    = xScale(2024);
+  const y2024    = yScale(332);
+  const yBot     = SVG_H - MG.bottom;
   const bandMidX = (x1990 + x2000) / 2;
 
-  // ─── GrowthGapHero-style mouse tracking ───────────────────────────────────
+  // ─── GrowthGapHero-identical mouse handler ────────────────────────────────
+  // Uses svgRef (the <svg> element), not wrapRef (the panel div).
+  // SVG width === panel width (set by ResizeObserver), so no scaleX needed.
   function handleMouseMove(e) {
-    if (!wrapRef.current) return;
-    const rect = wrapRef.current.getBoundingClientRect();
+    if (!svgRef.current) return;
+    const rect   = svgRef.current.getBoundingClientRect();
     const mouseX = e.clientX - rect.left;
     const mouseY = e.clientY - rect.top;
-    const relX = mouseX - MG.left;
+    const relX   = mouseX - MG.left;
     if (relX < 0 || relX > plotW) {
-      setTooltip(null);
+      setActiveData(null);
       return;
     }
     const ratio = relX / plotW;
-    const year = AÑO_MIN + ratio * (AÑO_MAX - AÑO_MIN);
+    const year  = AÑO_MIN + ratio * (AÑO_MAX - AÑO_MIN);
     let closest = DATA[0];
     let minDist = Infinity;
     for (const d of DATA) {
       const dist = Math.abs(d.año - year);
       if (dist < minDist) { minDist = dist; closest = d; }
     }
-    setTooltip({
-      x: mouseX,
-      y: mouseY,
-      año: closest.año,
-      val: closest.instituciones,
-      right: mouseX > rect.width / 2,
-    });
+    setActiveData({ año: closest.año, val: closest.instituciones });
+    setTooltipX(mouseX);
+    setTooltipY(mouseY);
+    setIsRight(mouseX > rect.width / 2);
   }
 
   return (
     <section style={sectionStyle}>
-      {/* Header */}
-      <header style={{ marginBottom: 14 }}>
-        <p style={{
-          margin: 0, fontSize: 11, letterSpacing: "0.08em",
-          textTransform: "uppercase", color: "var(--text-muted)",
-          fontWeight: 700, fontFamily: "var(--font-sans)",
-        }}>
-          ACTO I · TAMAÑO DEL ESTADO
-        </p>
-        <h3 style={{
-          fontSize: "clamp(1.3rem, 2.8vw, 1.9rem)", fontWeight: 800,
-          lineHeight: 1.1, letterSpacing: "-0.02em", color: "var(--text)",
-          margin: "4px 0 6px", fontFamily: "var(--font-sans)",
-        }}>
-          De 39 a 332 instituciones: el Estado que no para de crecer
-        </h3>
-        <p style={{ margin: 0, color: "var(--text-muted)", fontSize: 14, fontFamily: "var(--font-sans)" }}>
-          Número de instituciones públicas en Costa Rica · 1900–2024
-        </p>
-      </header>
-
-      {/* Panel */}
-      <div style={panelStyle} ref={wrapRef} onMouseLeave={() => setTooltip(null)}>
+      {/* Panel — position:relative anchors the absolute tooltip */}
+      <div style={panelStyle} ref={wrapRef} onMouseLeave={() => setActiveData(null)}>
         <svg
+          ref={svgRef}
           width={width}
           height={SVG_H}
           role="img"
@@ -214,48 +201,51 @@ export default function GraficoCrecimientoInstituciones() {
             width={x2000 - x1990} height={plotH}
             fill="rgba(96,255,18,0.07)"
           />
-          {/* Dashed borders of band */}
           <line
-            x1={x2000} y1={MG.top}
-            x2={x2000} y2={yBot}
+            x1={x2000} y1={MG.top} x2={x2000} y2={yBot}
             stroke="#f59e0b" strokeWidth={0.8} strokeDasharray="3 3" strokeOpacity={0.35}
           />
           <line
-            x1={x1990} y1={MG.top}
-            x2={x1990} y2={yBot}
+            x1={x1990} y1={MG.top} x2={x1990} y2={yBot}
             stroke="#f59e0b" strokeWidth={0.8} strokeDasharray="3 3" strokeOpacity={0.35}
           />
 
           {/* ── COREC 1988 vertical line ── */}
           <line
-            x1={x1988} y1={MG.top}
-            x2={x1988} y2={yBot}
-            stroke="#f59e0b" strokeWidth={1.2}
-            strokeDasharray="5 4" strokeOpacity={0.75}
+            x1={x1988} y1={MG.top} x2={x1988} y2={yBot}
+            stroke="#f59e0b" strokeWidth={1.2} strokeDasharray="5 4" strokeOpacity={0.75}
           />
-          {/* Band label — top of chart area, centered over band */}
-          <text
-            x={bandMidX} y={MG.top + 14}
-            textAnchor="middle"
-            style={{ ...txtBase, fontSize: 10, fill: "#f59e0b", fontWeight: 600 }}
-          >
-            84 nuevas — mayor aumento en cualquier década
-          </text>
 
-          {/* COREC label — 32px below band label to avoid overlap */}
+          {/* COREC label — top row, left of the 1988 line */}
           <text
-            x={x1988 - 6} y={MG.top + 46}
+            x={x1988 - 6} y={MG.top + 16}
             textAnchor="end"
             style={{ ...txtBase, fontSize: 10, fill: "#fbbf24", fontWeight: 700 }}
           >
             COREC 1988
           </text>
           <text
-            x={x1988 - 6} y={MG.top + 58}
+            x={x1988 - 6} y={MG.top + 28}
             textAnchor="end"
             style={{ ...txtBase, fontSize: 9, fill: "#9ca3af" }}
           >
             Ministerio de Reforma
+          </text>
+
+          {/* Band label — two lines, lower in the area to avoid overlap with COREC */}
+          <text
+            x={bandMidX} y={MG.top + 58}
+            textAnchor="middle"
+            style={{ ...txtBase, fontSize: 10, fill: "#f59e0b", fontWeight: 600 }}
+          >
+            84 nuevas — mayor aumento
+          </text>
+          <text
+            x={bandMidX} y={MG.top + 70}
+            textAnchor="middle"
+            style={{ ...txtBase, fontSize: 10, fill: "#f59e0b", fontWeight: 600 }}
+          >
+            en cualquier década
           </text>
 
           {/* ── Area fill ── */}
@@ -329,23 +319,21 @@ export default function GraficoCrecimientoInstituciones() {
             );
           })}
 
-          {/* ── Active hover crosshair ── */}
-          {tooltip && (
+          {/* ── Active hover crosshair (matches GrowthGapHero) ── */}
+          {activeData && (
             <>
               <line
-                x1={xScale(tooltip.año)} y1={MG.top}
-                x2={xScale(tooltip.año)} y2={yBot}
+                x1={xScale(activeData.año)} y1={MG.top}
+                x2={xScale(activeData.año)} y2={yBot}
                 stroke="var(--viz-grid)" strokeWidth={1} opacity={0.5}
               />
               <circle
-                cx={xScale(tooltip.año)} cy={yScale(tooltip.val)}
-                r={7}
-                fill="#60ff12" fillOpacity={0.15}
+                cx={xScale(activeData.año)} cy={yScale(activeData.val)}
+                r={7} fill="#60ff12" fillOpacity={0.15}
               />
               <circle
-                cx={xScale(tooltip.año)} cy={yScale(tooltip.val)}
-                r={3}
-                fill="#60ff12"
+                cx={xScale(activeData.año)} cy={yScale(activeData.val)}
+                r={3} fill="#60ff12"
               />
             </>
           )}
@@ -381,34 +369,43 @@ export default function GraficoCrecimientoInstituciones() {
             stroke="var(--border)" strokeWidth={1}
           />
 
-          {/* ── Mouse capture rect (GrowthGapHero pattern) ── */}
+          {/* ── Mouse capture rect — last element so it's on top ── */}
           <rect
             x={MG.left} y={MG.top}
             width={plotW} height={plotH}
             fill="transparent"
             style={{ cursor: "crosshair" }}
             onMouseMove={handleMouseMove}
-            onMouseLeave={() => setTooltip(null)}
+            onMouseLeave={() => setActiveData(null)}
           />
         </svg>
 
-        {/* Tooltip */}
-        {tooltip && (
+        {/* Tooltip — positioned relative to panelStyle (position:relative) */}
+        {activeData && (
           <div
             style={{
               ...tooltipStyle,
-              left: tooltip.right ? `${tooltip.x - 140}px` : `${tooltip.x + 14}px`,
-              top:  `${tooltip.y - 36}px`,
+              left: `${tooltipX + (isRight ? -140 : 16)}px`,
+              top:  `${tooltipY - 36}px`,
             }}
           >
-            <div style={{ fontSize: 11, fontWeight: 700, color: "var(--text)", marginBottom: 3, fontFamily: "var(--font-sans)" }}>
-              {tooltip.año}
+            <div style={{
+              fontSize: 11, fontWeight: 700, color: "var(--text)",
+              marginBottom: 3, fontFamily: "var(--font-sans)",
+            }}>
+              {activeData.año}
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
               <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#60ff12", flexShrink: 0 }} />
-              <span style={{ fontSize: 11, color: "var(--text-muted)", fontFamily: "var(--font-sans)" }}>Instituciones</span>
-              <strong style={{ fontSize: 11, color: "var(--text)", fontVariantNumeric: "tabular-nums", marginLeft: "auto", fontFamily: "var(--font-sans)" }}>
-                {tooltip.val}
+              <span style={{ fontSize: 11, color: "var(--text-muted)", fontFamily: "var(--font-sans)" }}>
+                Instituciones
+              </span>
+              <strong style={{
+                fontSize: 11, color: "var(--text)",
+                fontVariantNumeric: "tabular-nums",
+                marginLeft: "auto", fontFamily: "var(--font-sans)",
+              }}>
+                {activeData.val}
               </strong>
             </div>
           </div>

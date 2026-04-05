@@ -125,39 +125,6 @@ export default function GraficoConcentracionSalarial() {
 
   return (
     <section style={sectionStyle}>
-      {/* Header */}
-      <header style={{ marginBottom: 14 }}>
-        <p
-          style={{
-            margin: 0,
-            fontSize: 11,
-            letterSpacing: "0.08em",
-            textTransform: "uppercase",
-            color: "var(--text-muted)",
-            fontWeight: 700,
-            fontFamily: "var(--font-sans)",
-          }}
-        >
-          ACTO IV · ESTRUCTURA DEL GASTO PÚBLICO
-        </p>
-        <h3
-          style={{
-            fontSize: "clamp(1.3rem, 2.8vw, 1.9rem)",
-            fontWeight: 800,
-            lineHeight: 1.1,
-            letterSpacing: "-0.02em",
-            color: "var(--text)",
-            margin: "4px 0 6px",
-            fontFamily: "var(--font-sans)",
-          }}
-        >
-          Los salarios se llevan más de 7 de cada 10 colones del gasto de gobierno
-        </h3>
-        <p style={{ margin: 0, color: "var(--text-muted)", fontSize: 14, fontFamily: "var(--font-sans)" }}>
-          Remuneraciones como % de los costos de producción del gobierno · países OCDE y seleccionados
-        </p>
-      </header>
-
       {/* Panel */}
       <div style={panelStyle} ref={wrapRef}>
         <svg

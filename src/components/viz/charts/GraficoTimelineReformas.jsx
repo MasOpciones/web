@@ -101,27 +101,6 @@ export default function GraficoTimelineReformas() {
 
   return (
     <section style={sectionStyle}>
-      {/* Header */}
-      <header style={{ marginBottom: 14 }}>
-        <p style={{
-          margin: 0, fontSize: 11, letterSpacing: "0.08em",
-          textTransform: "uppercase", color: "var(--text-muted)",
-          fontWeight: 700, fontFamily: "var(--font-sans)",
-        }}>
-          ACTO V · HISTORIA DE LAS REFORMAS
-        </p>
-        <h3 style={{
-          fontSize: "clamp(1.3rem, 2.8vw, 1.9rem)", fontWeight: 800,
-          lineHeight: 1.1, letterSpacing: "-0.02em", color: "var(--text)",
-          margin: "4px 0 6px", fontFamily: "var(--font-sans)",
-        }}>
-          7 intentos. 37 años. Ninguna reforma estructural.
-        </h3>
-        <p style={{ margin: 0, color: "var(--text-muted)", fontSize: 14, fontFamily: "var(--font-sans)" }}>
-          Cronología de los intentos de racionalización del Estado costarricense · 1985–2022
-        </p>
-      </header>
-
       {/* Panel */}
       <div style={panelStyle}>
         {/* Timeline track */}
