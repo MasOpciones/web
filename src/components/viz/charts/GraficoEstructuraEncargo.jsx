@@ -55,7 +55,8 @@ const capaStyle = {
 };
 
 export default function GraficoEstructuraEncargo() {
-  const [mounted, setMounted] = useState(false);
+  const [mounted,       setMounted]       = useState(false);
+  const [hoveredPilar,  setHoveredPilar]  = useState(null);
 
   useEffect(() => {
     const id = requestAnimationFrame(() =>
@@ -166,24 +167,31 @@ export default function GraficoEstructuraEncargo() {
 
         {/* Pilares */}
         <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
-          {ENCARGO.capa2.pilares.map((pilar, i) => (
+          {ENCARGO.capa2.pilares.map((pilar, i) => {
+            const isHov = hoveredPilar === i;
+            return (
             <div
               key={pilar.numero}
+              onMouseEnter={() => setHoveredPilar(i)}
+              onMouseLeave={() => setHoveredPilar(null)}
               style={{
                 ...fade(0.5 + i * 0.12),
                 flex:         "1 1 200px",
-                background:   "rgba(255,255,255,0.02)",
-                border:       "1px solid var(--border)",
+                background:   isHov ? "rgba(96,255,18,0.04)" : "rgba(255,255,255,0.02)",
+                border:       `1px solid ${isHov ? "rgba(96,255,18,0.3)" : "var(--border)"}`,
                 borderRadius: 10,
                 padding:      "12px 14px",
+                cursor:       "default",
+                transition:   "background 0.2s ease, border-color 0.2s ease",
               }}
             >
               <p style={{
                 margin: "0 0 4px", ...TXT,
                 fontSize: 10, fontWeight: 500,
-                color: "var(--text-muted)",
+                color: isHov ? ACCENT : "var(--text-muted)",
                 letterSpacing: "0.07em",
                 textTransform: "uppercase",
+                transition: "color 0.2s ease",
               }}>
                 {pilar.numero}
               </p>
@@ -202,7 +210,8 @@ export default function GraficoEstructuraEncargo() {
                 {pilar.detalle}
               </p>
             </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* Nota al pie */}

@@ -189,11 +189,11 @@ export default function GraficoCrecimientoInstituciones() {
 
           {/* COREC 1988 line */}
           <line x1={x1988} y1={MG.top} x2={x1988} y2={yBot}
-            stroke="#f59e0b" strokeWidth={1.2} strokeDasharray="5 4" strokeOpacity={0.7} />
+            stroke="var(--viz-grid)" strokeWidth={1.2} strokeDasharray="5 4" strokeOpacity={0.7} />
 
           {/* Annotation: COREC — left of line, top of plot */}
           <text x={x1988 - 7} y={MG.top + 16} textAnchor="end"
-            style={{ ...chartTxt, fill: "#fbbf24", fontWeight: 700, fontSize: 10 }}>
+            style={{ ...chartTxt, fill: "var(--text-muted)", fontWeight: 700, fontSize: 10 }}>
             COREC 1988
           </text>
           <text x={x1988 - 7} y={MG.top + 28} textAnchor="end"

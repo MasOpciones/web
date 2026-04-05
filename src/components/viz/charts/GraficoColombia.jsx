@@ -15,9 +15,9 @@ const TOTALES = {
 
 // Fixed viewBox per panel
 const PANEL_W  = 460;
-const CHART_H  = 260;
+const CHART_H  = 300;
 const MG       = { top: 28, right: 14, bottom: 72, left: 50 };
-const PLOT_H   = CHART_H - MG.top - MG.bottom; // 160
+const PLOT_H   = CHART_H - MG.top - MG.bottom; // 200
 
 const C_BEFORE  = "rgba(156,163,175,0.35)";
 const C_EMP_AFT = "rgba(96,255,18,0.55)";
@@ -54,11 +54,11 @@ function PanelChart({ title, subtitle, yMax, yTicks, formatVal, colorAfter,
   return (
     <div style={{ flex: "1 1 0", minWidth: 0 }}>
       <div style={{ marginBottom: 8 }}>
-        <p style={{ margin: 0, ...TXT, fontSize: 12, fontWeight: 700, color: "var(--text)" }}>
+        <p style={{ margin: 0, ...TXT, fontSize: 14, fontWeight: 700, color: "var(--text)" }}>
           {title}
         </p>
         {subtitle && (
-          <p style={{ margin: "2px 0 0", ...TXT, fontSize: 10, color: "var(--text-muted)" }}>
+          <p style={{ margin: "2px 0 0", ...TXT, fontSize: 11, color: "var(--text-muted)" }}>
             {subtitle}
           </p>
         )}
@@ -119,18 +119,19 @@ function PanelChart({ title, subtitle, yMax, yTicks, formatVal, colorAfter,
               />
               {/* Value labels */}
               <text x={xA + barW / 2} y={yBot - hA - 5} textAnchor="middle"
-                style={{ ...chartTxt, opacity: animated ? 1 : 0,
+                style={{ ...chartTxt, fontSize: 13, fontWeight: 700, opacity: animated ? 1 : 0,
                   transition: `opacity 0.3s ease ${d1}` }}>
                 {formatVal(vA)}
               </text>
               <text x={xD + barW / 2} y={yBot - hD - 5} textAnchor="middle"
-                style={{ ...chartTxt, fill: lblColorD, fontWeight: 600,
+                style={{ ...chartTxt, fontSize: 13, fontWeight: 700, fill: lblColorD,
                   opacity: animated ? 1 : 0, transition: `opacity 0.3s ease ${d2}` }}>
                 {formatVal(vD)}
               </text>
               {/* X labels */}
               {parts.map((line, li) => (
-                <text key={li} x={cx} y={yBot + 16 + li * 13} textAnchor="middle" style={chartTxt}>
+                <text key={li} x={cx} y={yBot + 16 + li * 13} textAnchor="middle"
+                  style={{ ...chartTxt, fontSize: 11 }}>
                   {line}
                 </text>
               ))}
@@ -288,7 +289,7 @@ export default function GraficoColombia() {
             color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
             Planta total
           </p>
-          <p style={{ margin: 0, ...TXT, fontSize: 20, fontWeight: 800,
+          <p style={{ margin: 0, ...TXT, fontSize: "clamp(1.6rem, 4vw, 2.2rem)", fontWeight: 800,
             color: "#86efac", lineHeight: 1.1 }}>
             {empDelta.toLocaleString("es-CR")} empleados
           </p>
@@ -302,7 +303,7 @@ export default function GraficoColombia() {
             color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
             Gasto de personal
           </p>
-          <p style={{ margin: 0, ...TXT, fontSize: 20, fontWeight: 800,
+          <p style={{ margin: 0, ...TXT, fontSize: "clamp(1.6rem, 4vw, 2.2rem)", fontWeight: 800,
             color: "#fca5a5", lineHeight: 1.1 }}>
             +${gastoDelta}B en gasto
           </p>

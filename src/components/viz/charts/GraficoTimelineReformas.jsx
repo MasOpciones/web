@@ -64,8 +64,8 @@ const REFORMAS = [
   },
 ];
 
-const DOT_COLOR = { fallida: "#ef4444", parcial: "#f59e0b" };
-const BADGE_TEXT = { fallida: "#f87171", parcial: "#fbbf24" };
+const DOT_COLOR = { fallida: "#ef4444", parcial: "var(--text-muted)" };
+const BADGE_TEXT = { fallida: "#f87171", parcial: "var(--text-muted)" };
 const BADGE_LABEL = { fallida: "sin reforma estructural", parcial: "parcial" };
 
 const sectionStyle = {
@@ -144,7 +144,7 @@ export default function GraficoTimelineReformas() {
                   width:           10,
                   height:          10,
                   borderRadius:    "50%",
-                  background:      "#0d1117",
+                  background:      "var(--viz-panel)",
                   border:          `2px solid ${dotColor}`,
                   boxShadow:       isHov ? `0 0 8px ${dotColor}99` : "none",
                   transition:      "box-shadow 0.2s ease",
@@ -175,7 +175,7 @@ export default function GraficoTimelineReformas() {
                       fontFamily: "var(--font-sans)",
                       fontSize:   14,
                       fontWeight: 700,
-                      color:      "#f3f4f6",
+                      color:      "var(--text)",
                     }}>
                       {r.nombre}
                     </span>
@@ -199,7 +199,7 @@ export default function GraficoTimelineReformas() {
                     fontFamily:  "var(--font-sans)",
                     fontSize:    12.5,
                     lineHeight:  1.5,
-                    color:       "#9ca3af",
+                    color:       "var(--text-muted)",
                   }}>
                     {r.descripcion}
                   </p>

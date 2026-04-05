@@ -25,11 +25,14 @@ function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
 // ─── Horizontal bar ──────────────────────────────────────────────────────────
 // Label is a flex sibling of the track — always inside the container, never overflows.
 
-function HBar({ valor, colorFill, label, animated }) {
+function HBar({ valor, colorFill, label, animated, onHover, onLeave }) {
   const pct = (valor / MAX_VAL) * 100;
 
   return (
-    <div style={{ marginBottom: 18 }}>
+    <div style={{ marginBottom: 18 }}
+      onMouseEnter={onHover}
+      onMouseLeave={onLeave}
+    >
       {/* Row label */}
       <div style={{ marginBottom: 6, ...TXT, fontSize: 11, color: "var(--text-muted)" }}>
         {label}
@@ -87,11 +90,13 @@ const sectionStyle = {
 };
 
 const panelStyle = {
+  position:     "relative",
   width:        "100%",
   background:   "var(--viz-panel)",
   borderRadius: "16px",
   padding:      "24px 20px",
   border:       "1px solid var(--border)",
+  overflow:     "visible",
 };
 
 const divider = {
@@ -100,9 +105,24 @@ const divider = {
   margin:     "20px 0",
 };
 
+const tooltipStyle = {
+  position:             "absolute",
+  background:           "var(--viz-tooltip-bg)",
+  border:               "1px solid var(--viz-tooltip-border)",
+  borderRadius:         6,
+  padding:              "8px 12px",
+  boxShadow:            "var(--viz-tooltip-shadow)",
+  backdropFilter:       "var(--viz-tooltip-backdrop)",
+  WebkitBackdropFilter: "var(--viz-tooltip-backdrop)",
+  pointerEvents:        "none",
+  minWidth:             140,
+};
+
 export default function GraficoROI() {
-  const [mounted, setMounted] = useState(false);
-  const [count,   setCount]   = useState(0);
+  const [mounted,  setMounted]  = useState(false);
+  const [count,    setCount]    = useState(0);
+  const [tooltip,  setTooltip]  = useState(null);
+  const wrapRef  = useRef(null);
   const countRef = useRef(null);
 
   useEffect(() => {
@@ -129,9 +149,21 @@ export default function GraficoROI() {
     return () => { clearTimeout(delay); cancelAnimationFrame(rafId); };
   }, [mounted]);
 
+  function handleHover(e, bar) {
+    if (!wrapRef.current) return;
+    const rect = wrapRef.current.getBoundingClientRect();
+    setTooltip({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+      label: bar.label,
+      valor: bar.valor,
+      contW: rect.width,
+    });
+  }
+
   return (
     <section style={sectionStyle}>
-      <div style={panelStyle}>
+      <div style={panelStyle} ref={wrapRef} onMouseLeave={() => setTooltip(null)}>
 
         {/* ── Sección 1: Barras a escala real ── */}
         <p style={{
@@ -148,12 +180,16 @@ export default function GraficoROI() {
           colorFill="rgba(156,163,175,0.4)"
           label={DATA.costoAuditoria.label}
           animated={mounted}
+          onHover={(e) => handleHover(e, DATA.costoAuditoria)}
+          onLeave={() => setTooltip(null)}
         />
         <HBar
           valor={DATA.ineficienciaAnual.valor}
-          colorFill="rgba(96,255,18,0.35)"
+          colorFill="#60ff12"
           label={DATA.ineficienciaAnual.label}
           animated={mounted}
+          onHover={(e) => handleHover(e, DATA.ineficienciaAnual)}
+          onLeave={() => setTooltip(null)}
         />
 
         <div style={divider} />
@@ -169,7 +205,7 @@ export default function GraficoROI() {
               lineHeight:    1,
               color:         ACCENT,
               letterSpacing: "-0.03em",
-              textShadow:    `0 0 40px rgba(96,255,18,0.3)`,
+              textShadow:    `0 0 20px rgba(96,255,18,0.15)`,
               opacity:       mounted ? 1 : 0,
               transition:    "opacity 0.4s ease 0.3s",
             }}
@@ -259,6 +295,24 @@ export default function GraficoROI() {
           Los tres números son del mismo orden de magnitud. El primero es el único que{" "}
           <span style={{ color: "var(--text)" }}>todavía no se ha gastado</span>.
         </p>
+
+        {/* Tooltip */}
+        {tooltip && (
+          <div style={{
+            ...tooltipStyle,
+            left: `${tooltip.x + (tooltip.x > tooltip.contW / 2 ? -160 : 14)}px`,
+            top:  `${tooltip.y - 14}px`,
+          }}>
+            <div style={{ fontSize: 11, color: "var(--text-muted)", marginBottom: 4,
+              fontFamily: "var(--font-sans)" }}>
+              {tooltip.label}
+            </div>
+            <div style={{ fontSize: 13, fontWeight: 700, color: "var(--text)",
+              fontFamily: "var(--font-sans)", fontVariantNumeric: "tabular-nums" }}>
+              ${tooltip.valor.toLocaleString("en-US")}M
+            </div>
+          </div>
+        )}
 
       </div>
 

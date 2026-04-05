@@ -44,19 +44,11 @@ const MARGIN_B = 44;
 const DOT_R = 4.5;
 
 const DOT_COLOR = {
-  cr:      "#60ff12",
-  ref:     "#60a5fa",
-  promedio:"#f59e0b",
-  ocde:    "#374151",
-  latam:   "#4b5563",
-};
-
-const LABEL_COLOR = {
-  cr:      "#60ff12",
-  ref:     "#93c5fd",
-  promedio:"#f59e0b",
-  ocde:    "#6b7280",
-  latam:   "#6b7280",
+  cr:      "var(--accent)",
+  ref:     "var(--text-muted)",
+  promedio:"var(--text-muted)",
+  ocde:    "var(--text-muted)",
+  latam:   "var(--text-muted)",
 };
 
 const sectionStyle = {
@@ -70,12 +62,10 @@ const sectionStyle = {
 const panelStyle = {
   position: "relative",
   width: "100%",
-  background:
-    "radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 8%, transparent), transparent 36%), linear-gradient(160deg, var(--viz-panel-strong) 0%, var(--viz-panel) 100%)",
+  background: "var(--viz-panel)",
   borderRadius: "16px",
   padding: "20px 0 16px",
   border: "1px solid var(--border)",
-  boxShadow: "var(--viz-shadow)",
   overflow: "hidden",
 };
 
@@ -144,13 +134,13 @@ export default function GraficoConcentracionSalarial() {
                   x2={tx} y2={svgH - MARGIN_B}
                   stroke="var(--viz-grid)"
                   strokeWidth={1}
-                  strokeOpacity={0.45}
+                  strokeOpacity={0.25}
                 />
                 <text
                   x={tx}
                   y={svgH - MARGIN_B + 18}
                   textAnchor="middle"
-                  style={{ ...textBase, fill: "var(--text-muted)", fontSize: 10 }}
+                  style={{ ...textBase, fill: "var(--text-muted)", fontSize: 10, opacity: 0.5 }}
                 >
                   {tick}%
                 </text>
@@ -158,20 +148,20 @@ export default function GraficoConcentracionSalarial() {
             );
           })}
 
-          {/* Promedio OCDE vertical dashed line */}
+          {/* Promedio OCDE vertical line — muted */}
           <line
             x1={avgX} y1={MARGIN_T - 6}
             x2={avgX} y2={svgH - MARGIN_B}
-            stroke="#f59e0b"
+            stroke="var(--border)"
             strokeWidth={1.2}
             strokeDasharray="4 3"
-            strokeOpacity={0.8}
+            strokeOpacity={0.6}
           />
           <text
             x={avgX}
             y={MARGIN_T - 10}
             textAnchor="middle"
-            style={{ ...textBase, fill: "#f59e0b", fontSize: 9.5, fontWeight: 600 }}
+            style={{ ...textBase, fill: "var(--text-muted)", fontSize: 9.5, fontWeight: 600, opacity: 0.6 }}
           >
             Prom. OCDE
           </text>
@@ -182,14 +172,29 @@ export default function GraficoConcentracionSalarial() {
             const dotX       = xScale(d.valor);
             const stemLen    = dotX - MARGIN_L;
             const isHov      = hovered === i;
-            const dotColor   = DOT_COLOR[d.tipo]  ?? "#374151";
-            const lblColor   = LABEL_COLOR[d.tipo] ?? "#6b7280";
             const isCR       = d.tipo === "cr";
             const isRef      = d.tipo === "ref";
             const isAvg      = d.tipo === "promedio";
+            const isOcde     = d.tipo === "ocde";
+            const isLatam    = d.tipo === "latam";
 
             // Staggered delay
             const delay = `${i * 0.018}s`;
+
+            // Stem styling
+            const stemOpacity = isCR ? 0.4 : 0.15;
+            const stemWidth   = isCR ? 1.5 : 1;
+
+            // Dot fill opacity
+            const dotFillOpacity = animated
+              ? (isCR ? 1 : (isOcde || isLatam) ? 0.35 : 0.7)
+              : 0;
+
+            // Value label opacity
+            const valOpacity = animated ? (isCR ? 1 : (isOcde || isLatam) ? 0.45 : 0.7) : 0;
+
+            // Label color
+            const lblColor = isCR ? "var(--accent)" : "var(--text-muted)";
 
             return (
               <g
@@ -198,37 +203,25 @@ export default function GraficoConcentracionSalarial() {
                 onMouseLeave={() => setHovered(null)}
                 style={{ cursor: "default" }}
               >
-                {/* CR row background */}
-                {isCR && (
-                  <rect
-                    x={0} y={y - ROW_H / 2}
-                    width={width} height={ROW_H}
-                    fill="#60ff12"
-                    fillOpacity={0.055}
-                  />
-                )}
-
                 {/* Hover row highlight */}
-                {isHov && !isCR && (
+                {isHov && (
                   <rect
                     x={0} y={y - ROW_H / 2}
                     width={width} height={ROW_H}
-                    fill="#ffffff"
-                    fillOpacity={0.03}
+                    fill="var(--text-muted)"
+                    fillOpacity={0.04}
                   />
                 )}
 
-                {/* Stem */}
+                {/* Stem — no strokeDasharray */}
                 <line
                   x1={MARGIN_L} y1={y}
                   x2={dotX}     y2={y}
                   style={{
-                    stroke:              dotColor,
-                    strokeWidth:         isCR ? (isHov ? 2.4 : 1.8) : (isHov ? 1.8 : 1.1),
-                    strokeOpacity:       isCR ? 0.55 : isRef ? 0.45 : isAvg ? 0.6 : 0.3,
-                    strokeDasharray:     stemLen > 0 ? stemLen : 1,
-                    strokeDashoffset:    animated ? 0 : (stemLen > 0 ? stemLen : 1),
-                    transition:          `stroke-dashoffset 0.65s ease ${delay}`,
+                    stroke:           DOT_COLOR[d.tipo],
+                    strokeWidth:      isHov ? stemWidth + 0.5 : stemWidth,
+                    strokeOpacity:    isHov ? stemOpacity * 1.8 : stemOpacity,
+                    transition:       `stroke-opacity 0.15s ease, stroke-width 0.15s ease`,
                   }}
                 />
 
@@ -236,18 +229,11 @@ export default function GraficoConcentracionSalarial() {
                 <circle
                   cx={dotX}
                   cy={y}
-                  r={isHov ? DOT_R + 1 : DOT_R}
+                  r={DOT_R}
                   style={{
-                    fill:            dotColor,
-                    fillOpacity:     animated ? 1 : 0,
-                    filter:          isCR
-                      ? "drop-shadow(0 0 5px rgba(96,255,18,0.65))"
-                      : isRef
-                      ? "drop-shadow(0 0 3px rgba(96,165,250,0.45))"
-                      : isHov
-                      ? "brightness(1.4)"
-                      : "none",
-                    transition:      `fill-opacity 0.25s ease ${delay}, r 0.15s ease, filter 0.15s ease`,
+                    fill:         DOT_COLOR[d.tipo],
+                    fillOpacity:  animated ? (isHov ? Math.min(dotFillOpacity * 1.5, 1) : dotFillOpacity) : 0,
+                    transition:   `fill-opacity 0.25s ease ${delay}`,
                   }}
                 />
 
@@ -260,16 +246,14 @@ export default function GraficoConcentracionSalarial() {
                     ...textBase,
                     fontSize:   isCR ? 12 : isRef || isAvg ? 11 : 10.5,
                     fontWeight: isCR ? 700 : isRef || isAvg ? 600 : 400,
-                    fill:       isHov
-                      ? (isCR || isRef || isAvg ? lblColor : "#9ca3af")
-                      : lblColor,
+                    fill:       isHov && !isCR ? "var(--text)" : lblColor,
                     transition: "fill 0.15s ease",
                   }}
                 >
                   {d.pais}
                 </text>
 
-                {/* Value label (after dot) */}
+                {/* Value label (after dot) — always visible */}
                 <text
                   x={dotX + 7}
                   y={y + 4}
@@ -277,9 +261,9 @@ export default function GraficoConcentracionSalarial() {
                     ...textBase,
                     fontSize:    isCR ? 11 : 9.5,
                     fontWeight:  isCR ? 700 : 400,
-                    fill:        lblColor,
-                    fillOpacity: animated ? (isHov || isCR || isRef || isAvg ? 1 : 0.55) : 0,
-                    transition:  `fill-opacity 0.25s ease ${delay}`,
+                    fill:        isHov && !isCR ? "var(--text)" : lblColor,
+                    fillOpacity: animated ? (isHov ? 1 : valOpacity) : 0,
+                    transition:  `fill-opacity 0.25s ease ${delay}, fill 0.15s ease`,
                   }}
                 >
                   {d.valor}%
@@ -289,26 +273,22 @@ export default function GraficoConcentracionSalarial() {
           })}
         </svg>
 
-        {/* Callout */}
+        {/* Callout — plain text, no borderLeft, no background */}
         <div
           style={{
-            margin:      "0 16px 4px",
-            padding:     "10px 14px",
-            borderLeft:  "3px solid #60ff12",
-            background:  "rgba(96,255,18,0.05)",
-            borderRadius: "0 8px 8px 0",
-            fontSize:    13,
-            lineHeight:  1.55,
-            color:       "var(--text-muted)",
-            fontFamily:  "var(--font-sans)",
+            margin:     "0 20px 4px",
+            fontSize:   13,
+            lineHeight: 1.55,
+            color:      "var(--text-muted)",
+            fontFamily: "var(--font-sans)",
           }}
         >
           De cada colón que el gobierno gasta en producir servicios públicos,{" "}
-          <strong style={{ color: "#60ff12", fontWeight: 700 }}>
+          <strong style={{ color: "var(--text)", fontWeight: 600 }}>
             71.6 céntimos van a salarios
           </strong>
           . En Noruega ese número ronda el{" "}
-          <span style={{ color: "#93c5fd" }}>25%</span>.
+          <span style={{ color: "var(--text-muted)" }}>25%</span>.
         </div>
       </div>
 
