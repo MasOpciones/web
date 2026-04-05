@@ -45,8 +45,8 @@ const DOT_R = 4.5;
 
 const DOT_COLOR = {
   cr:      "var(--accent)",
-  ref:     "var(--text-muted)",
-  promedio:"var(--text-muted)",
+  ref:     "var(--accent)",
+  promedio:"var(--accent)",
   ocde:    "var(--text-muted)",
   latam:   "var(--text-muted)",
 };
@@ -62,10 +62,13 @@ const sectionStyle = {
 const panelStyle = {
   position: "relative",
   width: "100%",
-  background: "var(--viz-panel)",
+  background:
+    "radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 8%, transparent), transparent 36%), " +
+    "linear-gradient(160deg, var(--viz-panel-strong) 0%, var(--viz-panel) 100%)",
   borderRadius: "16px",
   padding: "20px 0 16px",
   border: "1px solid var(--border)",
+  boxShadow: "var(--viz-shadow)",
   overflow: "hidden",
 };
 
@@ -152,16 +155,16 @@ export default function GraficoConcentracionSalarial() {
           <line
             x1={avgX} y1={MARGIN_T - 6}
             x2={avgX} y2={svgH - MARGIN_B}
-            stroke="var(--border)"
+            stroke="var(--accent)"
             strokeWidth={1.2}
             strokeDasharray="4 3"
-            strokeOpacity={0.6}
+            strokeOpacity={0.35}
           />
           <text
             x={avgX}
             y={MARGIN_T - 10}
             textAnchor="middle"
-            style={{ ...textBase, fill: "var(--text-muted)", fontSize: 9.5, fontWeight: 600, opacity: 0.6 }}
+            style={{ ...textBase, fill: "var(--accent)", fontSize: 9.5, fontWeight: 600, opacity: 0.75 }}
           >
             Prom. OCDE
           </text>
@@ -194,7 +197,7 @@ export default function GraficoConcentracionSalarial() {
             const valOpacity = animated ? (isCR ? 1 : (isOcde || isLatam) ? 0.45 : 0.7) : 0;
 
             // Label color
-            const lblColor = isCR ? "var(--accent)" : "var(--text-muted)";
+            const lblColor = (isCR || isRef || isAvg) ? "var(--accent)" : "var(--text-muted)";
 
             return (
               <g

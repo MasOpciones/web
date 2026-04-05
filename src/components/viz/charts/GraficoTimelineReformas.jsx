@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 const REFORMAS = [
   {
@@ -88,9 +88,25 @@ const panelStyle = {
   boxShadow: "var(--viz-shadow)",
 };
 
+const tooltipStyle = {
+  position:             "absolute",
+  background:           "var(--viz-tooltip-bg)",
+  border:               "1px solid var(--viz-tooltip-border)",
+  borderRadius:         8,
+  padding:              "12px 14px",
+  boxShadow:            "var(--viz-tooltip-shadow)",
+  backdropFilter:       "var(--viz-tooltip-backdrop)",
+  WebkitBackdropFilter: "var(--viz-tooltip-backdrop)",
+  pointerEvents:        "none",
+  maxWidth:             320,
+  zIndex:               10,
+};
+
 export default function GraficoTimelineReformas() {
-  const [mounted, setMounted] = useState(false);
-  const [hovered, setHovered] = useState(null);
+  const panelRef = useRef(null);
+  const [mounted,    setMounted]    = useState(false);
+  const [hovered,    setHovered]    = useState(null);
+  const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     const id = requestAnimationFrame(() =>
@@ -99,10 +115,23 @@ export default function GraficoTimelineReformas() {
     return () => cancelAnimationFrame(id);
   }, []);
 
+  function handleMouseMove(e, i) {
+    if (!panelRef.current) return;
+    const rect = panelRef.current.getBoundingClientRect();
+    setHovered(i);
+    setTooltipPos({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+      right: e.clientX - rect.left > rect.width / 2,
+    });
+  }
+
+  const hoveredReforma = hovered !== null ? REFORMAS[hovered] : null;
+
   return (
     <section style={sectionStyle}>
       {/* Panel */}
-      <div style={panelStyle}>
+      <div style={{ ...panelStyle, position: "relative" }} ref={panelRef}>
         {/* Timeline track */}
         <div style={{ position: "relative", paddingLeft: 36 }}>
 
@@ -128,12 +157,13 @@ export default function GraficoTimelineReformas() {
                 key={r.año}
                 style={{
                   position:     "relative",
-                  marginBottom: isLast ? 0 : 28,
+                  marginBottom: isLast ? 0 : 16,
                   opacity:      mounted ? 1 : 0,
                   transform:    mounted ? "translateY(0)" : "translateY(14px)",
                   transition:   `opacity 0.45s ease ${delay}, transform 0.45s ease ${delay}`,
+                  cursor:       "default",
                 }}
-                onMouseEnter={() => setHovered(i)}
+                onMouseMove={(e) => handleMouseMove(e, i)}
                 onMouseLeave={() => setHovered(null)}
               >
                 {/* Dot — smaller, no outline, glow only on hover */}
@@ -161,7 +191,7 @@ export default function GraficoTimelineReformas() {
                   cursor:        "default",
                 }}>
                   {/* Year + name + badge row */}
-                  <div style={{ display: "flex", flexWrap: "wrap", alignItems: "baseline", gap: "6px 10px", marginBottom: 4 }}>
+                  <div style={{ display: "flex", flexWrap: "wrap", alignItems: "baseline", gap: "6px 10px" }}>
                     <span style={{
                       fontFamily:         "var(--font-sans)",
                       fontSize:           15,
@@ -175,11 +205,11 @@ export default function GraficoTimelineReformas() {
                       fontFamily: "var(--font-sans)",
                       fontSize:   14,
                       fontWeight: 700,
-                      color:      "var(--text)",
+                      color:      isHov ? "var(--text)" : "var(--text)",
                     }}>
                       {r.nombre}
                     </span>
-                    {/* Badge — text only, no border, no background */}
+                    {/* Badge — text only */}
                     <span style={{
                       fontFamily:    "var(--font-sans)",
                       fontSize:      9.5,
@@ -192,48 +222,44 @@ export default function GraficoTimelineReformas() {
                       {BADGE_LABEL[r.tipo]}
                     </span>
                   </div>
-
-                  {/* Descripcion */}
-                  <p style={{
-                    margin:      "0 0 5px",
-                    fontFamily:  "var(--font-sans)",
-                    fontSize:    12.5,
-                    lineHeight:  1.5,
-                    color:       "var(--text-muted)",
-                  }}>
-                    {r.descripcion}
-                  </p>
-
-                  {/* Resultado — plain text, color as prefix dot */}
-                  <div style={{ display: "flex", alignItems: "flex-start", gap: 7 }}>
-                    <span style={{
-                      flexShrink:   0,
-                      marginTop:    5,
-                      width:        5,
-                      height:       5,
-                      borderRadius: "50%",
-                      background:   dotColor,
-                      opacity:      0.6,
-                    }} />
-                    <p style={{
-                      margin:     0,
-                      fontFamily: "var(--font-sans)",
-                      fontSize:   12,
-                      lineHeight: 1.5,
-                      color:      "var(--text-muted)",
-                    }}>
-                      {r.resultado}
-                    </p>
-                  </div>
                 </div>
               </div>
             );
           })}
         </div>
 
+        {/* Tooltip */}
+        {hoveredReforma && (
+          <div style={{
+            ...tooltipStyle,
+            left: tooltipPos.right
+              ? `${tooltipPos.x - 330}px`
+              : `${tooltipPos.x + 16}px`,
+            top: `${tooltipPos.y - 10}px`,
+          }}>
+            <div style={{ fontSize: 11, color: "var(--text-muted)", marginBottom: 6,
+              fontFamily: "var(--font-sans)", fontWeight: 600,
+              textTransform: "uppercase", letterSpacing: "0.06em" }}>
+              {hoveredReforma.año} · {hoveredReforma.nombre}
+            </div>
+            <p style={{ margin: "0 0 8px", fontFamily: "var(--font-sans)",
+              fontSize: 12.5, lineHeight: 1.5, color: "var(--text-muted)" }}>
+              {hoveredReforma.descripcion}
+            </p>
+            <div style={{ display: "flex", alignItems: "flex-start", gap: 7 }}>
+              <span style={{ flexShrink: 0, marginTop: 5, width: 5, height: 5,
+                borderRadius: "50%", background: DOT_COLOR[hoveredReforma.tipo], opacity: 0.7 }} />
+              <p style={{ margin: 0, fontFamily: "var(--font-sans)",
+                fontSize: 12, lineHeight: 1.5, color: "var(--text-muted)" }}>
+                {hoveredReforma.resultado}
+              </p>
+            </div>
+          </div>
+        )}
+
         {/* Bottom callout — no red background */}
         <div style={{
-          marginTop:  28,
+          marginTop:  20,
           paddingTop: 14,
           borderTop:  "1px solid var(--border)",
           fontFamily: "var(--font-sans)",

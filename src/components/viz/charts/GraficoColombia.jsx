@@ -48,7 +48,7 @@ function splitLabel(str) {
 function PanelChart({ title, subtitle, yMax, yTicks, formatVal, colorAfter,
   valAntes, valDespues, animated, onHover, onLeave, svgRef }) {
   const plotW = PANEL_W - MG.left - MG.right; // 396
-  const barW  = Math.min(28, (plotW / DATA.length - 10) / 2);
+  const barW  = Math.min(36, (plotW / DATA.length - 10) / 2);
   const yBot  = MG.top + PLOT_H;
 
   return (
@@ -194,10 +194,11 @@ const tooltipStyle = {
 };
 
 export default function GraficoColombia() {
-  const wrapRef  = useRef(null);
-  const svg1Ref  = useRef(null);
-  const [animated, setAnimated] = useState(false);
-  const [tooltip,  setTooltip]  = useState(null);
+  const wrapRef    = useRef(null);
+  const svg1Ref    = useRef(null);
+  const [animated,    setAnimated]    = useState(false);
+  const [tooltip,     setTooltip]     = useState(null);
+  const [hoveredKPI,  setHoveredKPI]  = useState(null);
 
   useEffect(() => {
     const id = requestAnimationFrame(() =>
@@ -283,24 +284,42 @@ export default function GraficoColombia() {
 
       {/* KPI summary — outside the panel */}
       <div style={{ display: "flex", gap: 12, marginTop: 12, flexWrap: "wrap" }}>
-        <div style={{ flex: "1 1 160px", padding: "14px 16px",
-          border: "1px solid var(--border)", borderRadius: 12 }}>
+        <div
+          onMouseEnter={() => setHoveredKPI(0)}
+          onMouseLeave={() => setHoveredKPI(null)}
+          style={{
+            flex: "1 1 160px", padding: "14px 16px", borderRadius: 12, cursor: "default",
+            border: `1px solid ${hoveredKPI === 0 ? "rgba(96,255,18,0.35)" : "var(--border)"}`,
+            background: hoveredKPI === 0 ? "rgba(96,255,18,0.04)" : "transparent",
+            transition: "border-color 0.2s ease, background 0.2s ease",
+          }}>
           <p style={{ margin: "0 0 2px", ...TXT, fontSize: 10,
-            color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+            color: hoveredKPI === 0 ? "var(--accent)" : "var(--text-muted)",
+            textTransform: "uppercase", letterSpacing: "0.06em",
+            transition: "color 0.2s ease" }}>
             Planta total
           </p>
           <p style={{ margin: 0, ...TXT, fontSize: "clamp(1.6rem, 4vw, 2.2rem)", fontWeight: 800,
-            color: "#86efac", lineHeight: 1.1 }}>
+            color: "var(--accent)", lineHeight: 1.1 }}>
             {empDelta.toLocaleString("es-CR")} empleados
           </p>
           <p style={{ margin: "3px 0 0", ...TXT, fontSize: 12, color: "var(--text-muted)" }}>
             {empPct}% · parece un éxito
           </p>
         </div>
-        <div style={{ flex: "1 1 160px", padding: "14px 16px",
-          border: "1px solid var(--border)", borderRadius: 12 }}>
+        <div
+          onMouseEnter={() => setHoveredKPI(1)}
+          onMouseLeave={() => setHoveredKPI(null)}
+          style={{
+            flex: "1 1 160px", padding: "14px 16px", borderRadius: 12, cursor: "default",
+            border: `1px solid ${hoveredKPI === 1 ? "rgba(248,113,113,0.35)" : "var(--border)"}`,
+            background: hoveredKPI === 1 ? "rgba(248,113,113,0.04)" : "transparent",
+            transition: "border-color 0.2s ease, background 0.2s ease",
+          }}>
           <p style={{ margin: "0 0 2px", ...TXT, fontSize: 10,
-            color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+            color: hoveredKPI === 1 ? "#fca5a5" : "var(--text-muted)",
+            textTransform: "uppercase", letterSpacing: "0.06em",
+            transition: "color 0.2s ease" }}>
             Gasto de personal
           </p>
           <p style={{ margin: 0, ...TXT, fontSize: "clamp(1.6rem, 4vw, 2.2rem)", fontWeight: 800,
@@ -318,7 +337,7 @@ export default function GraficoColombia() {
         color: "var(--text-muted)", fontStyle: "italic" }}>
         "El ponente de la ley reconoció el fracaso. En 2011, el gobierno Santos revirtió las
         fusiones mediante la{" "}
-        <span style={{ fontStyle: "normal", color: "#fbbf24", fontWeight: 600 }}>Ley 1444</span>."
+        <span style={{ fontStyle: "normal", color: "var(--text)", fontWeight: 700 }}>Ley 1444</span>."
       </p>
 
       <footer style={{

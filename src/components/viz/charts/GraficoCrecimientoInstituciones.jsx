@@ -15,9 +15,9 @@ const DATA = [
 // Fixed viewBox dimensions — same pattern as InformalidadChart / GrowthGapHero
 const WIDTH  = 960;
 const HEIGHT = 500;
-const MG     = { top: 76, right: 160, bottom: 62, left: 64 };
+const MG     = { top: 76, right: 100, bottom: 62, left: 64 };
 
-const PLOT_W = WIDTH  - MG.left - MG.right;  // 736
+const PLOT_W = WIDTH  - MG.left - MG.right;  // 796
 const PLOT_H = HEIGHT - MG.top  - MG.bottom; // 362
 
 const AÑO_MIN = 1900;
@@ -192,12 +192,12 @@ export default function GraficoCrecimientoInstituciones() {
             stroke="var(--viz-grid)" strokeWidth={1.2} strokeDasharray="5 4" strokeOpacity={0.7} />
 
           {/* Annotation: COREC — left of line, top of plot */}
-          <text x={x1988 - 7} y={MG.top + 16} textAnchor="end"
-            style={{ ...chartTxt, fill: "var(--text-muted)", fontWeight: 700, fontSize: 10 }}>
+          <text x={x1988 - 7} y={MG.top + 18} textAnchor="end"
+            style={{ ...chartTxt, fill: "var(--text-muted)", fontWeight: 700, fontSize: 12 }}>
             COREC 1988
           </text>
-          <text x={x1988 - 7} y={MG.top + 28} textAnchor="end"
-            style={{ ...chartTxt, fontSize: 9 }}>
+          <text x={x1988 - 7} y={MG.top + 33} textAnchor="end"
+            style={{ ...chartTxt, fontSize: 11 }}>
             Ministerio de Reforma
           </text>
 

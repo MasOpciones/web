@@ -119,9 +119,10 @@ const tooltipStyle = {
 };
 
 export default function GraficoROI() {
-  const [mounted,  setMounted]  = useState(false);
-  const [count,    setCount]    = useState(0);
-  const [tooltip,  setTooltip]  = useState(null);
+  const [mounted,     setMounted]     = useState(false);
+  const [count,       setCount]       = useState(0);
+  const [tooltip,     setTooltip]     = useState(null);
+  const [hoveredCard, setHoveredCard] = useState(null);
   const wrapRef  = useRef(null);
   const countRef = useRef(null);
 
@@ -236,34 +237,45 @@ export default function GraficoROI() {
         <div style={{ display: "flex", flexWrap: "wrap", gap: 12, marginBottom: 16 }}>
           {[
             {
-              valor:    "$15M",
-              label:    "Costo estimado del encargo",
-              sub:      "Big Four · escala de Estado",
-              valColor: "var(--text-muted)",
+              valor:     "$15M",
+              label:     "Costo estimado del encargo",
+              sub:       "Big Four · escala de Estado",
+              valColor:  "var(--text-muted)",
+              hoverBorder: "rgba(156,163,175,0.35)",
+              hoverBg:   "rgba(156,163,175,0.04)",
             },
             {
-              valor:    "$2,300M",
-              label:    "Ineficiencia anual estimada",
-              sub:      "BID · 4.7% del PIB",
-              valColor: ACCENT,
+              valor:     "$2,300M",
+              label:     "Ineficiencia anual estimada",
+              sub:       "BID · 4.7% del PIB",
+              valColor:  ACCENT,
+              hoverBorder: "rgba(96,255,18,0.35)",
+              hoverBg:   "rgba(96,255,18,0.04)",
             },
             {
-              valor:    "$2,370M",
-              label:    "Intereses de la deuda en 2024",
-              sub:      "Máximo histórico · 19 años",
-              valColor: "#f87171",
+              valor:     "$2,370M",
+              label:     "Intereses de la deuda en 2024",
+              sub:       "Máximo histórico · 19 años",
+              valColor:  "#f87171",
+              hoverBorder: "rgba(248,113,113,0.35)",
+              hoverBg:   "rgba(248,113,113,0.04)",
             },
-          ].map(({ valor, label, sub, valColor }) => (
+          ].map(({ valor, label, sub, valColor, hoverBorder, hoverBg }, ci) => {
+            const isHov = hoveredCard === ci;
+            return (
             <div
               key={label}
+              onMouseEnter={() => setHoveredCard(ci)}
+              onMouseLeave={() => setHoveredCard(null)}
               style={{
                 flex:         "1 1 160px",
-                background:   "transparent",
-                border:       "1px solid var(--border)",
+                background:   isHov ? hoverBg : "transparent",
+                border:       `1px solid ${isHov ? hoverBorder : "var(--border)"}`,
                 borderRadius: 12,
                 padding:      "14px 16px",
+                cursor:       "default",
                 opacity:      mounted ? 1 : 0,
-                transition:   "opacity 0.5s ease 0.6s",
+                transition:   "opacity 0.5s ease 0.6s, background 0.2s ease, border-color 0.2s ease",
               }}
             >
               <p style={{
@@ -283,7 +295,8 @@ export default function GraficoROI() {
                 {sub}
               </p>
             </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* Nota al pie */}
