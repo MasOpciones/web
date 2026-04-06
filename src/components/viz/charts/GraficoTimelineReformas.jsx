@@ -196,7 +196,7 @@ export default function GraficoTimelineReformas() {
 
                 {/* Card */}
                 <div style={{
-                  borderLeft:    `3px solid ${isHov ? dotColor : "transparent"}`,
+                  borderLeft:    `3px solid ${isHov ? "var(--accent)" : "transparent"}`,
                   paddingLeft:   14,
                   paddingTop:    2,
                   paddingBottom: 2,

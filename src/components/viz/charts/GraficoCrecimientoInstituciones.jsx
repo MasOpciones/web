@@ -158,7 +158,7 @@ export default function GraficoCrecimientoInstituciones() {
           width="100%"
           role="img"
           aria-label="Crecimiento de instituciones públicas en Costa Rica de 39 en 1900 a 332 en 2024"
-          style={{ display: "block", width: "100%", height: "auto" }}
+          style={{ display: "block", width: "100%", height: "auto", overflow: "visible" }}
         >
           {/* Grid lines */}
           {Y_TICKS.map((tick) => (
@@ -186,12 +186,12 @@ export default function GraficoCrecimientoInstituciones() {
             stroke="var(--viz-grid)" strokeWidth={1.2} strokeDasharray="5 4" strokeOpacity={0.7} />
 
           {/* Annotation: COREC — left of line, top of plot */}
-          <text x={x1988 - 7} y={MG.top + 18} textAnchor="end"
-            style={{ ...chartTxt, fill: "var(--text-muted)", fontWeight: 700, fontSize: 12 }}>
+          <text x={x1988 - 7} y={MG.top + 20} textAnchor="end"
+            style={{ ...chartTxt, fill: "var(--text-muted)", fontWeight: 700, fontSize: 14 }}>
             COREC 1988
           </text>
-          <text x={x1988 - 7} y={MG.top + 33} textAnchor="end"
-            style={{ ...chartTxt, fontSize: 11 }}>
+          <text x={x1988 - 7} y={MG.top + 37} textAnchor="end"
+            style={{ ...chartTxt, fontSize: 13 }}>
             Ministerio de Reforma
           </text>
 

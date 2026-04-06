@@ -298,31 +298,38 @@ Esta propuesta tiene límites que vale la pena nombrar. Una auditoría externa n
 
 Una auditoría externa tampoco es una privatización ni una entrega del diagnóstico a actores que no responden ante los costarricenses. El contrato, los términos de referencia, el acceso y la publicación de resultados son decisiones del Estado costarricense. Las firmas son el instrumento, no el mandante.
 
-<div style={{ margin: "2rem 0", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "1px", background: "var(--border)", borderRadius: "10px", overflow: "hidden" }}>
-  <div style={{ background: "var(--viz-panel)", padding: "16px 18px" }}>
-    <div style={{ fontFamily: "var(--font-sans)", fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.07em", color: "var(--text-muted)", marginBottom: "6px" }}>Instituciones públicas</div>
-    <div style={{ fontFamily: "var(--font-sans)", fontSize: "28px", fontWeight: 800, color: "var(--accent)", lineHeight: 1 }}>332</div>
-  </div>
-  <div style={{ background: "var(--viz-panel)", padding: "16px 18px" }}>
-    <div style={{ fontFamily: "var(--font-sans)", fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.07em", color: "var(--text-muted)", marginBottom: "6px" }}>Salarios / costo de producción</div>
-    <div style={{ fontFamily: "var(--font-sans)", fontSize: "28px", fontWeight: 800, color: "var(--accent)", lineHeight: 1 }}>71.6% <span style={{ fontSize: "13px", fontWeight: 400, color: "var(--text-muted)" }}>más alto OCDE</span></div>
-  </div>
-  <div style={{ background: "var(--viz-panel)", padding: "16px 18px" }}>
-    <div style={{ fontFamily: "var(--font-sans)", fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.07em", color: "var(--text-muted)", marginBottom: "6px" }}>Sectores con duplicidades</div>
-    <div style={{ fontFamily: "var(--font-sans)", fontSize: "28px", fontWeight: 800, color: "var(--accent)", lineHeight: 1 }}>9 <span style={{ fontSize: "13px", fontWeight: 400, color: "var(--text-muted)" }}>documentados por la CGR</span></div>
-  </div>
-  <div style={{ background: "var(--viz-panel)", padding: "16px 18px" }}>
-    <div style={{ fontFamily: "var(--font-sans)", fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.07em", color: "var(--text-muted)", marginBottom: "6px" }}>Intentos de reforma</div>
-    <div style={{ fontFamily: "var(--font-sans)", fontSize: "28px", fontWeight: 800, color: "var(--accent)", lineHeight: 1 }}>7 <span style={{ fontSize: "13px", fontWeight: 400, color: "var(--text-muted)" }}>en 40 años. Ninguno completo.</span></div>
-  </div>
-</div>
+<StatGrid>
+  <KpiCard
+    label="Instituciones públicas"
+    value="332"
+    detail="Solo 15 han cerrado en 75 años. MIDEPLAN, abril 2024."
+    accent={true}
+  />
+  <KpiCard
+    label="Salarios / costo de producción"
+    value="71.6%"
+    detail="El porcentaje más alto de la OCDE. En Noruega ronda el 25%."
+  />
+  <KpiCard
+    label="Sectores con duplicidades"
+    value="9"
+    detail="Documentados por la propia Contraloría General de la República."
+  />
+  <KpiCard
+    label="Intentos de reforma desde 1985"
+    value="7"
+    detail="En 40 años. Ninguno completó una auditoría forense del aparato."
+  />
+</StatGrid>
 
-> Sin ese paso, ninguna reforma tiene los datos ni la legitimidad política para sostenerse. Con ese paso, por primera vez, el sistema tendría que responder a evidencia que él mismo no produjo y que no puede simplemente archivar.
+<Insight>
+Sin ese paso, ninguna reforma tiene los datos ni la legitimidad política para sostenerse. Con ese paso, por primera vez, el sistema tendría que responder a evidencia que él mismo no produjo y que no puede simplemente archivar.
+</Insight>
 
 La pregunta que queda no es técnica. Es fiscal y política a la vez: mientras el Estado sigue sin auditarse, alguien está pagando esa ineficiencia — y ese alguien tiene nombre en cada factura, en cada servicio que costó más de lo que produjo.
 
-<div style={{ marginTop: "2.5rem", paddingTop: "1.2rem", borderTop: "1px solid var(--border)" }}>
-  <p style={{ fontFamily: "var(--font-sans)", fontSize: "11px", lineHeight: 1.65, color: "var(--text-muted)", opacity: 0.7, margin: 0 }}>
-    <strong style={{ fontWeight: 600, opacity: 1 }}>Nota metodológica —</strong> Estimación del costo de las 67 estructuras redundantes: La cifra de ₡6,331 millones anuales se construye con salarios promedio del régimen general de empleo público para cuatro puestos de soporte institucional (proveedor/a: ₡1,350,000 bruto mensual; profesional en RRHH: ₡1,150,000; asesor/a legal: ₡1,500,000; auditor/a interno/a: ₡2,250,000), más cargas sociales del 26%, multiplicados por 12 meses y 67 estructuras. Fuente: escalas MIDEPLAN/Servicio Civil, 2024. No existe ninguna fuente oficial que haya calculado este costo — lo que es, en sí mismo, parte del problema que esta investigación documenta.
+<div style={{ marginTop: "2.8rem", paddingTop: "1.2rem", borderTop: "1px solid var(--border)" }}>
+  <p style={{ fontFamily: "var(--font-sans)", fontSize: "10.5px", lineHeight: 1.7, color: "var(--text-muted)", opacity: 0.55, margin: 0, fontStyle: "italic" }}>
+    <strong style={{ fontWeight: 600, fontStyle: "normal", opacity: 0.8 }}>Nota metodológica —</strong> Estimación del costo de las 67 estructuras redundantes: La cifra de ₡6,331 millones anuales se construye con salarios promedio del régimen general de empleo público para cuatro puestos de soporte institucional (proveedor/a: ₡1,350,000 bruto mensual; profesional en RRHH: ₡1,150,000; asesor/a legal: ₡1,500,000; auditor/a interno/a: ₡2,250,000), más cargas sociales del 26%, multiplicados por 12 meses y 67 estructuras. Fuente: escalas MIDEPLAN/Servicio Civil, 2024. No existe ninguna fuente oficial que haya calculado este costo — lo que es, en sí mismo, parte del problema que esta investigación documenta.
   </p>
 </div>
