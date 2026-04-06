@@ -20,6 +20,10 @@ import GraficoTimelineReformas from "../../components/viz/charts/GraficoTimeline
 import GraficoColombia from "../../components/viz/charts/GraficoColombia.jsx";
 import GraficoEstructuraEncargo from "../../components/viz/charts/GraficoEstructuraEncargo.jsx";
 import GraficoROI from "../../components/viz/charts/GraficoROI.jsx";
+import GraficoComposicionEstado from "../../components/viz/charts/GraficoComposicionEstado.jsx";
+import GraficoDeudaInteresesIneficiencia from "../../components/viz/charts/GraficoDeudaInteresesIneficiencia.jsx";
+import GraficoDuplicidades from "../../components/viz/charts/GraficoDuplicidades.jsx";
+import GraficoCostosDocumentados from "../../components/viz/charts/GraficoCostosDocumentados.jsx";
 
 Esta investigación nació de una pregunta simple: ¿por qué Costa Rica, con cuatro décadas de diagnósticos sobre el Estado, no ha podido reformarlo?
 
@@ -72,6 +76,8 @@ Las 332 instituciones no son un monolito. Aproximadamente 70 a 80 tienen autonom
   label="se necesitan para tocar las instituciones que controlan el 60–70% del gasto público. El Ejecutivo no puede, por decreto, fusionarlas ni redirigir sus recursos. La Sala Constitucional lo ha dejado claro cada vez que se ha intentado."
 />
 
+<GraficoComposicionEstado client:load />
+
 En abril de 2024, la ministra de Planificación Laura Fernández Delgado bloqueó ante la Asamblea la creación del Consejo Nacional de Productividad. Su argumento: *"sería la institución número 333, y duplicaría funciones con entidades que ya existen."* El diagnóstico era correcto. Las 332 instituciones que ya existían tampoco se revisaron.
 
 <ActShell>
@@ -118,6 +124,8 @@ El costo salarial no opera en el vacío. Los intereses de la deuda cerraron 2024
   label="ineficiencia anual estimada del gasto público costarricense. BID: 4.7% del PIB. Distribuida en servicios de baja eficiencia, compras con sobrecostos y programas con diseño deficiente. No existe un desglose oficial por componente — esa ausencia es parte del problema."
 />
 
+<GraficoDeudaInteresesIneficiencia client:load />
+
 <ActShell>
   <ActHero
     tag="ACTO III · LAS DUPLICIDADES"
@@ -144,6 +152,8 @@ El costo salarial no opera en el vacío. Los intereses de la deuda cerraron 2024
       detail="693 personas recibieron crédito de dos fuentes públicas distintas, simultáneamente, para el mismo propósito. 0.4% del PIB. CGR DFOE-EC-IF-00006-2022."
     />
   </StatGrid>
+
+  <GraficoDuplicidades client:load />
 
   <ActFooter
     source="Contraloría General de la República, presentación ante la Comisión Especial de la Asamblea Legislativa para la Reforma del Estado, julio 2022."
@@ -285,6 +295,8 @@ En 2022, las cuatro firmas Big Four rechazaron auditar Petroecuador. Las condici
   </StatGrid>
 
   <GraficoROI client:load />
+
+  <GraficoCostosDocumentados client:load />
 
   <ActFooter
     source={'BID, "Better Spending for Better Lives" (2018): ineficiencia estimada para Costa Rica 4.7% del PIB ≈ $4,500M. Costo del encargo: tarifas US GSA 2024 y benchmarks europeos.'}
