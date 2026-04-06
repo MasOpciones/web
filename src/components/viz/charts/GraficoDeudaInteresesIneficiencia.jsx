@@ -60,10 +60,11 @@ const tooltipStyle = {
 };
 
 export default function GraficoDeudaInteresesIneficiencia() {
-  const panelRef  = useRef(null);
-  const [animated, setAnimated] = useState(false);
-  const [hovered,  setHovered]  = useState(null);
-  const [tipPos,   setTipPos]   = useState({ x: 0, y: 0, right: false });
+  const panelRef   = useRef(null);
+  const [animated,    setAnimated]    = useState(false);
+  const [hovered,     setHovered]     = useState(null);
+  const [tipPos,      setTipPos]      = useState({ x: 0, y: 0, right: false });
+  const [hoveredCard, setHoveredCard] = useState(null);
 
   useEffect(() => {
     const id = requestAnimationFrame(() =>
@@ -156,31 +157,39 @@ export default function GraficoDeudaInteresesIneficiencia() {
           transition: "opacity 0.5s ease 0.5s",
           display: "flex", gap: 20, flexWrap: "wrap",
         }}>
-          <div style={{
-            flex: "1 1 160px", padding: "14px 16px", borderRadius: 10,
-            border: "1px solid var(--border)",
-            background: "transparent",
-          }}>
-            <div style={{ ...TXT, fontSize: 26, fontWeight: 800, color: "var(--text)", lineHeight: 1 }}>
-              3×
-            </div>
-            <div style={{ ...TXT, fontSize: 11, color: "var(--text-muted)", marginTop: 6, lineHeight: 1.4 }}>
-              Los intereses superan 3 veces la inversión en infraestructura crítica pendiente
-            </div>
-          </div>
-
-          <div style={{
-            flex: "1 1 160px", padding: "14px 16px", borderRadius: 10,
-            border: "1px solid var(--border)",
-            background: "transparent",
-          }}>
-            <div style={{ ...TXT, fontSize: 26, fontWeight: 800, color: "var(--text)", lineHeight: 1 }}>
-              ≈
-            </div>
-            <div style={{ ...TXT, fontSize: 11, color: "var(--text-muted)", marginTop: 6, lineHeight: 1.4 }}>
-              Ineficiencia e intereses son casi iguales — juntos consumen más del 30 % del presupuesto
-            </div>
-          </div>
+          {[
+            { key: "3x", sym: "3×", text: "Los intereses superan 3 veces la inversión en infraestructura crítica pendiente" },
+            { key: "eq", sym: "≈",  text: "Ineficiencia e intereses son casi iguales — juntos consumen más del 30 % del presupuesto" },
+          ].map(({ key, sym, text }) => {
+            const isHov = hoveredCard === key;
+            return (
+              <div
+                key={key}
+                onMouseEnter={() => setHoveredCard(key)}
+                onMouseLeave={() => setHoveredCard(null)}
+                style={{
+                  flex:       "1 1 160px",
+                  padding:    "14px 16px",
+                  borderRadius: 10,
+                  border:     isHov ? "1px solid rgba(96,255,18,0.3)" : "1px solid var(--border)",
+                  background: isHov ? "rgba(96,255,18,0.03)" : "transparent",
+                  transition: "border-color 0.2s ease, background 0.2s ease",
+                  cursor:     "default",
+                }}
+              >
+                <div style={{
+                  ...TXT, fontSize: 26, fontWeight: 800, lineHeight: 1,
+                  color:      isHov ? "var(--accent)" : "var(--text)",
+                  transition: "color 0.2s ease",
+                }}>
+                  {sym}
+                </div>
+                <div style={{ ...TXT, fontSize: 11, color: "var(--text-muted)", marginTop: 6, lineHeight: 1.4 }}>
+                  {text}
+                </div>
+              </div>
+            );
+          })}
         </div>
 
         {/* Tooltip */}

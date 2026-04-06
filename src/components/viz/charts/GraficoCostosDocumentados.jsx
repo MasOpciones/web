@@ -62,54 +62,56 @@ export default function GraficoCostosDocumentados() {
   return (
     <section style={sectionStyle}>
       <div style={panelStyle} ref={ref}>
-        <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
           {ROWS.map((row, i) => {
-            const isLast = i === ROWS.length - 1;
-            const showDash = i === 1; // dashed separator before estimated row
+            const isLast   = i === ROWS.length - 1;
+            const isFirst  = i === 0;
+            const showDash = i === 2; // dashed separator before estimated row
 
             return (
               <React.Fragment key={row.id}>
                 {showDash && (
                   <div style={{
-                    borderTop: "1px dashed var(--border)",
-                    margin: "4px 0",
-                    opacity: active ? 0.6 : 0,
+                    borderTop:  "1px dashed var(--border)",
+                    opacity:    active ? 0.6 : 0,
                     transition: "opacity 0.4s ease 0.3s",
+                    marginTop:  -8,
                   }} />
                 )}
                 <div style={{
-                  display:    "flex",
-                  alignItems: "flex-start",
-                  gap:        20,
-                  padding:    "14px 0",
-                  borderBottom: isLast ? "none" : (showDash ? "none" : "1px solid var(--border)"),
-                  opacity:    active ? 1 : 0,
-                  transform:  active ? "translateY(0)" : "translateY(8px)",
-                  transition: `opacity 0.5s ease ${i * 0.1}s, transform 0.5s ease ${i * 0.1}s`,
+                  display:              "grid",
+                  gridTemplateColumns:  "140px 1px 1fr",
+                  alignItems:           "center",
+                  gap:                  "0 20px",
+                  opacity:              active ? 1 : 0,
+                  transform:            active ? "translateY(0)" : "translateY(8px)",
+                  transition:           `opacity 0.5s ease ${i * 0.1}s, transform 0.5s ease ${i * 0.1}s`,
                 }}>
-                  {/* Number */}
-                  <div style={{ minWidth: 140, flexShrink: 0 }}>
-                    <div style={{
-                      ...TXT,
-                      fontSize:   "clamp(1.6rem, 4vw, 2.2rem)",
-                      fontWeight: 800,
-                      lineHeight: 1,
-                      color:      row.estimated ? "var(--text-muted)" : "var(--text)",
-                      opacity:    row.estimated ? 0.65 : 1,
-                    }}>
-                      {row.valor}
-                    </div>
+                  {/* Number — right-aligned */}
+                  <div style={{
+                    ...TXT,
+                    fontSize:   "clamp(1.6rem, 4vw, 2.2rem)",
+                    fontWeight: 800,
+                    lineHeight: 1,
+                    textAlign:  "right",
+                    color:      isFirst ? "var(--accent)"
+                               : row.estimated ? "var(--text-muted)"
+                               : "var(--text)",
+                    opacity:    row.estimated ? 0.65 : 1,
+                  }}>
+                    {row.valor}
                   </div>
 
-                  {/* Separator */}
+                  {/* Vertical separator */}
                   <div style={{
-                    width: 1, alignSelf: "stretch", minHeight: 36,
-                    background: "var(--border)", flexShrink: 0,
-                    opacity: 0.5,
+                    alignSelf:  "stretch",
+                    minHeight:  36,
+                    background: "var(--border)",
+                    opacity:    0.5,
                   }} />
 
                   {/* Text */}
-                  <div style={{ flex: 1, minWidth: 0 }}>
+                  <div>
                     <div style={{
                       ...TXT, fontSize: 13, fontWeight: 500,
                       color:      row.estimated ? "var(--text-muted)" : "var(--text)",
@@ -120,10 +122,10 @@ export default function GraficoCostosDocumentados() {
                     </div>
                     <div style={{
                       ...TXT, fontSize: 11,
-                      color:      "var(--text-muted)",
+                      color:     "var(--text-muted)",
                       lineHeight: 1.45,
-                      fontStyle:  row.estimated ? "italic" : "normal",
-                      opacity:    row.estimated ? 0.6 : 0.8,
+                      fontStyle: row.estimated ? "italic" : "normal",
+                      opacity:   row.estimated ? 0.6 : 0.8,
                     }}>
                       {row.fuente}
                     </div>

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 
 const REFORMAS = [
   {
@@ -64,9 +64,12 @@ const REFORMAS = [
   },
 ];
 
-const DOT_COLOR = { fallida: "#ef4444", parcial: "var(--text-muted)" };
-const BADGE_TEXT = { fallida: "#f87171", parcial: "var(--text-muted)" };
 const BADGE_LABEL = { fallida: "sin reforma estructural", parcial: "parcial" };
+
+const CARD_W   = 240;
+const CARD_GAP = 20;
+
+const TXT = { fontFamily: "var(--font-sans)", fontVariantNumeric: "tabular-nums" };
 
 const sectionStyle = {
   width: "100%",
@@ -77,15 +80,14 @@ const sectionStyle = {
 };
 
 const panelStyle = {
-  position: "relative",
-  width: "100%",
-  background:
-    "radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 8%, transparent), transparent 36%), " +
-    "linear-gradient(160deg, var(--viz-panel-strong) 0%, var(--viz-panel) 100%)",
+  position:   "relative",
+  width:      "100%",
+  boxSizing:  "border-box",
+  background: "var(--viz-panel)",
   borderRadius: "16px",
-  padding: "28px 24px 24px",
-  border: "1px solid var(--border)",
-  boxShadow: "var(--viz-shadow)",
+  padding:    "20px",
+  border:     "1px solid var(--border)",
+  overflow:   "hidden",
 };
 
 const tooltipStyle = {
@@ -98,15 +100,24 @@ const tooltipStyle = {
   backdropFilter:       "var(--viz-tooltip-backdrop)",
   WebkitBackdropFilter: "var(--viz-tooltip-backdrop)",
   pointerEvents:        "none",
-  maxWidth:             320,
+  maxWidth:             300,
   zIndex:               10,
 };
 
 export default function GraficoTimelineReformas() {
-  const panelRef = useRef(null);
-  const [mounted,    setMounted]    = useState(false);
-  const [hovered,    setHovered]    = useState(null);
-  const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 });
+  const trackRef    = useRef(null);
+  const panelRef    = useRef(null);
+  const intervalRef = useRef(null);
+  const dragRef     = useRef({ active: false, startX: 0 });
+
+  const [mounted,   setMounted]   = useState(false);
+  const [active,    setActive]    = useState(0);
+  const [paused,    setPaused]    = useState(false);
+  const [hovered,   setHovered]   = useState(null);
+
+  // Tooltip state
+  const [tipData,  setTipData]  = useState(null);
+  const [tipPos,   setTipPos]   = useState({ x: 0, y: 0, right: false });
 
   useEffect(() => {
     const id = requestAnimationFrame(() =>
@@ -115,192 +126,291 @@ export default function GraficoTimelineReformas() {
     return () => cancelAnimationFrame(id);
   }, []);
 
-  function handleMouseMove(e, i) {
+  // Auto-advance
+  const advance = useCallback(() => {
+    setActive((prev) => (prev + 1) % REFORMAS.length);
+  }, []);
+
+  useEffect(() => {
+    if (paused) { clearInterval(intervalRef.current); return; }
+    intervalRef.current = setInterval(advance, 3500);
+    return () => clearInterval(intervalRef.current);
+  }, [paused, advance]);
+
+  // Compute translateX so active card is roughly centred in the visible track
+  function getTranslate() {
+    if (!trackRef.current) return 0;
+    const panelW  = trackRef.current.parentElement?.offsetWidth ?? 600;
+    const offset  = active * (CARD_W + CARD_GAP);
+    const center  = panelW / 2 - CARD_W / 2;
+    return Math.min(0, -(offset - center));
+  }
+
+  // Drag handling
+  function onMouseDown(e) {
+    dragRef.current = { active: true, startX: e.clientX };
+    setPaused(true);
+  }
+  function onMouseMove(e) {
+    if (!dragRef.current.active) return;
+    const delta = dragRef.current.startX - e.clientX;
+    if (Math.abs(delta) > 40) {
+      dragRef.current.active = false;
+      setActive((prev) =>
+        delta > 0
+          ? Math.min(prev + 1, REFORMAS.length - 1)
+          : Math.max(prev - 1, 0)
+      );
+    }
+  }
+  function onMouseUp() {
+    dragRef.current.active = false;
+    setPaused(false);
+  }
+
+  function handleCardMouseEnter(e, i) {
+    setHovered(i);
     if (!panelRef.current) return;
     const rect = panelRef.current.getBoundingClientRect();
-    setHovered(i);
-    setTooltipPos({
+    setTipData(REFORMAS[i]);
+    setTipPos({
       x: e.clientX - rect.left,
       y: e.clientY - rect.top,
       right: e.clientX - rect.left > rect.width / 2,
     });
   }
+  function handleCardMouseMove(e, i) {
+    if (!panelRef.current) return;
+    const rect = panelRef.current.getBoundingClientRect();
+    setTipPos({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+      right: e.clientX - rect.left > rect.width / 2,
+    });
+  }
+  function handleCardMouseLeave() {
+    setHovered(null);
+    setTipData(null);
+  }
 
-  const hoveredReforma = hovered !== null ? REFORMAS[hovered] : null;
+  const translateX = getTranslate();
 
   return (
     <section style={sectionStyle}>
-      {/* Panel */}
-      <div style={{ ...panelStyle, position: "relative" }} ref={panelRef}>
-        {/* Timeline track */}
-        <div style={{ position: "relative", paddingLeft: 36 }}>
-
-          {REFORMAS.map((r, i) => {
-            const isLast   = i === REFORMAS.length - 1;
-            const isHov    = hovered === i;
-            const delay    = `${i * 0.08}s`;
-            // Dot center is at left: -31 + 4 = -27; 2px line centered → left: -28
-            const connLeft = -28;
-
-            return (
-              <div
-                key={r.año}
-                style={{
-                  position:     "relative",
-                  marginBottom: isLast ? 0 : 16,
-                  opacity:      mounted ? 1 : 0,
-                  transform:    mounted ? "translateY(0)" : "translateY(14px)",
-                  transition:   `opacity 0.45s ease ${delay}, transform 0.45s ease ${delay}`,
-                  cursor:       "default",
-                }}
-                onMouseMove={(e) => handleMouseMove(e, i)}
-                onMouseLeave={() => setHovered(null)}
-              >
-                {/* Connector from previous item gap to this dot top */}
-                {i > 0 && (
-                  <div style={{
-                    position:   "absolute",
-                    left:       connLeft,
-                    top:        -8,
-                    height:     14,
-                    width:      2,
-                    background: "rgba(107,114,128,0.4)",
-                  }} />
-                )}
-
-                {/* Dot — all same green, brightens on hover */}
-                <div style={{
-                  position:     "absolute",
-                  left:         -31,
-                  top:          6,
-                  width:        8,
-                  height:       8,
-                  borderRadius: "50%",
-                  background:   isHov ? "var(--accent)" : "rgba(96,255,18,0.3)",
-                  boxShadow:    isHov ? "0 0 8px rgba(96,255,18,0.65)" : "none",
-                  transition:   "background 0.2s ease, box-shadow 0.2s ease",
-                  zIndex:       1,
-                }} />
-
-                {/* Connector from this dot bottom to next item gap */}
-                {!isLast && (
-                  <div style={{
-                    position:   "absolute",
-                    left:       connLeft,
-                    top:        14,
-                    bottom:     -8,
-                    width:      2,
-                    background: "rgba(107,114,128,0.4)",
-                  }} />
-                )}
-
-                {/* Card */}
-                <div style={{
-                  borderLeft:    `3px solid ${isHov ? "var(--accent)" : "transparent"}`,
-                  paddingLeft:   14,
-                  paddingTop:    2,
-                  paddingBottom: 2,
-                  transition:    "border-color 0.2s ease",
-                  cursor:        "default",
-                }}>
-                  {/* Year + name + badge row */}
-                  <div style={{ display: "flex", flexWrap: "wrap", alignItems: "baseline", gap: "6px 10px" }}>
-                    <span style={{
-                      fontFamily:         "var(--font-sans)",
-                      fontSize:           15,
-                      fontWeight:         800,
-                      color:              "#60ff12",
-                      fontVariantNumeric: "tabular-nums",
-                    }}>
-                      {r.año}
-                    </span>
-                    <span style={{
-                      fontFamily: "var(--font-sans)",
-                      fontSize:   14,
-                      fontWeight: 700,
-                      color:      isHov ? "var(--text)" : "var(--text)",
-                    }}>
-                      {r.nombre}
-                    </span>
-                    {/* Badge — text only */}
-                    <span style={{
-                      fontFamily:    "var(--font-sans)",
-                      fontSize:      9.5,
-                      fontWeight:    600,
-                      letterSpacing: "0.06em",
-                      textTransform: "uppercase",
-                      color:         BADGE_TEXT[r.tipo],
-                      opacity:       0.6,
-                    }}>
-                      {BADGE_LABEL[r.tipo]}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+      <div
+        style={{ ...panelStyle, position: "relative" }}
+        ref={panelRef}
+        onMouseEnter={() => setPaused(true)}
+        onMouseLeave={() => { setPaused(false); setHovered(null); setTipData(null); }}
+      >
+        {/* Arrow buttons */}
+        <div style={{
+          position: "absolute", top: 18, right: 18,
+          display: "flex", gap: 4, zIndex: 2,
+        }}>
+          <button
+            onClick={() => setActive((p) => Math.max(p - 1, 0))}
+            style={{
+              ...TXT, fontSize: 18, color: "var(--text-muted)",
+              background: "none", border: "none", cursor: "pointer",
+              lineHeight: 1, padding: "2px 6px", opacity: active === 0 ? 0.3 : 0.7,
+            }}
+            aria-label="Anterior"
+          >←</button>
+          <button
+            onClick={() => setActive((p) => Math.min(p + 1, REFORMAS.length - 1))}
+            style={{
+              ...TXT, fontSize: 18, color: "var(--text-muted)",
+              background: "none", border: "none", cursor: "pointer",
+              lineHeight: 1, padding: "2px 6px",
+              opacity: active === REFORMAS.length - 1 ? 0.3 : 0.7,
+            }}
+            aria-label="Siguiente"
+          >→</button>
         </div>
 
-        {/* Tooltip */}
-        {hoveredReforma && (
+        {/* Carousel track wrapper */}
+        <div
+          style={{ overflow: "hidden", cursor: "grab", userSelect: "none" }}
+          onMouseDown={onMouseDown}
+          onMouseMove={onMouseMove}
+          onMouseUp={onMouseUp}
+          onMouseLeave={onMouseUp}
+          ref={trackRef}
+        >
           <div style={{
-            ...tooltipStyle,
-            left: tooltipPos.right
-              ? `${tooltipPos.x - 330}px`
-              : `${tooltipPos.x + 16}px`,
-            top: `${tooltipPos.y - 10}px`,
+            display:    "flex",
+            gap:        CARD_GAP,
+            transform:  `translateX(${translateX}px)`,
+            transition: "transform 0.5s cubic-bezier(0.16,1,0.3,1)",
+            willChange: "transform",
           }}>
-            <div style={{ fontSize: 11, color: "var(--text-muted)", marginBottom: 6,
-              fontFamily: "var(--font-sans)", fontWeight: 600,
-              textTransform: "uppercase", letterSpacing: "0.06em" }}>
-              {hoveredReforma.año} · {hoveredReforma.nombre}
-            </div>
-            <p style={{ margin: "0 0 8px", fontFamily: "var(--font-sans)",
-              fontSize: 12.5, lineHeight: 1.5, color: "var(--text-muted)" }}>
-              {hoveredReforma.descripcion}
-            </p>
-            <div style={{ display: "flex", alignItems: "flex-start", gap: 7 }}>
-              <span style={{ flexShrink: 0, marginTop: 5, width: 5, height: 5,
-                borderRadius: "50%", background: DOT_COLOR[hoveredReforma.tipo], opacity: 0.7 }} />
-              <p style={{ margin: 0, fontFamily: "var(--font-sans)",
-                fontSize: 12, lineHeight: 1.5, color: "var(--text-muted)" }}>
-                {hoveredReforma.resultado}
-              </p>
-            </div>
-          </div>
-        )}
+            {REFORMAS.map((r, i) => {
+              const isActive = i === active;
+              const isHov    = hovered === i;
+              const delay    = `${i * 0.06}s`;
 
-        {/* Bottom callout — no red background */}
+              return (
+                <div
+                  key={r.año}
+                  style={{
+                    width:        CARD_W,
+                    flexShrink:   0,
+                    borderRadius: 12,
+                    padding:      "18px 16px",
+                    border:       isActive
+                      ? "1px solid rgba(96,255,18,0.4)"
+                      : isHov
+                        ? "1px solid rgba(96,255,18,0.3)"
+                        : "1px solid var(--border)",
+                    background:   isHov ? "rgba(96,255,18,0.03)" : "transparent",
+                    transition:   "border-color 0.2s ease, background 0.2s ease",
+                    opacity:      mounted ? 1 : 0,
+                    transform:    mounted ? "translateY(0)" : "translateY(10px)",
+                    // stagger only on mount, not on every re-render
+                  }}
+                  onMouseEnter={(e) => handleCardMouseEnter(e, i)}
+                  onMouseMove={(e)  => handleCardMouseMove(e, i)}
+                  onMouseLeave={handleCardMouseLeave}
+                >
+                  {/* Year */}
+                  <div style={{
+                    ...TXT,
+                    fontSize:   22,
+                    fontWeight: 800,
+                    color:      "var(--accent)",
+                    lineHeight: 1,
+                  }}>
+                    {r.año}
+                  </div>
+
+                  {/* Name */}
+                  <div style={{
+                    ...TXT,
+                    fontSize:   13,
+                    fontWeight: 600,
+                    color:      "var(--text)",
+                    marginTop:  4,
+                    lineHeight: 1.3,
+                  }}>
+                    {r.nombre}
+                  </div>
+
+                  {/* Badge */}
+                  <div style={{
+                    ...TXT,
+                    fontSize:      9,
+                    fontWeight:    600,
+                    letterSpacing: "0.06em",
+                    textTransform: "uppercase",
+                    color:         "var(--text-muted)",
+                    opacity:       0.5,
+                    marginTop:     5,
+                  }}>
+                    {BADGE_LABEL[r.tipo]}
+                  </div>
+
+                  {/* Description */}
+                  <div style={{
+                    ...TXT,
+                    fontSize:   12,
+                    color:      "var(--text-muted)",
+                    lineHeight: 1.5,
+                    marginTop:  8,
+                  }}>
+                    {r.descripcion}
+                  </div>
+
+                  {/* Divider */}
+                  <div style={{
+                    margin:     "8px 0",
+                    borderTop:  "1px solid var(--border)",
+                    opacity:    0.4,
+                  }} />
+
+                  {/* Resultado */}
+                  <div style={{
+                    ...TXT,
+                    fontSize:   11,
+                    color:      "var(--text-muted)",
+                    lineHeight: 1.45,
+                  }}>
+                    {r.resultado}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Dot indicators */}
         <div style={{
-          marginTop:  20,
+          display:        "flex",
+          justifyContent: "center",
+          gap:            6,
+          marginTop:      16,
+        }}>
+          {REFORMAS.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => { setActive(i); setPaused(true); setTimeout(() => setPaused(false), 5000); }}
+              style={{
+                width:        i === active ? 16 : 5,
+                height:       5,
+                borderRadius: 999,
+                background:   i === active ? "var(--accent)" : "var(--border)",
+                border:       "none",
+                padding:      0,
+                cursor:       "pointer",
+                transition:   "background 0.2s ease, width 0.3s ease",
+              }}
+              aria-label={`Ir a ${REFORMAS[i].año}`}
+            />
+          ))}
+        </div>
+
+        {/* Bottom callout */}
+        <div style={{
+          marginTop:  16,
           paddingTop: 14,
           borderTop:  "1px solid var(--border)",
-          fontFamily: "var(--font-sans)",
+          ...TXT,
           fontSize:   13,
           lineHeight: 1.55,
           color:      "var(--text-muted)",
           opacity:    mounted ? 1 : 0,
-          transition: `opacity 0.45s ease ${REFORMAS.length * 0.08 + 0.1}s`,
+          transition: "opacity 0.45s ease 0.5s",
         }}>
           El patrón se repite en cada intento: diagnóstico, comisión, propuesta,{" "}
-          <strong style={{ color: "#f87171", fontWeight: 700 }}>archivo</strong>.
+          <strong style={{ color: "var(--accent)", fontWeight: 700 }}>archivo</strong>.
           Costa Rica ha tenido más comisiones de reforma que países con reformas reales.
         </div>
+
+        {/* Tooltip */}
+        {tipData && (
+          <div style={{
+            ...tooltipStyle,
+            left: tipPos.right ? `${tipPos.x - 316}px` : `${tipPos.x + 16}px`,
+            top:  `${tipPos.y - 10}px`,
+          }}>
+            <div style={{ ...TXT, fontSize: 11, color: "var(--text-muted)", marginBottom: 6,
+              fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.06em" }}>
+              {tipData.año} · {tipData.nombre}
+            </div>
+            <p style={{ margin: "0 0 8px", ...TXT, fontSize: 12.5, lineHeight: 1.5, color: "var(--text-muted)" }}>
+              {tipData.descripcion}
+            </p>
+            <p style={{ margin: 0, ...TXT, fontSize: 12, lineHeight: 1.5, color: "var(--text-muted)" }}>
+              {tipData.resultado}
+            </p>
+          </div>
+        )}
       </div>
 
-      {/* Footer */}
       <footer style={{
-        display:            "flex",
-        justifyContent:     "space-between",
-        alignItems:         "center",
-        gap:                12,
-        marginTop:          10,
-        fontSize:           10,
-        textTransform:      "uppercase",
-        color:              "var(--text-muted)",
-        fontFamily:         "var(--font-sans)",
-        fontVariantNumeric: "tabular-nums",
-        letterSpacing:      "0.04em",
+        display: "flex", justifyContent: "space-between", alignItems: "center",
+        gap: 12, marginTop: 10, fontSize: 10, textTransform: "uppercase",
+        color: "var(--text-muted)", ...TXT, letterSpacing: "0.04em",
       }}>
         <span>FUENTE: MIDEPLAN, CGR, Asamblea Legislativa</span>
         <span>PROYECTO: MÁSOPCIONES</span>
