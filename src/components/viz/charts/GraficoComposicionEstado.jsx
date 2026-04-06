@@ -10,24 +10,28 @@ const CATS = [
   { nombre: "Otras",             count: 106, fill: "var(--text-muted)", fillOp: 0.25, candado: false },
 ];
 
-// Candado annotation geometry
-const PRE_CANDADO  = (CATS[0].count + CATS[1].count) / TOTAL * 100;  // left edge of autónomas
-const CANDADO_W    = (CATS[2].count + CATS[3].count) / TOTAL * 100;  // width of locked segment
+const PRE_CANDADO = (CATS[0].count + CATS[1].count) / TOTAL * 100;
+const CANDADO_W   = (CATS[2].count + CATS[3].count) / TOTAL * 100;
 
 const TXT = { fontFamily: "var(--font-sans)", fontVariantNumeric: "tabular-nums" };
 
 const sectionStyle = {
-  width: "100%", margin: "2.8rem 0 3.2rem", padding: "0.15rem 0",
-  fontFamily: "var(--font-sans)", color: "var(--text)",
+  width: "100%",
+  margin: "2.8rem 0 3.2rem",
+  padding: "0.15rem 0",
+  fontFamily: "var(--font-sans)",
+  color: "var(--text)",
 };
 
 const panelStyle = {
-  position: "relative", width: "100%", overflow: "visible",
-  background:
-    "radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 8%, transparent), transparent 36%), " +
-    "linear-gradient(160deg, var(--viz-panel-strong) 0%, var(--viz-panel) 100%)",
-  borderRadius: "16px", padding: "24px 20px 20px",
-  border: "1px solid var(--border)", boxShadow: "var(--viz-shadow)",
+  position: "relative",
+  width: "100%",
+  boxSizing: "border-box",
+  background: "var(--viz-panel)",
+  borderRadius: "16px",
+  padding: "20px",
+  border: "1px solid var(--border)",
+  overflow: "hidden",
 };
 
 const tooltipStyle = {
@@ -41,9 +45,9 @@ const tooltipStyle = {
 
 export default function GraficoComposicionEstado() {
   const wrapRef = useRef(null);
-  const [animated, setAnimated]   = useState(false);
-  const [hovered,  setHovered]    = useState(null);
-  const [tooltip,  setTooltip]    = useState(null);
+  const [animated, setAnimated] = useState(false);
+  const [hovered,  setHovered]  = useState(null);
+  const [tooltip,  setTooltip]  = useState(null);
 
   useEffect(() => {
     const id = requestAnimationFrame(() =>
@@ -76,34 +80,35 @@ export default function GraficoComposicionEstado() {
           transition: "opacity 0.5s ease 0.6s",
         }}>
           <div style={{
-            position:   "absolute",
-            left:       `${PRE_CANDADO}%`,
-            width:      `${CANDADO_W}%`,
-            bottom:     0,
+            position: "absolute",
+            left:     `${PRE_CANDADO}%`,
+            width:    `${CANDADO_W}%`,
+            bottom:   0,
           }}>
             {/* Horizontal bracket line */}
             <div style={{
-              position:    "absolute",
-              bottom:      0,
-              left:        0, right: 0,
-              height:      1,
-              background:  "rgba(96,255,18,0.45)",
+              position:   "absolute",
+              bottom:     0,
+              left:       0, right: 0,
+              height:     1.5,
+              background: "var(--accent)",
+              opacity:    0.7,
             }} />
             {/* Left tick */}
-            <div style={{ position: "absolute", bottom: 0, left: 0, width: 1, height: 6, background: "rgba(96,255,18,0.45)" }} />
+            <div style={{ position: "absolute", bottom: 0, left: 0, width: 1.5, height: 7, background: "var(--accent)", opacity: 0.7 }} />
             {/* Right tick */}
-            <div style={{ position: "absolute", bottom: 0, right: 0, width: 1, height: 6, background: "rgba(96,255,18,0.45)" }} />
+            <div style={{ position: "absolute", bottom: 0, right: 0, width: 1.5, height: 7, background: "var(--accent)", opacity: 0.7 }} />
             {/* Label centered */}
             <div style={{
-              position:  "absolute",
-              bottom:    8,
-              left:      "50%",
-              transform: "translateX(-50%)",
-              whiteSpace: "nowrap",
+              position:      "absolute",
+              bottom:        9,
+              left:          "50%",
+              transform:     "translateX(-50%)",
+              whiteSpace:    "nowrap",
               ...TXT,
-              fontSize:     10,
-              fontWeight:   600,
-              color:        "rgba(96,255,18,0.7)",
+              fontSize:      11,
+              fontWeight:    600,
+              color:         "var(--accent)",
               letterSpacing: "0.04em",
               textTransform: "uppercase",
             }}>
@@ -145,7 +150,7 @@ export default function GraficoComposicionEstado() {
         <div style={{
           display:   "flex",
           flexWrap:  "wrap",
-          gap:       "10px 20px",
+          gap:       "10px 16px",
           marginTop: 16,
           opacity:   animated ? 1 : 0,
           transition:"opacity 0.5s ease 0.4s",
@@ -191,7 +196,7 @@ export default function GraficoComposicionEstado() {
               </strong>
             </div>
             {CATS[hovered].candado && (
-              <div style={{ ...TXT, fontSize: 10, color: "rgba(96,255,18,0.7)", marginTop: 6 }}>
+              <div style={{ ...TXT, fontSize: 10, color: "var(--accent)", marginTop: 6 }}>
                 Requiere 2/3 de la Asamblea para reformar
               </div>
             )}

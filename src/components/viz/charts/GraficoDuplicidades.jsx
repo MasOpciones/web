@@ -1,63 +1,43 @@
 import React, { useEffect, useState } from "react";
 
-// 9 sectors × N institutions each — dot matrix
-const SECTORS = [
-  { nombre: "Salud",               count: 14, highlight: true  },
-  { nombre: "Educación",           count: 12, highlight: true  },
-  { nombre: "Seguridad social",    count: 11, highlight: false },
-  { nombre: "Agropecuario",        count: 18, highlight: true  },
-  { nombre: "Infraestructura",     count: 9,  highlight: false },
-  { nombre: "Vivienda",            count: 8,  highlight: false },
-  { nombre: "Cultura y deporte",   count: 7,  highlight: false },
-  { nombre: "Medio ambiente",      count: 10, highlight: true  },
-  { nombre: "Economía y comercio", count: 11, highlight: false },
+const SECTORES = [
+  { nombre: "Agropecuario",            instituciones: ["MAG", "CNP", "INDER", "PIMA", "INTA"] },
+  { nombre: "Protección social",        instituciones: ["CCSS", "IMAS", "PANI", "CONAPAM", "JPS", "CONAPDIS", "CEN-CINAI"] },
+  { nombre: "Pensiones",                instituciones: ["IVM-CCSS", "Poder Judicial", "MEP", "Hacienda"] },
+  { nombre: "Educación y formación",    instituciones: ["MEP", "INA", "CONAPE"] },
+  { nombre: "Vivienda",                 instituciones: ["MIVAH", "INVU", "BANHVI"] },
+  { nombre: "Energía",                  instituciones: ["ICE", "Empresas municipales", "Cooperativas"] },
+  { nombre: "Movilidad",                instituciones: ["MOPT", "CONAVI", "CTP"] },
+  { nombre: "Ambiente",                 instituciones: ["SETENA", "Comisiones sectoriales"] },
+  { nombre: "Ordenamiento territorial", instituciones: ["INVU", "MIDEPLAN", "ICT"] },
 ];
 
-const TOTAL_DOTS = SECTORS.reduce((s, r) => s + r.count, 0);
+const TOTAL_INST = SECTORES.reduce((s, r) => s + r.instituciones.length, 0);
 
 const TXT = { fontFamily: "var(--font-sans)", fontVariantNumeric: "tabular-nums" };
 
 const sectionStyle = {
-  width: "100%", margin: "2.8rem 0 3.2rem", padding: "0.15rem 0",
-  fontFamily: "var(--font-sans)", color: "var(--text)",
+  width: "100%",
+  margin: "2.8rem 0 3.2rem",
+  padding: "0.15rem 0",
+  fontFamily: "var(--font-sans)",
+  color: "var(--text)",
 };
 
 const panelStyle = {
-  position: "relative", width: "100%", overflow: "visible",
-  background:
-    "radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 8%, transparent), transparent 36%), " +
-    "linear-gradient(160deg, var(--viz-panel-strong) 0%, var(--viz-panel) 100%)",
-  borderRadius: "16px", padding: "24px 20px 20px",
-  border: "1px solid var(--border)", boxShadow: "var(--viz-shadow)",
-};
-
-const tooltipStyle = {
-  position: "absolute", background: "var(--viz-tooltip-bg)",
-  border: "1px solid var(--viz-tooltip-border)", borderRadius: 8,
-  padding: "10px 14px", boxShadow: "var(--viz-tooltip-shadow)",
-  backdropFilter: "var(--viz-tooltip-backdrop)",
-  WebkitBackdropFilter: "var(--viz-tooltip-backdrop)",
-  pointerEvents: "none", minWidth: 180, zIndex: 10,
-};
-
-// Descriptions for tooltip
-const SECTOR_DESC = {
-  "Salud":               "CCSS, MTSS, IAFA, INS, hospitales nacionales — 14 entidades con competencias superpuestas",
-  "Educación":           "MEP, CONARE, UCR, TEC, UNA, UNED, institutos técnicos — sin coordinación presupuestaria",
-  "Seguridad social":    "CCSS, IMAS, FODESAF, Patronato Nacional — transferencias duplicadas a beneficiarios comunes",
-  "Agropecuario":        "MAG, INTA, CNP, SENASA, INCOPESCA, DINADECO — 18 entidades, mayor densidad institucional",
-  "Infraestructura":     "MOPT, COSEVI, CONAVI, AyA, ICE, RECOPE — planificación fragmentada",
-  "Vivienda":            "MIVAH, BANHVI, INVU, municipalidades — subsidios sin ventanilla única",
-  "Cultura y deporte":   "MCJ, DINADECO, ICODER, SINAC — 7 entidades, presupuestos dispersos",
-  "Medio ambiente":      "MINAE, SINAC, SETENA, CONAGEBIO, FONAFIFO — 10 entidades, competencias trasladas",
-  "Economía y comercio": "MEIC, PROCOMER, COMEX, BCCR, SUGEF — regulación financiera fragmentada",
+  position: "relative",
+  width: "100%",
+  boxSizing: "border-box",
+  background: "var(--viz-panel)",
+  borderRadius: "16px",
+  padding: "20px",
+  border: "1px solid var(--border)",
+  overflow: "hidden",
 };
 
 export default function GraficoDuplicidades() {
   const [animated, setAnimated] = useState(false);
   const [hovered,  setHovered]  = useState(null);
-  const [tipPos,   setTipPos]   = useState({ x: 0, y: 0, right: false });
-  const panelRef  = React.useRef(null);
 
   useEffect(() => {
     const id = requestAnimationFrame(() =>
@@ -66,152 +46,92 @@ export default function GraficoDuplicidades() {
     return () => cancelAnimationFrame(id);
   }, []);
 
-  function handleMove(e, i) {
-    if (!panelRef.current) return;
-    const rect = panelRef.current.getBoundingClientRect();
-    setHovered(i);
-    setTipPos({
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
-      right: e.clientX - rect.left > rect.width / 2,
-    });
-  }
-
   return (
     <section style={sectionStyle}>
-      <div style={panelStyle} ref={panelRef} onMouseLeave={() => setHovered(null)}>
-
-        {/* Grid */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-          {SECTORS.map((sector, si) => {
-            const isHov  = hovered === si;
-            const delay  = `${si * 0.06}s`;
+      <div style={panelStyle}>
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          {SECTORES.map((sector, i) => {
+            const isHov   = hovered === i;
+            const isLast  = i === SECTORES.length - 1;
+            const maxInst = Math.max(...SECTORES.map((s) => s.instituciones.length));
+            const isMax   = sector.instituciones.length === maxInst;
+            const delay   = `${i * 0.05}s`;
 
             return (
               <div
                 key={sector.nombre}
                 style={{
-                  display:    "flex",
-                  alignItems: "center",
-                  gap:        10,
-                  padding:    "7px 10px",
-                  borderRadius: 8,
-                  cursor:     "default",
-                  background: isHov ? "rgba(255,255,255,0.04)" : "transparent",
-                  border:     isHov
-                    ? "1px solid rgba(96,255,18,0.18)"
-                    : "1px solid transparent",
-                  opacity:    animated ? 1 : 0,
-                  transform:  animated ? "translateX(0)" : "translateX(-10px)",
-                  transition: `opacity 0.4s ease ${delay}, transform 0.4s ease ${delay}, background 0.2s ease, border-color 0.2s ease`,
+                  display:      "flex",
+                  alignItems:   "center",
+                  gap:          12,
+                  padding:      "9px 8px",
+                  borderRadius: 6,
+                  borderBottom: isLast ? "none" : "1px solid var(--border)",
+                  background:   isHov ? "rgba(255,255,255,0.02)" : "transparent",
+                  cursor:       "default",
+                  opacity:      animated ? 1 : 0,
+                  transform:    animated ? "translateX(0)" : "translateX(-8px)",
+                  transition:   `opacity 0.4s ease ${delay}, transform 0.4s ease ${delay}, background 0.15s ease`,
                 }}
-                onMouseMove={(e) => handleMove(e, si)}
+                onMouseEnter={() => setHovered(i)}
                 onMouseLeave={() => setHovered(null)}
               >
-                {/* Sector label */}
+                {/* Sector name */}
                 <span style={{
                   ...TXT,
                   fontSize:   12,
-                  fontWeight: isHov ? 600 : 400,
+                  fontWeight: 600,
                   color:      isHov ? "var(--text)" : "var(--text-muted)",
-                  width:      148,
+                  width:      140,
                   flexShrink: 0,
-                  transition: "color 0.2s ease, font-weight 0.2s ease",
+                  lineHeight: 1.3,
+                  transition: "color 0.15s ease",
                 }}>
                   {sector.nombre}
                 </span>
 
-                {/* Dot row */}
-                <div style={{ display: "flex", gap: 4, flexWrap: "wrap", flex: 1 }}>
-                  {Array.from({ length: sector.count }).map((_, di) => {
-                    const dotDelay = `${si * 0.06 + di * 0.018}s`;
-                    const isAccent = sector.highlight;
-                    return (
-                      <div
-                        key={di}
-                        style={{
-                          width:        9,
-                          height:       9,
-                          borderRadius: "50%",
-                          flexShrink:   0,
-                          background:   isAccent
-                            ? (isHov ? "var(--accent)" : "rgba(96,255,18,0.45)")
-                            : (isHov ? "var(--text-muted)" : "rgba(156,163,175,0.35)"),
-                          boxShadow:    isHov && isAccent ? "0 0 5px rgba(96,255,18,0.4)" : "none",
-                          opacity:      animated ? 1 : 0,
-                          transition:   `opacity 0.3s ease ${dotDelay}, background 0.2s ease, box-shadow 0.2s ease`,
-                        }}
-                      />
-                    );
-                  })}
-                </div>
+                {/* Institution tags */}
+                <span style={{
+                  ...TXT,
+                  fontSize:   11,
+                  color:      "var(--text-muted)",
+                  flex:       1,
+                  lineHeight: 1.5,
+                }}>
+                  {sector.instituciones.join(" · ")}
+                </span>
 
                 {/* Count */}
                 <span style={{
                   ...TXT,
-                  fontSize:   12,
+                  fontSize:   11,
                   fontWeight: 700,
-                  color:      isHov
-                    ? (sector.highlight ? "var(--accent)" : "var(--text-muted)")
-                    : "var(--text-muted)",
-                  opacity:    isHov ? 1 : 0.6,
-                  width:      24,
+                  color:      isMax ? "var(--accent)" : "var(--text-muted)",
+                  opacity:    isMax ? 1 : 0.6,
+                  width:      16,
                   textAlign:  "right",
                   flexShrink: 0,
-                  transition: "color 0.2s ease, opacity 0.2s ease",
                 }}>
-                  {sector.count}
+                  {sector.instituciones.length}
                 </span>
               </div>
             );
           })}
         </div>
 
-        {/* Callout */}
+        {/* Footer totals */}
         <div style={{
-          marginTop:  20,
-          paddingTop: 14,
+          ...TXT,
+          marginTop:  16,
+          paddingTop: 12,
           borderTop:  "1px solid var(--border)",
-          display:    "flex",
-          gap:        20,
-          flexWrap:   "wrap",
+          fontSize:   11,
+          color:      "var(--text-muted)",
           opacity:    animated ? 1 : 0,
-          transition: "opacity 0.5s ease 0.7s",
+          transition: "opacity 0.5s ease 0.55s",
         }}>
-          <div>
-            <span style={{ ...TXT, fontSize: 22, fontWeight: 800, color: "var(--accent)" }}>
-              {TOTAL_DOTS}
-            </span>
-            <span style={{ ...TXT, fontSize: 11, color: "var(--text-muted)", marginLeft: 8 }}>
-              entidades analizadas
-            </span>
-          </div>
-          <div style={{ borderLeft: "1px solid var(--border)", paddingLeft: 20 }}>
-            <span style={{ ...TXT, fontSize: 11, color: "var(--text-muted)", lineHeight: 1.5 }}>
-              67 órganos adscritos sin personalidad jurídica propia — creados por decreto,{" "}
-              <strong style={{ color: "var(--text)" }}>suprimibles sin reforma constitucional</strong>
-            </span>
-          </div>
+          9 sectores · {TOTAL_INST} instituciones con mandatos superpuestos
         </div>
-
-        {/* Tooltip */}
-        {hovered !== null && (
-          <div style={{
-            ...tooltipStyle,
-            left: tipPos.right ? `${tipPos.x - 200}px` : `${tipPos.x + 16}px`,
-            top:  `${tipPos.y - 10}px`,
-          }}>
-            <div style={{ ...TXT, fontSize: 12, fontWeight: 700, color: "var(--text)", marginBottom: 5 }}>
-              {SECTORS[hovered].nombre}
-              <span style={{ marginLeft: 8, fontSize: 11, color: "var(--text-muted)", fontWeight: 400 }}>
-                {SECTORS[hovered].count} entidades
-              </span>
-            </div>
-            <div style={{ ...TXT, fontSize: 11, color: "var(--text-muted)", lineHeight: 1.5 }}>
-              {SECTOR_DESC[SECTORS[hovered].nombre]}
-            </div>
-          </div>
-        )}
       </div>
 
       <footer style={{
@@ -219,7 +139,7 @@ export default function GraficoDuplicidades() {
         gap: 12, marginTop: 10, fontSize: 10, textTransform: "uppercase",
         color: "var(--text-muted)", ...TXT, letterSpacing: "0.04em",
       }}>
-        <span>FUENTE: CGR — Diagnóstico sectorial 2022 · MIDEPLAN</span>
+        <span>FUENTE: CGR — Diagnóstico sectorial, Comisión Legislativa de Reforma, julio 2022</span>
         <span>PROYECTO: MÁSOPCIONES</span>
       </footer>
     </section>

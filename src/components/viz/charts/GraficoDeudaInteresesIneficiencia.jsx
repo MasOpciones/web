@@ -2,50 +2,52 @@ import React, { useEffect, useRef, useState } from "react";
 
 const BARS = [
   {
-    id:      "intereses",
-    label:   "Intereses deuda pública",
-    value:   2370,
-    unit:    "Miles de millones ₡",
-    color:   "#f87171",
-    colorOp: 0.85,
-    note:    "Costo financiero anual del endeudamiento acumulado",
-  },
-  {
     id:      "ineficiencia",
     label:   "Ineficiencia estimada del gasto",
     value:   2300,
-    unit:    "Miles de millones ₡",
     color:   "var(--accent)",
     colorOp: 0.9,
     note:    "CGR: 15–20 % del presupuesto sin efecto comprobable en resultados",
   },
   {
+    id:      "intereses",
+    label:   "Intereses deuda pública",
+    value:   2370,
+    color:   "var(--text-muted)",
+    colorOp: 0.55,
+    note:    "Costo financiero anual del endeudamiento acumulado — MHCP 2024",
+  },
+  {
     id:      "infraestructura",
     label:   "Déficit infraestructura crítica",
     value:   707,
-    unit:    "Miles de millones ₡",
     color:   "var(--text-muted)",
-    colorOp: 0.55,
+    colorOp: 0.3,
     note:    "Inversión mínima pendiente en caminos, agua potable y saneamiento",
   },
 ];
 
-const MAX_VAL = 2500; // domain max for bar scaling
+const MAX_VAL = 2500;
 
 const TXT = { fontFamily: "var(--font-sans)", fontVariantNumeric: "tabular-nums" };
 
 const sectionStyle = {
-  width: "100%", margin: "2.8rem 0 3.2rem", padding: "0.15rem 0",
-  fontFamily: "var(--font-sans)", color: "var(--text)",
+  width: "100%",
+  margin: "2.8rem 0 3.2rem",
+  padding: "0.15rem 0",
+  fontFamily: "var(--font-sans)",
+  color: "var(--text)",
 };
 
 const panelStyle = {
-  position: "relative", width: "100%", overflow: "visible",
-  background:
-    "radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 8%, transparent), transparent 36%), " +
-    "linear-gradient(160deg, var(--viz-panel-strong) 0%, var(--viz-panel) 100%)",
-  borderRadius: "16px", padding: "28px 24px 24px",
-  border: "1px solid var(--border)", boxShadow: "var(--viz-shadow)",
+  position: "relative",
+  width: "100%",
+  boxSizing: "border-box",
+  background: "var(--viz-panel)",
+  borderRadius: "16px",
+  padding: "20px",
+  border: "1px solid var(--border)",
+  overflow: "hidden",
 };
 
 const tooltipStyle = {
@@ -88,9 +90,8 @@ export default function GraficoDeudaInteresesIneficiencia() {
         {/* Bars */}
         <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
           {BARS.map((bar, i) => {
-            const pct     = (bar.value / MAX_VAL) * 100;
-            const isHov   = hovered === i;
-            const delay   = `${i * 0.12}s`;
+            const pct   = (bar.value / MAX_VAL) * 100;
+            const delay = `${i * 0.12}s`;
 
             return (
               <div
@@ -111,16 +112,14 @@ export default function GraficoDeudaInteresesIneficiencia() {
                 }}>
                   <span style={{
                     ...TXT, fontSize: 13, fontWeight: 600,
-                    color: isHov ? "var(--text)" : "var(--text-muted)",
+                    color: hovered === i ? "var(--text)" : "var(--text-muted)",
                     transition: "color 0.2s ease",
                   }}>
                     {bar.label}
                   </span>
                   <span style={{
                     ...TXT, fontSize: 14, fontWeight: 800,
-                    color: bar.color === "var(--accent)" ? "var(--accent)"
-                         : bar.color === "#f87171" ? "#f87171"
-                         : "var(--text-muted)",
+                    color: bar.color === "var(--accent)" ? "var(--accent)" : "var(--text-muted)",
                     opacity: bar.colorOp,
                     whiteSpace: "nowrap",
                   }}>
@@ -136,15 +135,12 @@ export default function GraficoDeudaInteresesIneficiencia() {
                 }}>
                   <div style={{
                     position:   "absolute",
-                    left:       0, top: 0, bottom: 0,
+                    left: 0, top: 0, bottom: 0,
                     width:      animated ? `${pct}%` : "0%",
                     background: bar.color,
                     opacity:    bar.colorOp,
                     borderRadius: 5,
                     transition: `width 0.9s cubic-bezier(0.16,1,0.3,1) ${delay}`,
-                    filter:     bar.color === "var(--accent)"
-                      ? "drop-shadow(0 0 4px rgba(96,255,18,0.45))"
-                      : "none",
                   }} />
                 </div>
               </div>
@@ -152,40 +148,37 @@ export default function GraficoDeudaInteresesIneficiencia() {
           })}
         </div>
 
-        {/* Callout: ≈ 3× comparison */}
+        {/* Callout cards */}
         <div style={{
-          marginTop: 28, paddingTop: 16,
+          marginTop: 24, paddingTop: 16,
           borderTop: "1px solid var(--border)",
           opacity: animated ? 1 : 0,
           transition: "opacity 0.5s ease 0.5s",
+          display: "flex", gap: 20, flexWrap: "wrap",
         }}>
-          <div style={{ display: "flex", gap: 24, flexWrap: "wrap" }}>
-            {/* Metric 1 */}
-            <div style={{
-              flex: "1 1 160px", padding: "14px 16px", borderRadius: 10,
-              border: "1px solid rgba(248,113,113,0.2)",
-              background: "rgba(248,113,113,0.04)",
-            }}>
-              <div style={{ ...TXT, fontSize: 26, fontWeight: 800, color: "#f87171", lineHeight: 1 }}>
-                3×
-              </div>
-              <div style={{ ...TXT, fontSize: 11, color: "var(--text-muted)", marginTop: 6, lineHeight: 1.4 }}>
-                Los intereses superan 3 veces la inversión en infraestructura crítica pendiente
-              </div>
+          <div style={{
+            flex: "1 1 160px", padding: "14px 16px", borderRadius: 10,
+            border: "1px solid var(--border)",
+            background: "transparent",
+          }}>
+            <div style={{ ...TXT, fontSize: 26, fontWeight: 800, color: "var(--text)", lineHeight: 1 }}>
+              3×
             </div>
+            <div style={{ ...TXT, fontSize: 11, color: "var(--text-muted)", marginTop: 6, lineHeight: 1.4 }}>
+              Los intereses superan 3 veces la inversión en infraestructura crítica pendiente
+            </div>
+          </div>
 
-            {/* Metric 2 */}
-            <div style={{
-              flex: "1 1 160px", padding: "14px 16px", borderRadius: 10,
-              border: "1px solid rgba(96,255,18,0.18)",
-              background: "rgba(96,255,18,0.03)",
-            }}>
-              <div style={{ ...TXT, fontSize: 26, fontWeight: 800, color: "var(--accent)", lineHeight: 1 }}>
-                ≈
-              </div>
-              <div style={{ ...TXT, fontSize: 11, color: "var(--text-muted)", marginTop: 6, lineHeight: 1.4 }}>
-                Ineficiencia e intereses son casi iguales — juntos consumen más del 30 % del presupuesto
-              </div>
+          <div style={{
+            flex: "1 1 160px", padding: "14px 16px", borderRadius: 10,
+            border: "1px solid var(--border)",
+            background: "transparent",
+          }}>
+            <div style={{ ...TXT, fontSize: 26, fontWeight: 800, color: "var(--text)", lineHeight: 1 }}>
+              ≈
+            </div>
+            <div style={{ ...TXT, fontSize: 11, color: "var(--text-muted)", marginTop: 6, lineHeight: 1.4 }}>
+              Ineficiencia e intereses son casi iguales — juntos consumen más del 30 % del presupuesto
             </div>
           </div>
         </div>
