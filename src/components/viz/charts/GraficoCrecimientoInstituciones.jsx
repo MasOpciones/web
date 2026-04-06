@@ -244,12 +244,12 @@ export default function GraficoCrecimientoInstituciones() {
           }} />
 
           {/* End-label in right margin */}
-          <text x={x2024 + 12} y={y2024 + 4} textAnchor="start"
-            style={{ ...chartTxt, fill: "var(--viz-accent)", fontWeight: 700, fontSize: 11 }}>
+          <text x={x2024 + 12} y={y2024 + 5} textAnchor="start"
+            style={{ ...chartTxt, fill: "var(--viz-accent)", fontWeight: 700, fontSize: 14 }}>
             332 · 2024
           </text>
-          <text x={x2024 + 12} y={y2024 + 17} textAnchor="start"
-            style={{ ...chartTxt, fontSize: 10 }}>
+          <text x={x2024 + 12} y={y2024 + 21} textAnchor="start"
+            style={{ ...chartTxt, fontSize: 12 }}>
             solo 15 han cerrado
           </text>
 

@@ -135,22 +135,12 @@ export default function GraficoTimelineReformas() {
         {/* Timeline track */}
         <div style={{ position: "relative", paddingLeft: 36 }}>
 
-          {/* Vertical spine */}
-          <div style={{
-            position:     "absolute",
-            left:         10,
-            top:          6,
-            bottom:       6,
-            width:        2,
-            background:   "rgba(107,114,128,0.35)",
-            borderRadius: 1,
-          }} />
-
           {REFORMAS.map((r, i) => {
             const isLast   = i === REFORMAS.length - 1;
             const isHov    = hovered === i;
-            const dotColor = DOT_COLOR[r.tipo];
             const delay    = `${i * 0.08}s`;
+            // Dot center is at left: -31 + 4 = -27; 2px line centered → left: -28
+            const connLeft = -28;
 
             return (
               <div
@@ -166,6 +156,18 @@ export default function GraficoTimelineReformas() {
                 onMouseMove={(e) => handleMouseMove(e, i)}
                 onMouseLeave={() => setHovered(null)}
               >
+                {/* Connector from previous item gap to this dot top */}
+                {i > 0 && (
+                  <div style={{
+                    position:   "absolute",
+                    left:       connLeft,
+                    top:        -8,
+                    height:     14,
+                    width:      2,
+                    background: "rgba(107,114,128,0.4)",
+                  }} />
+                )}
+
                 {/* Dot — all same green, brightens on hover */}
                 <div style={{
                   position:     "absolute",
@@ -174,11 +176,23 @@ export default function GraficoTimelineReformas() {
                   width:        8,
                   height:       8,
                   borderRadius: "50%",
-                  background:   isHov ? "var(--accent)" : "rgba(96,255,18,0.25)",
+                  background:   isHov ? "var(--accent)" : "rgba(96,255,18,0.3)",
                   boxShadow:    isHov ? "0 0 8px rgba(96,255,18,0.65)" : "none",
                   transition:   "background 0.2s ease, box-shadow 0.2s ease",
                   zIndex:       1,
                 }} />
+
+                {/* Connector from this dot bottom to next item gap */}
+                {!isLast && (
+                  <div style={{
+                    position:   "absolute",
+                    left:       connLeft,
+                    top:        14,
+                    bottom:     -8,
+                    width:      2,
+                    background: "rgba(107,114,128,0.4)",
+                  }} />
+                )}
 
                 {/* Card */}
                 <div style={{
