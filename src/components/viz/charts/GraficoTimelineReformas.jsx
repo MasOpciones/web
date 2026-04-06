@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 const REFORMAS = [
   {
@@ -65,11 +65,9 @@ const REFORMAS = [
 ];
 
 const BADGE_LABEL = { fallida: "sin reforma estructural", parcial: "parcial" };
-
-const CARD_W   = 240;
-const CARD_GAP = 20;
-
-const TXT = { fontFamily: "var(--font-sans)", fontVariantNumeric: "tabular-nums" };
+const CARD_W      = 240;
+const CARD_GAP    = 16;
+const TXT         = { fontFamily: "var(--font-sans)", fontVariantNumeric: "tabular-nums" };
 
 const sectionStyle = {
   width: "100%",
@@ -80,42 +78,28 @@ const sectionStyle = {
 };
 
 const panelStyle = {
-  position:   "relative",
-  width:      "100%",
-  boxSizing:  "border-box",
-  background: "var(--viz-panel)",
+  position:     "relative",
+  width:        "100%",
+  overflow:     "visible",
+  background:
+    "radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 8%, transparent), transparent 36%), " +
+    "linear-gradient(160deg, var(--viz-panel-strong) 0%, var(--viz-panel) 100%)",
   borderRadius: "16px",
-  padding:    "20px",
-  border:     "1px solid var(--border)",
-  overflow:   "hidden",
-};
-
-const tooltipStyle = {
-  position:             "absolute",
-  background:           "var(--viz-tooltip-bg)",
-  border:               "1px solid var(--viz-tooltip-border)",
-  borderRadius:         8,
-  padding:              "12px 14px",
-  boxShadow:            "var(--viz-tooltip-shadow)",
-  backdropFilter:       "var(--viz-tooltip-backdrop)",
-  WebkitBackdropFilter: "var(--viz-tooltip-backdrop)",
-  pointerEvents:        "none",
-  maxWidth:             300,
-  zIndex:               10,
+  padding:      "20px 20px 16px",
+  border:       "1px solid var(--border)",
+  boxShadow:    "var(--viz-shadow)",
 };
 
 export default function GraficoTimelineReformas() {
-  const trackRef    = useRef(null);
-  const panelRef    = useRef(null);
-  const intervalRef = useRef(null);
-  const dragRef     = useRef({ active: false, startX: 0 });
+  const trackRef   = useRef(null);
+  const panelRef   = useRef(null);
+  const timerRef   = useRef(null);
+  const dragRef    = useRef({ active: false, startX: 0 });
 
-  const [mounted,   setMounted]   = useState(false);
-  const [active,    setActive]    = useState(0);
-  const [paused,    setPaused]    = useState(false);
-  const [hovered,   setHovered]   = useState(null);
-
-  // Tooltip state
+  const [mounted,  setMounted]  = useState(false);
+  const [active,   setActive]   = useState(0);
+  const [paused,   setPaused]   = useState(false);
+  const [hovCard,  setHovCard]  = useState(null);
   const [tipData,  setTipData]  = useState(null);
   const [tipPos,   setTipPos]   = useState({ x: 0, y: 0, right: false });
 
@@ -126,60 +110,45 @@ export default function GraficoTimelineReformas() {
     return () => cancelAnimationFrame(id);
   }, []);
 
-  // Auto-advance
-  const advance = useCallback(() => {
-    setActive((prev) => (prev + 1) % REFORMAS.length);
-  }, []);
-
+  // Auto-advance interval
   useEffect(() => {
-    if (paused) { clearInterval(intervalRef.current); return; }
-    intervalRef.current = setInterval(advance, 3500);
-    return () => clearInterval(intervalRef.current);
-  }, [paused, advance]);
+    if (paused) return;
+    timerRef.current = setInterval(() => {
+      setActive((p) => (p + 1) % REFORMAS.length);
+    }, 3500);
+    return () => clearInterval(timerRef.current);
+  }, [paused]);
 
-  // Compute translateX so active card is roughly centred in the visible track
-  function getTranslate() {
-    if (!trackRef.current) return 0;
-    const panelW  = trackRef.current.parentElement?.offsetWidth ?? 600;
-    const offset  = active * (CARD_W + CARD_GAP);
-    const center  = panelW / 2 - CARD_W / 2;
+  function go(idx) {
+    setActive(Math.max(0, Math.min(idx, REFORMAS.length - 1)));
+  }
+
+  // Compute how far to slide the track so active card is centered
+  function translateX() {
+    const trackW = trackRef.current ? trackRef.current.offsetWidth : 600;
+    const offset = active * (CARD_W + CARD_GAP);
+    const center = trackW / 2 - CARD_W / 2;
     return Math.min(0, -(offset - center));
   }
 
-  // Drag handling
   function onMouseDown(e) {
     dragRef.current = { active: true, startX: e.clientX };
-    setPaused(true);
   }
   function onMouseMove(e) {
     if (!dragRef.current.active) return;
     const delta = dragRef.current.startX - e.clientX;
     if (Math.abs(delta) > 40) {
       dragRef.current.active = false;
-      setActive((prev) =>
-        delta > 0
-          ? Math.min(prev + 1, REFORMAS.length - 1)
-          : Math.max(prev - 1, 0)
-      );
+      go(active + (delta > 0 ? 1 : -1));
     }
   }
   function onMouseUp() {
     dragRef.current.active = false;
-    setPaused(false);
   }
 
-  function handleCardMouseEnter(e, i) {
-    setHovered(i);
-    if (!panelRef.current) return;
-    const rect = panelRef.current.getBoundingClientRect();
+  function onCardEnter(e, i) {
+    setHovCard(i);
     setTipData(REFORMAS[i]);
-    setTipPos({
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
-      right: e.clientX - rect.left > rect.width / 2,
-    });
-  }
-  function handleCardMouseMove(e, i) {
     if (!panelRef.current) return;
     const rect = panelRef.current.getBoundingClientRect();
     setTipPos({
@@ -188,71 +157,71 @@ export default function GraficoTimelineReformas() {
       right: e.clientX - rect.left > rect.width / 2,
     });
   }
-  function handleCardMouseLeave() {
-    setHovered(null);
+  function onCardMove(e) {
+    if (!panelRef.current) return;
+    const rect = panelRef.current.getBoundingClientRect();
+    setTipPos({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+      right: e.clientX - rect.left > rect.width / 2,
+    });
+  }
+  function onCardLeave() {
+    setHovCard(null);
     setTipData(null);
   }
 
-  const translateX = getTranslate();
+  const tx = translateX();
 
   return (
     <section style={sectionStyle}>
       <div
-        style={{ ...panelStyle, position: "relative" }}
         ref={panelRef}
+        style={panelStyle}
         onMouseEnter={() => setPaused(true)}
-        onMouseLeave={() => { setPaused(false); setHovered(null); setTipData(null); }}
+        onMouseLeave={() => { setPaused(false); setHovCard(null); setTipData(null); }}
       >
-        {/* Arrow buttons */}
-        <div style={{
-          position: "absolute", top: 18, right: 18,
-          display: "flex", gap: 4, zIndex: 2,
-        }}>
-          <button
-            onClick={() => setActive((p) => Math.max(p - 1, 0))}
-            style={{
-              ...TXT, fontSize: 18, color: "var(--text-muted)",
-              background: "none", border: "none", cursor: "pointer",
-              lineHeight: 1, padding: "2px 6px", opacity: active === 0 ? 0.3 : 0.7,
-            }}
-            aria-label="Anterior"
-          >←</button>
-          <button
-            onClick={() => setActive((p) => Math.min(p + 1, REFORMAS.length - 1))}
-            style={{
-              ...TXT, fontSize: 18, color: "var(--text-muted)",
-              background: "none", border: "none", cursor: "pointer",
-              lineHeight: 1, padding: "2px 6px",
-              opacity: active === REFORMAS.length - 1 ? 0.3 : 0.7,
-            }}
-            aria-label="Siguiente"
-          >→</button>
+        {/* Nav arrows */}
+        <div style={{ position: "absolute", top: 18, right: 18, display: "flex", gap: 2, zIndex: 2 }}>
+          {[["←", -1], ["→", 1]].map(([arrow, dir]) => (
+            <button
+              key={arrow}
+              onClick={() => go(active + dir)}
+              style={{
+                ...TXT, fontSize: 18, color: "var(--text-muted)",
+                background: "none", border: "none", cursor: "pointer",
+                padding: "2px 7px", lineHeight: 1,
+                opacity: dir === -1 ? (active === 0 ? 0.25 : 0.65) : (active === REFORMAS.length - 1 ? 0.25 : 0.65),
+              }}
+            >{arrow}</button>
+          ))}
         </div>
 
-        {/* Carousel track wrapper */}
+        {/* Track (clips overflowing cards) */}
         <div
+          ref={trackRef}
           style={{ overflow: "hidden", cursor: "grab", userSelect: "none" }}
           onMouseDown={onMouseDown}
           onMouseMove={onMouseMove}
           onMouseUp={onMouseUp}
           onMouseLeave={onMouseUp}
-          ref={trackRef}
         >
           <div style={{
             display:    "flex",
             gap:        CARD_GAP,
-            transform:  `translateX(${translateX}px)`,
+            transform:  `translateX(${tx}px)`,
             transition: "transform 0.5s cubic-bezier(0.16,1,0.3,1)",
             willChange: "transform",
           }}>
             {REFORMAS.map((r, i) => {
               const isActive = i === active;
-              const isHov    = hovered === i;
-              const delay    = `${i * 0.06}s`;
-
+              const isHov    = hovCard === i;
               return (
                 <div
                   key={r.año}
+                  onMouseEnter={(e) => onCardEnter(e, i)}
+                  onMouseMove={onCardMove}
+                  onMouseLeave={onCardLeave}
                   style={{
                     width:        CARD_W,
                     flexShrink:   0,
@@ -265,76 +234,26 @@ export default function GraficoTimelineReformas() {
                         : "1px solid var(--border)",
                     background:   isHov ? "rgba(96,255,18,0.03)" : "transparent",
                     transition:   "border-color 0.2s ease, background 0.2s ease",
+                    cursor:       "default",
                     opacity:      mounted ? 1 : 0,
                     transform:    mounted ? "translateY(0)" : "translateY(10px)",
-                    // stagger only on mount, not on every re-render
                   }}
-                  onMouseEnter={(e) => handleCardMouseEnter(e, i)}
-                  onMouseMove={(e)  => handleCardMouseMove(e, i)}
-                  onMouseLeave={handleCardMouseLeave}
                 >
-                  {/* Year */}
-                  <div style={{
-                    ...TXT,
-                    fontSize:   22,
-                    fontWeight: 800,
-                    color:      "var(--accent)",
-                    lineHeight: 1,
-                  }}>
+                  <div style={{ ...TXT, fontSize: 22, fontWeight: 800, color: "var(--accent)", lineHeight: 1 }}>
                     {r.año}
                   </div>
-
-                  {/* Name */}
-                  <div style={{
-                    ...TXT,
-                    fontSize:   13,
-                    fontWeight: 600,
-                    color:      "var(--text)",
-                    marginTop:  4,
-                    lineHeight: 1.3,
-                  }}>
+                  <div style={{ ...TXT, fontSize: 13, fontWeight: 600, color: "var(--text)", marginTop: 4, lineHeight: 1.3 }}>
                     {r.nombre}
                   </div>
-
-                  {/* Badge */}
-                  <div style={{
-                    ...TXT,
-                    fontSize:      9,
-                    fontWeight:    600,
-                    letterSpacing: "0.06em",
-                    textTransform: "uppercase",
-                    color:         "var(--text-muted)",
-                    opacity:       0.5,
-                    marginTop:     5,
-                  }}>
+                  <div style={{ ...TXT, fontSize: 9, fontWeight: 600, letterSpacing: "0.06em",
+                    textTransform: "uppercase", color: "var(--text-muted)", opacity: 0.5, marginTop: 5 }}>
                     {BADGE_LABEL[r.tipo]}
                   </div>
-
-                  {/* Description */}
-                  <div style={{
-                    ...TXT,
-                    fontSize:   12,
-                    color:      "var(--text-muted)",
-                    lineHeight: 1.5,
-                    marginTop:  8,
-                  }}>
+                  <div style={{ ...TXT, fontSize: 12, color: "var(--text-muted)", lineHeight: 1.5, marginTop: 8 }}>
                     {r.descripcion}
                   </div>
-
-                  {/* Divider */}
-                  <div style={{
-                    margin:     "8px 0",
-                    borderTop:  "1px solid var(--border)",
-                    opacity:    0.4,
-                  }} />
-
-                  {/* Resultado */}
-                  <div style={{
-                    ...TXT,
-                    fontSize:   11,
-                    color:      "var(--text-muted)",
-                    lineHeight: 1.45,
-                  }}>
+                  <div style={{ margin: "8px 0", borderTop: "1px solid var(--border)", opacity: 0.4 }} />
+                  <div style={{ ...TXT, fontSize: 11, color: "var(--text-muted)", lineHeight: 1.45 }}>
                     {r.resultado}
                   </div>
                 </div>
@@ -344,16 +263,11 @@ export default function GraficoTimelineReformas() {
         </div>
 
         {/* Dot indicators */}
-        <div style={{
-          display:        "flex",
-          justifyContent: "center",
-          gap:            6,
-          marginTop:      16,
-        }}>
+        <div style={{ display: "flex", justifyContent: "center", gap: 6, marginTop: 14 }}>
           {REFORMAS.map((_, i) => (
             <button
               key={i}
-              onClick={() => { setActive(i); setPaused(true); setTimeout(() => setPaused(false), 5000); }}
+              onClick={() => { go(i); setPaused(true); setTimeout(() => setPaused(false), 5000); }}
               style={{
                 width:        i === active ? 16 : 5,
                 height:       5,
@@ -364,22 +278,17 @@ export default function GraficoTimelineReformas() {
                 cursor:       "pointer",
                 transition:   "background 0.2s ease, width 0.3s ease",
               }}
-              aria-label={`Ir a ${REFORMAS[i].año}`}
             />
           ))}
         </div>
 
-        {/* Bottom callout */}
+        {/* Callout */}
         <div style={{
-          marginTop:  16,
-          paddingTop: 14,
-          borderTop:  "1px solid var(--border)",
-          ...TXT,
-          fontSize:   13,
-          lineHeight: 1.55,
-          color:      "var(--text-muted)",
-          opacity:    mounted ? 1 : 0,
-          transition: "opacity 0.45s ease 0.5s",
+          marginTop: 14, paddingTop: 12,
+          borderTop: "1px solid var(--border)",
+          ...TXT, fontSize: 13, lineHeight: 1.55, color: "var(--text-muted)",
+          opacity: mounted ? 1 : 0,
+          transition: "opacity 0.45s ease 0.4s",
         }}>
           El patrón se repite en cada intento: diagnóstico, comisión, propuesta,{" "}
           <strong style={{ color: "var(--accent)", fontWeight: 700 }}>archivo</strong>.
@@ -389,7 +298,14 @@ export default function GraficoTimelineReformas() {
         {/* Tooltip */}
         {tipData && (
           <div style={{
-            ...tooltipStyle,
+            position: "absolute",
+            background: "var(--viz-tooltip-bg)",
+            border: "1px solid var(--viz-tooltip-border)",
+            borderRadius: 8, padding: "12px 14px",
+            boxShadow: "var(--viz-tooltip-shadow)",
+            backdropFilter: "var(--viz-tooltip-backdrop)",
+            WebkitBackdropFilter: "var(--viz-tooltip-backdrop)",
+            pointerEvents: "none", maxWidth: 300, zIndex: 10,
             left: tipPos.right ? `${tipPos.x - 316}px` : `${tipPos.x + 16}px`,
             top:  `${tipPos.y - 10}px`,
           }}>

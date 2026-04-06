@@ -42,12 +42,14 @@ const sectionStyle = {
 const panelStyle = {
   position: "relative",
   width: "100%",
-  boxSizing: "border-box",
-  background: "var(--viz-panel)",
+  overflow: "visible",
+  background:
+    "radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 8%, transparent), transparent 36%), " +
+    "linear-gradient(160deg, var(--viz-panel-strong) 0%, var(--viz-panel) 100%)",
   borderRadius: "16px",
   padding: "20px",
   border: "1px solid var(--border)",
-  overflow: "hidden",
+  boxShadow: "var(--viz-shadow)",
 };
 
 const tooltipStyle = {

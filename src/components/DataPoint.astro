@@ -8,7 +8,7 @@ interface Props {
 const { value, label, note } = Astro.props;
 ---
 
-<div class="data-point" style="max-width: 42rem;">
+<div class="data-point" style="width: 100%;">
   <p class="data-point-value">{value}</p>
   <p class="data-point-label">{label}</p>
   {note && <p class="data-point-note">{note}</p>}
