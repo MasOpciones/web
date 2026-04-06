@@ -52,13 +52,10 @@ export default function GraficoCostosDocumentados() {
   const [active, setActive] = useState(false);
 
   useEffect(() => {
-    if (!ref.current) return;
-    const obs = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setActive(true); obs.disconnect(); } },
-      { threshold: 0.2 }
+    const id = requestAnimationFrame(() =>
+      requestAnimationFrame(() => setActive(true))
     );
-    obs.observe(ref.current);
-    return () => obs.disconnect();
+    return () => cancelAnimationFrame(id);
   }, []);
 
   return (
