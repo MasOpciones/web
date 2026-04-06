@@ -24,3 +24,6 @@ pnpm-debug.log*
 .idea/
 
 .vercel
+
+# local-only pages (never commit)
+src/pages/instagram.astro
