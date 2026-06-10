@@ -58,9 +58,7 @@ const sectionStyle = {
 const panelStyle = {
   position: "relative",
   width: "100%",
-  background:
-    "radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 8%, transparent), transparent 36%), " +
-    "linear-gradient(160deg, var(--viz-panel-strong) 0%, var(--viz-panel) 100%)",
+  background: "color-mix(in srgb, var(--viz-panel) 60%, black)",
   borderRadius: "16px",
   padding: "20px",
   border: "1px solid var(--border)",
@@ -75,8 +73,14 @@ const TIPO_COLOR = {
 
 const TIPO_OPACITY = {
   quiebre: 1,
-  mall: 0.55,
+  mall: 0.5,
   dato: 0.5,
+};
+
+const TIPO_SIZE = {
+  quiebre: 10,
+  mall: 8,
+  dato: 8,
 };
 
 export default function GraficoTimelineMalls() {
@@ -102,11 +106,11 @@ export default function GraficoTimelineMalls() {
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
             <div style={{ width: 8, height: 8, borderRadius: "50%", background: "var(--accent)" }} />
-            <span style={{ ...TXT, fontSize: 11, color: "var(--text-muted)" }}>Puntos de quiebre</span>
+            <span style={{ ...TXT, fontSize: 12, color: "var(--text)" }}>Puntos de quiebre</span>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
-            <div style={{ width: 8, height: 8, borderRadius: "50%", background: "var(--text-muted)", opacity: 0.55 }} />
-            <span style={{ ...TXT, fontSize: 11, color: "var(--text-muted)" }}>Nuevos malls</span>
+            <div style={{ width: 8, height: 8, borderRadius: "50%", background: "var(--text-muted)", opacity: 0.5 }} />
+            <span style={{ ...TXT, fontSize: 12, color: "var(--text-muted)" }}>Nuevos malls</span>
           </div>
         </div>
 
@@ -121,7 +125,7 @@ export default function GraficoTimelineMalls() {
             bottom: 0,
             width: 1,
             background: "var(--border)",
-            opacity: animated ? 0.6 : 0,
+            opacity: animated ? 0.25 : 0,
             transition: "opacity 0.5s ease",
           }} />
 
@@ -132,12 +136,14 @@ export default function GraficoTimelineMalls() {
             const color = TIPO_COLOR[h.tipo];
             const dotOpacity = TIPO_OPACITY[h.tipo];
 
+            const size = TIPO_SIZE[h.tipo];
+
             return (
               <div
                 key={i}
                 style={{
                   position: "relative",
-                  paddingBottom: isLast ? 0 : 20,
+                  paddingBottom: isLast ? 0 : 28,
                   opacity: animated ? 1 : 0,
                   transform: animated ? "translateX(0)" : "translateX(-8px)",
                   transition: `opacity 0.4s ease ${delay}, transform 0.4s ease ${delay}`,
@@ -150,15 +156,14 @@ export default function GraficoTimelineMalls() {
                 <div style={{
                   position: "absolute",
                   left: -21,
-                  top: 4,
-                  width: 10,
-                  height: 10,
+                  top: 8,
+                  width: size,
+                  height: size,
                   borderRadius: "50%",
                   background: color,
                   opacity: isHov ? Math.min(dotOpacity * 1.8, 1) : dotOpacity,
                   transition: "opacity 0.15s ease, transform 0.15s ease",
                   transform: isHov ? "scale(1.3)" : "scale(1)",
-                  border: h.tipo === "quiebre" ? "1px solid var(--accent)" : "none",
                 }} />
 
                 {/* Content */}
@@ -173,10 +178,9 @@ export default function GraficoTimelineMalls() {
                   <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 3 }}>
                     <span style={{
                       ...TXT,
-                      fontSize: 11,
-                      fontWeight: 700,
+                      fontSize: 12,
+                      fontWeight: h.tipo === "quiebre" ? 700 : 500,
                       color: color,
-                      opacity: dotOpacity,
                       flexShrink: 0,
                       letterSpacing: "0.04em",
                     }}>
@@ -184,7 +188,7 @@ export default function GraficoTimelineMalls() {
                     </span>
                     <span style={{
                       ...TXT,
-                      fontSize: 13,
+                      fontSize: h.tipo === "quiebre" ? 15 : 14,
                       fontWeight: h.tipo === "quiebre" ? 600 : 400,
                       color: isHov ? "var(--text)" : h.tipo === "quiebre" ? "var(--text)" : "var(--text-muted)",
                       transition: "color 0.15s ease",
@@ -197,12 +201,11 @@ export default function GraficoTimelineMalls() {
                   {(isHov || h.tipo === "quiebre") && (
                     <p style={{
                       ...TXT,
-                      fontSize: 11,
+                      fontSize: 13,
                       color: "var(--text-muted)",
                       margin: 0,
-                      lineHeight: 1.55,
+                      lineHeight: 1.6,
                       maxWidth: 480,
-                      opacity: isHov ? 1 : 0.7,
                     }}>
                       {h.desc}
                     </p>
@@ -220,7 +223,7 @@ export default function GraficoTimelineMalls() {
           opacity: animated ? 1 : 0,
           transition: "opacity 0.5s ease 0.6s",
         }}>
-          <span style={{ ...TXT, fontSize: 11, color: "var(--text-muted)" }}>
+          <span style={{ ...TXT, fontSize: 11, color: "var(--text-muted)", opacity: 0.45, fontStyle: "italic" }}>
             Pasá el cursor sobre cada hito para ver el detalle.
           </span>
         </div>

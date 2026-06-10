@@ -24,9 +24,7 @@ const sectionStyle = {
 const panelStyle = {
   position: "relative",
   width: "100%",
-  background:
-    "radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 8%, transparent), transparent 36%), " +
-    "linear-gradient(160deg, var(--viz-panel-strong) 0%, var(--viz-panel) 100%)",
+  background: "color-mix(in srgb, var(--viz-panel) 60%, black)",
   borderRadius: "16px",
   padding: "20px",
   border: "1px solid var(--border)",
@@ -115,8 +113,8 @@ export default function GraficoValorSuelo() {
               <div
                 key={z.nombre}
                 style={{
-                  padding: "12px 0",
-                  borderBottom: isLast ? "none" : "1px solid var(--border)",
+                  padding: "16px 0",
+                  borderBottom: isLast ? "none" : "1px solid color-mix(in srgb, var(--border) 30%, transparent)",
                   opacity: animated ? 1 : 0,
                   transform: animated ? "translateX(0)" : "translateX(-8px)",
                   transition: `opacity 0.4s ease ${delay}, transform 0.4s ease ${delay}, background 0.15s ease`,
@@ -135,24 +133,23 @@ export default function GraficoValorSuelo() {
                   marginBottom: 8,
                 }}>
                   <span style={{
-                    ...TXT, fontSize: 12,
-                    fontWeight: isHov || isWorst ? 600 : 400,
-                    color: isHov ? "var(--text)" : "var(--text-muted)",
+                    ...TXT, fontSize: 13,
+                    fontWeight: 500,
+                    color: "var(--text)",
                     lineHeight: 1.3,
-                    transition: "color 0.15s ease",
                   }}>
                     {z.nombre}
                   </span>
-                  <span style={{ ...TXT, fontSize: 12, color: "var(--text-muted)", textAlign: "right", opacity: 0.6 }}>
+                  <span style={{ ...TXT, fontSize: 12, color: "var(--text-muted)", textAlign: "right" }}>
                     {z.v2008.toLocaleString("es-CR")}k
                   </span>
                   <span style={{ ...TXT, fontSize: 12, color: "var(--text)", textAlign: "right", fontWeight: 500 }}>
                     {z.v2021.toLocaleString("es-CR")}k
                   </span>
                   <span style={{
-                    ...TXT, fontSize: 12, fontWeight: 700,
+                    ...TXT, fontSize: 12,
+                    fontWeight: isWorst ? 700 : 400,
                     color: isWorst ? "var(--accent)" : "var(--text-muted)",
-                    opacity: isWorst ? 1 : 0.6,
                     textAlign: "right",
                   }}>
                     {z.real}%
@@ -163,13 +160,13 @@ export default function GraficoValorSuelo() {
                 <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
                   {/* 2008 bar */}
                   <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                    <span style={{ ...TXT, fontSize: 9, color: "var(--text-muted)", opacity: 0.4, width: 28, flexShrink: 0 }}>2008</span>
+                    <span style={{ ...TXT, fontSize: 10, fontWeight: 500, color: "var(--text-muted)", letterSpacing: "0.06em", textTransform: "uppercase", width: 32, flexShrink: 0 }}>2008</span>
                     <div style={{ flex: 1, height: 6, background: "rgba(255,255,255,0.06)", borderRadius: 3, overflow: "hidden" }}>
                       <div style={{
                         width: animated ? `${pct2008}%` : "0%",
                         height: "100%",
-                        background: "var(--text-muted)",
-                        opacity: 0.35,
+                        background: "var(--border)",
+                        opacity: 0.5,
                         borderRadius: 3,
                         transition: `width 0.8s cubic-bezier(0.16,1,0.3,1) ${delay}`,
                       }} />
@@ -177,13 +174,13 @@ export default function GraficoValorSuelo() {
                   </div>
                   {/* 2021 bar */}
                   <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                    <span style={{ ...TXT, fontSize: 9, color: "var(--text-muted)", opacity: 0.4, width: 28, flexShrink: 0 }}>2021</span>
+                    <span style={{ ...TXT, fontSize: 10, fontWeight: 500, color: "var(--text-muted)", letterSpacing: "0.06em", textTransform: "uppercase", width: 32, flexShrink: 0 }}>2021</span>
                     <div style={{ flex: 1, height: 6, background: "rgba(255,255,255,0.06)", borderRadius: 3, overflow: "hidden" }}>
                       <div style={{
                         width: animated ? `${pct2021}%` : "0%",
                         height: "100%",
                         background: isWorst ? "var(--accent)" : "var(--text)",
-                        opacity: isWorst ? 0.7 : 0.65,
+                        opacity: isWorst ? 1 : 0.85,
                         borderRadius: 3,
                         transition: `width 0.8s cubic-bezier(0.16,1,0.3,1) ${delay}`,
                       }} />

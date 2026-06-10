@@ -52,22 +52,32 @@ const HERRAMIENTAS = [
   },
 ];
 
-const ESTADO_COLOR = {
+// naranja de estado intermedio — sin variable en el sistema
+const NARANJA = "#f5a623";
+
+const ESTADO_DOT_COLOR = {
   factible: "var(--accent)",
-  posible:  "var(--text-muted)",
-  reforma:  "var(--text-muted)",
+  posible: NARANJA,
+  reforma: "var(--text-muted)",
 };
 
-const ESTADO_OPACITY = {
+const ESTADO_DOT_OPACITY = {
   factible: 1,
-  posible:  0.55,
-  reforma:  0.3,
+  posible: 1,
+  reforma: 0.6,
 };
 
 const ESTADO_LABEL = {
   factible: "Hoy",
-  posible:  "Con coordinación",
-  reforma:  "Requiere reforma legal",
+  posible: "Con coordinación",
+  reforma: "Requiere reforma legal",
+};
+
+const ETAPA_STYLE = {
+  "Inmediata": { color: "var(--accent)", weight: 600 },
+  "Corto plazo": { color: NARANJA, weight: 500 },
+  "Mediano plazo": { color: "var(--text-muted)", weight: 400 },
+  "Largo plazo": { color: "var(--text-muted)", weight: 400 },
 };
 
 const TXT = { fontFamily: "var(--font-sans)", fontVariantNumeric: "tabular-nums" };
@@ -83,9 +93,7 @@ const sectionStyle = {
 const panelStyle = {
   position: "relative",
   width: "100%",
-  background:
-    "radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 8%, transparent), transparent 36%), " +
-    "linear-gradient(160deg, var(--viz-panel-strong) 0%, var(--viz-panel) 100%)",
+  background: "color-mix(in srgb, var(--viz-panel) 60%, black)",
   borderRadius: "16px",
   padding: "20px",
   border: "1px solid var(--border)",
@@ -95,6 +103,7 @@ const panelStyle = {
 export default function GraficoViabilidadLegal() {
   const [animated, setAnimated] = useState(false);
   const [hovered, setHovered] = useState(null);
+  const [expanded, setExpanded] = useState(null);
 
   useEffect(() => {
     const id = requestAnimationFrame(() =>
@@ -117,10 +126,10 @@ export default function GraficoViabilidadLegal() {
             <div key={estado} style={{ display: "flex", alignItems: "center", gap: 7 }}>
               <div style={{
                 width: 8, height: 8, borderRadius: "50%",
-                background: ESTADO_COLOR[estado],
-                opacity: ESTADO_OPACITY[estado],
+                background: ESTADO_DOT_COLOR[estado],
+                opacity: ESTADO_DOT_OPACITY[estado],
               }} />
-              <span style={{ ...TXT, fontSize: 11, color: "var(--text-muted)" }}>{label}</span>
+              <span style={{ ...TXT, fontSize: 12, color: "var(--text-muted)" }}>{label}</span>
             </div>
           ))}
         </div>
@@ -129,89 +138,97 @@ export default function GraficoViabilidadLegal() {
         <div style={{ display: "flex", flexDirection: "column" }}>
           {HERRAMIENTAS.map((h, i) => {
             const isHov = hovered === i;
+            const isExpanded = expanded === i;
             const isLast = i === HERRAMIENTAS.length - 1;
             const delay = `${i * 0.06}s`;
-            const color = ESTADO_COLOR[h.estado];
-            const opacity = ESTADO_OPACITY[h.estado];
-
-            // Separator between etapas
-            const prevEtapa = i > 0 ? HERRAMIENTAS[i - 1].etapa : null;
-            const showSep = prevEtapa && prevEtapa !== h.etapa;
+            const etapaStyle = ETAPA_STYLE[h.etapa];
 
             return (
-              <React.Fragment key={h.nombre}>
-                {showSep && (
-                  <div style={{
-                    borderTop: "1px solid var(--border)",
-                    opacity: animated ? 0.4 : 0,
-                    transition: `opacity 0.4s ease ${delay}`,
-                    margin: "2px 0",
-                  }} />
-                )}
-
+              <div
+                key={h.nombre}
+                style={{
+                  borderBottom: isLast ? "none" : "1px solid color-mix(in srgb, var(--border) 20%, transparent)",
+                  opacity: animated ? 1 : 0,
+                  transform: animated ? "translateX(0)" : "translateX(-8px)",
+                  transition: `opacity 0.4s ease ${delay}, transform 0.4s ease ${delay}`,
+                }}
+              >
                 <div
                   style={{
                     display: "flex",
-                    alignItems: "flex-start",
+                    alignItems: "center",
                     gap: 14,
-                    padding: "10px 8px",
-                    borderBottom: isLast ? "none" : "1px solid var(--border)",
+                    padding: "14px 0",
                     borderRadius: 6,
-                    background: isHov ? "rgba(255,255,255,0.02)" : "transparent",
-                    cursor: "default",
-                    opacity: animated ? 1 : 0,
-                    transform: animated ? "translateX(0)" : "translateX(-8px)",
-                    transition: `opacity 0.4s ease ${delay}, transform 0.4s ease ${delay}, background 0.15s ease`,
+                    background: isHov ? "var(--viz-panel)" : "transparent",
+                    cursor: "pointer",
+                    transition: "background 0.15s ease",
                   }}
                   onMouseEnter={() => setHovered(i)}
                   onMouseLeave={() => setHovered(null)}
+                  onClick={() => setExpanded(isExpanded ? null : i)}
                 >
                   {/* Status dot */}
                   <div style={{
                     width: 8, height: 8, borderRadius: "50%",
-                    background: color,
-                    opacity: isHov ? Math.min(opacity * 1.5, 1) : opacity,
+                    background: ESTADO_DOT_COLOR[h.estado],
+                    opacity: ESTADO_DOT_OPACITY[h.estado],
                     flexShrink: 0,
-                    marginTop: 4,
-                    transition: "opacity 0.15s ease",
                   }} />
 
-                  {/* Content */}
-                  <div style={{ flex: 1 }}>
-                    <div style={{ display: "flex", justifyContent: "space-between", gap: 12, alignItems: "baseline" }}>
-                      <span style={{
-                        ...TXT,
-                        fontSize: 12,
-                        fontWeight: 600,
-                        color: isHov ? "var(--text)" : color === "var(--accent)" ? "var(--text)" : "var(--text-muted)",
-                        transition: "color 0.15s ease",
-                        lineHeight: 1.3,
-                      }}>
-                        {h.nombre}
-                      </span>
-                      <span style={{
-                        ...TXT,
-                        fontSize: 10,
-                        color: color,
-                        opacity: opacity,
-                        whiteSpace: "nowrap",
-                        flexShrink: 0,
-                      }}>
-                        {h.etapa}
-                      </span>
-                    </div>
-                    {isHov && (
-                      <div style={{
-                        ...TXT, fontSize: 11,
-                        color: "var(--text-muted)",
-                        marginTop: 4, lineHeight: 1.5,
-                      }}>
-                        {h.requiere} · {h.ley}
-                      </div>
-                    )}
-                  </div>
+                  {/* Nombre */}
+                  <span style={{
+                    ...TXT,
+                    flex: 1,
+                    fontSize: 14,
+                    fontWeight: 500,
+                    color: "var(--text)",
+                    lineHeight: 1.3,
+                  }}>
+                    {h.nombre}
+                  </span>
+
+                  {/* Etapa */}
+                  <span style={{
+                    ...TXT,
+                    fontSize: 12,
+                    fontWeight: etapaStyle.weight,
+                    color: etapaStyle.color,
+                    whiteSpace: "nowrap",
+                    flexShrink: 0,
+                  }}>
+                    {h.etapa}
+                  </span>
+
+                  {/* Chevron */}
+                  <span style={{
+                    display: "inline-block",
+                    fontSize: 10,
+                    color: "var(--text-muted)",
+                    transform: isExpanded ? "rotate(90deg)" : "rotate(0deg)",
+                    transition: "transform 0.15s ease",
+                    flexShrink: 0,
+                  }}>
+                    ›
+                  </span>
                 </div>
-              </React.Fragment>
+
+                {isExpanded && (
+                  <div style={{
+                    background: "var(--viz-panel)",
+                    borderRadius: 8,
+                    padding: "10px 12px",
+                    marginBottom: 10,
+                  }}>
+                    <div style={{ ...TXT, fontSize: 12, color: "var(--text-muted)", marginBottom: 4, lineHeight: 1.65 }}>
+                      Requiere: <span style={{ color: "var(--text)" }}>{h.requiere}</span>
+                    </div>
+                    <div style={{ ...TXT, fontSize: 12, color: "var(--text-muted)", lineHeight: 1.65 }}>
+                      Base legal: <span style={{ color: "var(--text)" }}>{h.ley}</span>
+                    </div>
+                  </div>
+                )}
+              </div>
             );
           })}
         </div>
