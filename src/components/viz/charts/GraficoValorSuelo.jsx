@@ -24,7 +24,7 @@ const sectionStyle = {
 const panelStyle = {
   position: "relative",
   width: "100%",
-  background: "color-mix(in srgb, var(--viz-panel) 60%, black)",
+  background: "var(--viz-panel-deep)",
   borderRadius: "16px",
   padding: "20px",
   border: "1px solid var(--border)",

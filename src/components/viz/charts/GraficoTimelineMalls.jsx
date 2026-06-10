@@ -58,7 +58,7 @@ const sectionStyle = {
 const panelStyle = {
   position: "relative",
   width: "100%",
-  background: "color-mix(in srgb, var(--viz-panel) 60%, black)",
+  background: "var(--viz-panel-deep)",
   borderRadius: "16px",
   padding: "20px",
   border: "1px solid var(--border)",
@@ -137,6 +137,7 @@ export default function GraficoTimelineMalls() {
             const dotOpacity = TIPO_OPACITY[h.tipo];
 
             const size = TIPO_SIZE[h.tipo];
+            const dotLeft = -20.5 - size / 2; // centra el punto sobre la línea vertical (left: 7 del spine)
 
             return (
               <div
@@ -155,7 +156,7 @@ export default function GraficoTimelineMalls() {
                 {/* Dot */}
                 <div style={{
                   position: "absolute",
-                  left: -21,
+                  left: dotLeft,
                   top: 8,
                   width: size,
                   height: size,
