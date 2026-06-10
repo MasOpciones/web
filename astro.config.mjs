@@ -6,4 +6,5 @@ import sitemap from "@astrojs/sitemap";
 export default defineConfig({
   site: "https://masopciones.blog",
   integrations: [mdx(), react(), sitemap()],
+  devToolbar: { enabled: false },
 });
