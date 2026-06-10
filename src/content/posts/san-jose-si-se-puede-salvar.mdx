@@ -1,0 +1,308 @@
+---
+title: "San José: Sí se puede salvar"
+description: "San José fue durante décadas la capital más avanzada de América Central. Hoy su centro es un lugar que buena parte de los josefinos evita. Esta investigación responde dos preguntas: cuándo empezó ese deterioro y qué existe hoy para revertirlo."
+pubDate: 2026-06-08
+featured: true
+---
+
+import Insight from "../../components/Insight.astro";
+import DataPoint from "../../components/DataPoint.astro";
+import ActShell from "../../components/viz/acts/ActShell.astro";
+import ActHero from "../../components/viz/acts/ActHero.astro";
+import ActFooter from "../../components/viz/acts/ActFooter.astro";
+import StatGrid from "../../components/viz/acts/StatGrid.astro";
+import KpiCard from "../../components/viz/primitives/KpiCard.astro";
+import ActFrame from "../../components/viz/primitives/ActFrame.astro";
+import SourceNote from "../../components/viz/primitives/SourceNote.astro";
+import GraficoPresupuestoMSJ from "../../components/viz/charts/GraficoPresupuestoMSJ.jsx";
+import GraficoGastoMunicipal from "../../components/viz/charts/GraficoGastoMunicipal.jsx";
+import GraficoDEEDistritos from "../../components/viz/charts/GraficoDEEDistritos.jsx";
+import GraficoValorSuelo from "../../components/viz/charts/GraficoValorSuelo.jsx";
+import GraficoViabilidadLegal from "../../components/viz/charts/GraficoViabilidadLegal.jsx";
+import GraficoTimelineMalls from "../../components/viz/charts/GraficoTimelineMalls.jsx";
+
+San José fue durante décadas la capital más avanzada de América Central. Hoy su centro es un lugar que buena parte de los josefinos evita. Esta investigación responde dos preguntas difíciles de trabajar con datos: cuándo empezó ese deterioro y qué existe hoy para revertirlo.
+
+Esta investigación nació de un número que apareció en una sesión ordinaria del Concejo Municipal de San José en junio de 2025: ₡38.9 mil millones. Era el superávit libre del año anterior — plata presupuestada y no gastada — en una ciudad con calles rotas, aceras tomadas por el comercio informal y la mayor concentración de personas en situación de calle del país. Los datos del BID muestran que Costa Rica tiene el gasto municipal per cápita más alto de Centroamérica. El problema central está en cómo se gestionan los recursos, más que en su cantidad.
+
+<DataPoint
+  value="₡38.9 mil millones"
+  label="sin ejecutar en 2024. Desde el año 2000, cada año con superávit libre. Sin excepción."
+/>
+
+<ActShell act={1} title="La ciudad que fuimos">
+
+<ActHero
+  eyebrow="Acto 1 de 5"
+  title="San José fue, por casi un siglo, la capital más avanzada de América Central."
+  subtitle="En 1884 encendió su alumbrado eléctrico — primera capital centroamericana en hacerlo. En 1899 inauguró su tranvía. Sus élites construían con mármoles de Italia. En 1984 alcanzó su pico de población. Desde entonces, el cantón central ha perdido residentes en cada censo."
+/>
+
+<StatGrid>
+  <KpiCard
+    label="Año del alumbrado eléctrico público"
+    value="1884"
+    detail="Primera capital centroamericana. Planta hidroeléctrica en Barrio Aranjuez, 25 lámparas en el centro."
+    accent={true}
+  />
+  <KpiCard
+    label="Años que operó el tranvía"
+    value="51"
+    detail="1899 a 1950. Conectaba La Sabana con San Pedro, Guadalupe y el Atlántico."
+  />
+  <KpiCard
+    label="Pico de población cantonal"
+    value="241,464"
+    detail="Censo de 1984. Desde ese año, caída en cada medición posterior."
+  />
+  <KpiCard
+    label="Habitantes en Carmen, 2011"
+    value="2,702"
+    detail="En 1950 eran 8,891. Pérdida del 70% en sesenta años."
+  />
+</StatGrid>
+
+Hay una afirmación que circula desde hace décadas: que San José fue "la tercera ciudad del mundo en tener alumbrado eléctrico público, primera de América Latina". Ese dato es falso. Londres (1878), Ciudad de México (1881), Kimberley (1882), Santiago y Caracas (1883) la precedieron. Lo documentado: fue la primera capital centroamericana, el 9 de agosto de 1884.
+
+<Insight>
+  El mito del alumbrado revela algo sobre cómo Costa Rica recuerda a San José: el pasado aparece exagerado, el presente tiende a minimizarse. Esta investigación trabaja con los datos disponibles, incluso cuando resultan menos cómodos que la versión idealizada.
+</Insight>
+
+La mayor parte del San José histórico — el Teatro Nacional, Barrio Amón, el Mercado Central — se construyó en cincuenta años impulsados por el dinero del café. Las élites cafetaleras exportaban grano y al mismo tiempo una imagen de modernidad con referencia explícita en Europa. El Congreso decretó la construcción del Teatro Nacional cuando San José tenía menos de 20,000 habitantes. La apuesta era aspiracional: la ciudad buscaba ser reconocida como el tipo de capital que exhibe un Teatro Nacional.
+
+El Censo de Población 2000 documentaba hasta dónde había llegado el vaciamiento residencial: el distrito Carmen tenía apenas 2,989 personas mayores de 12 años, con el 86.3% asalariadas. Carmen en 2000 era un distrito de personas que llegaban a trabajar de día, no un barrio donde vivía alguien.
+
+<DataPoint
+  value="-20.3%"
+  label="Pérdida de población en Hospital entre 2000 y 2011. Carmen: -19.6%. Catedral: -15.7%. Merced: -9.6%."
+/>
+
+Para 2011, los cuatro distritos centrales tenían 47,165 personas en 9.47 km². Un espacio que a principios del siglo XX concentraba la vida económica y social del país operaba como zona comercial de día y permanecía deshabitado de noche.
+
+Santiago de Chile enfrentó un deterioro similar en su centro histórico. Entre 1991 y 2005, implementó el Subsidio de Renovación Urbana: el 48% de los subsidios entregados produjo repoblamiento efectivo del área central. San José no desplegó un mecanismo de esa escala. Los censos confirman que las intervenciones que sí existieron no alcanzaron para revertir la tendencia.
+
+<ActFooter
+  source="INEC, Censos Nacionales de Población 1864-2011. INEC, IX Censo Nacional: Características Económicas, 2002. UCR/Archive.org, 'La modernización entre cafetales: San José, 1880-1930'. Carlos Revilla Maroto, Cambio Político, 2025. MIVAH, Diagnóstico Socio Cultural Físico Espacial del Cantón Central de San José, 2013."
+  note="Sobre el dato del alumbrado: la afirmación de 'tercera ciudad del mundo y primera de América Latina' no tiene respaldo historiográfico verificable. Lo documentado: primera capital centroamericana, el 9 de agosto de 1884."
+/>
+
+</ActShell>
+
+<ActShell act={2} title="El punto de quiebre">
+
+<ActHero
+  eyebrow="Acto 2 de 5"
+  title="El centro de San José no se vació de golpe. Se vació por capas."
+  subtitle="Primero las élites que descubrieron los suburbios en los cuarenta. Luego el tranvía que desapareció en 1950. Luego la migración rural sin infraestructura proporcional. Luego los malls. Cada capa dejó al centro un poco más vacío."
+/>
+
+<StatGrid>
+  <KpiCard
+    label="Último viaje del tranvía"
+    value="1 ago. 1950"
+    detail="Desapareció por competencia de autobuses privados más baratos, no por decisión política."
+    accent={true}
+  />
+  <KpiCard
+    label="Primer mall moderno del país"
+    value="1993"
+    detail="Multiplaza Escazú. Retail cerrado, climatizado, orientado al carro."
+  />
+  <KpiCard
+    label="Empresas perdidas en el cantón central"
+    value="-47.6%"
+    detail="De 8,726 empresas en 2008 a 4,571 en 2022. INEC, DEE."
+  />
+</StatGrid>
+
+El vaciamiento comenzó antes de que existiera un solo mall. Las élites josefinas descubrieron el suburbio desde los años cuarenta. Los Yoses, Rohrmoser, La Sabana fueron el equivalente josefino del sueño suburbano: casas con jardín, alejadas del ruido del centro.
+
+El tranvía desapareció por competencia de mercado. Los autobuses privados ofrecieron tarifas más bajas y el sistema no recibió inversión para modernizarse. Lo que siguió fue una ausencia de política: ningún sistema estructurado de transporte público lo reemplazó.
+
+<GraficoTimelineMalls client:load />
+
+El impacto de los malls sobre el comercio del centro josefino es cuantificable con el Directorio de Empresas y Establecimientos del INEC, que registra empresas formales por distrito desde 2008.
+
+<GraficoDEEDistritos client:load />
+
+<SourceNote>
+  INEC, DEE 2008–2024. Entre 2008 y 2022, el cantón central perdió el 47.6% de sus empresas. Hospital cayó de 1,891 a 724 — reducción del 61.7%. Desde 2022 hay recuperación leve: 4,822 empresas en 2024.
+</SourceNote>
+
+La gestión del espacio urbano del cantón se reparte entre nueve instituciones con competencias superpuestas y sin mecanismo de coordinación obligatoria: MSJ, MOPT, AyA, ICE/CNFL, INVU, SETENA, INCOFER, Ministerio de Cultura, PRUGAM/POTGAM. La municipalidad repavimenta un tramo, el AyA lo abre semanas después para tuberías, el MOPT interviene el mismo segmento para señalización. Cada institución actúa dentro de su mandato. El efecto acumulado, desde la acera, es de desorden permanente.
+
+<ActFooter
+  source="MIVAH, Diagnóstico Socio Cultural Físico Espacial del Cantón Central de San José, 2013. El Financiero CR / MiCostaRicaDeAntano, cronología de centros comerciales. Ley 9329 (2015). INEC, DEE 2008-2024."
+  note="La causalidad estricta entre apertura de malls y pérdida de comercio en el centro queda como brecha de investigación. El DEE documenta la correlación temporal: la caída es sostenida y profunda desde 2008."
+/>
+
+</ActShell>
+
+<ActShell act={3} title="El presente">
+
+<ActHero
+  eyebrow="Acto 3 de 5"
+  title="Más presupuesto. Menos ejecución. Centro peor."
+  subtitle="Entre 1990 y 2014, el presupuesto de la MSJ creció 3,378%. La ejecución nunca superó el 86%. El superávit libre creció cada año desde el 2000. En 2024 alcanzó su récord histórico."
+/>
+
+<StatGrid>
+  <KpiCard
+    label="Superávit libre 2024"
+    value="₡38.9 mil M"
+    detail="Récord histórico. Sesión Ordinaria 060, Concejo Municipal, 24 junio 2025."
+    accent={true}
+  />
+  <KpiCard
+    label="Años consecutivos con superávit libre"
+    value="24+"
+    detail="Desde el año 2000. Sin excepción."
+  />
+  <KpiCard
+    label="Gasto municipal per cápita"
+    value="USD 135.5"
+    detail="El más alto de Centroamérica. Promedio regional: USD 84. BID, 2017."
+  />
+  <KpiCard
+    label="Johnny Araya al frente de la MSJ"
+    value="~30 años"
+    detail="Ejecutivo municipal desde 1991, alcalde 1998-2024. Una interrupción de 3 años."
+  />
+</StatGrid>
+
+Esta investigación obtuvo las liquidaciones presupuestarias de la MSJ desde 1990 hasta 2014 vía Ley 8220 — una serie de 25 años que permite analizar la ejecución a lo largo de todo el período de deterioro. El superávit que aparece corresponde al **superávit libre**: plata sin destino específico asignado, sobre la que la municipalidad tiene discrecionalidad total.
+
+<GraficoPresupuestoMSJ client:load />
+
+<SourceNote>
+  Liquidaciones 1990-1997: CGR, archivos digitalizados. 1998-2014: Departamento de Presupuesto MSJ vía Ley 8220, 20 abril 2026 (Juan Manuel Treminio Izaba). 2015-2024: SIPP/CGR. El peor año: 2008, con 63.6% de ejecución — el mismo año en que el presupuesto casi se duplicó de golpe.
+</SourceNote>
+
+Ante el deterioro visible del centro josefino, es común atribuir el problema a falta de recursos. La comparación regional dice otra cosa.
+
+<GraficoGastoMunicipal client:load />
+
+Costa Rica tiene el gasto municipal per cápita más alto de Centroamérica y la mayor proporción de recursos propios. Al mismo tiempo, es uno de los países menos descentralizados de la región: el 4.2% del gasto nacional es municipal, frente al 6.8% del promedio centroamericano.
+
+Las Plataformas de Valores de Terrenos del Ministerio de Hacienda establecen el valor fiscal oficial del suelo. Esta investigación obtuvo las plataformas del Cantón 01 San José para 2008, 2014 y 2021. La dirección de la tendencia es más significativa que los valores absolutos.
+
+<GraficoValorSuelo client:load />
+
+<SourceNote>
+  ONT/Ministerio de Hacienda, Plataformas de Valores 2008, 2014 y 2021, vía ONT@hacienda.go.cr, 20 abril 2026. Cambio real ajustado por inflación ~95% acumulada 2008-2021 (BCCR). Barrio Amón: -73% real. Mercado Borbón / Coca Cola: colapso nominal, de ₡125,000 a ₡59,000/m².
+</SourceNote>
+
+Johnny Araya gobernó la MSJ durante aproximadamente treinta años, con una única interrupción entre 2013 y 2016. El dato apunta a un problema estructural de rendición de cuentas: en treinta años, el electorado reeligió cuatro veces al mismo alcalde mientras el centro perdía valor, residentes y actividad.
+
+<DataPoint
+  value="24.36%"
+  label="Votos con que Diego Miranda ganó la alcaldía en 2024. El porcentaje más bajo desde que existe elección directa."
+/>
+
+<ActFooter
+  source="Liquidaciones MSJ 1990-2024: CGR/MSJ vía Ley 8220 + SIPP. BID, IDB-DP-552, 2017. ONT/Ministerio de Hacienda, 2008, 2014, 2021. INEC, DEE 2008-2024. TSE, resultados electorales 2024."
+  note="Los valores del suelo son fiscales oficiales del ONT-Hacienda, no precios de mercado. El DEE registra empresas del sector privado formal — criterios de inclusión cambiaron entre períodos; la tendencia de largo plazo es comparable."
+/>
+
+</ActShell>
+
+<ActShell act={4} title="Por qué no se arregla solo">
+
+<ActHero
+  eyebrow="Acto 4 de 5"
+  title="Tres patrones que explican el estancamiento del centro josefino."
+  subtitle="El primero: construir más infraestructura vial no resuelve las presas. El segundo: nueve instituciones con competencias traslapadas y sin coordinación formal producen bloqueos sistemáticos. El tercero: mantener suelo subutilizado en el centro es racional y legal."
+/>
+
+<StatGrid>
+  <KpiCard
+    label="Instituciones con competencia sobre el cantón"
+    value="9"
+    detail="MSJ, MOPT, AyA, ICE/CNFL, INVU, SETENA, INCOFER, Ministerio de Cultura, PRUGAM/POTGAM."
+    accent={true}
+  />
+  <KpiCard
+    label="Reducción de tráfico en Pontevedra"
+    value="−91%"
+    detail="De 80,000 a 7,000 vehículos diarios entre 1999 y 2013. Premio ONU Hábitat."
+  />
+  <KpiCard
+    label="Muertes viales en Pontevedra desde 2011"
+    value="0"
+    detail="85,000 habitantes. Más de una década sin una sola muerte por accidente de tránsito."
+  />
+</StatGrid>
+
+Cuando se amplía la capacidad vial, el tráfico crece hasta llenarla. El fenómeno se llama inducción de demanda. En 2003, Londres implementó el congestion charge: el tráfico cayó 20% el primer año, pero cinco años después la congestión volvió a niveles previos. Sin restricción física del espacio para carros y mejora simultánea de alternativas, ningún instrumento sostiene la reducción.
+
+Pontevedra, con 85,000 habitantes y escala comparable al casco central josefino, eliminó estacionamientos, redujo velocidades y bloqueó rutas de paso. Resultado: 91% menos tráfico, cero muertes desde 2011, 12,000 nuevos residentes en el centro desde 2009. No construyó infraestructura nueva.
+
+La MSJ tiene competencia sobre calles locales. Las arterias principales del centro — Paseo Colón, Circunvalación, corredor del este — son carreteras nacionales bajo competencia del MOPT. Una política coherente requiere que ambas instituciones actúen en la misma dirección. Ese mecanismo de coordinación formal no existe hoy.
+
+La fragmentación entre las nueve instituciones responde a mandatos legales distintos. Ninguna fue diseñada para coordinar a las demás. La ejecución de capital de la MSJ — la plata en infraestructura, no en planilla — ha sido históricamente la porción más volátil del presupuesto. Un proyecto que requiere coordinar con el AyA, el MOPT y el ICE acumula más puntos de falla que uno que la MSJ ejecuta sola.
+
+El tercer patrón opera sobre los propietarios privados. Mantener un inmueble sin desarrollar tiene un costo tributario bajo — 0.25% del valor fiscal registrado — y no tiene penalización por subutilización.
+
+<DataPoint
+  value="₡73,750"
+  label="Costo anual de mantener 500 m² en zona Borbón/Coca Cola sin desarrollar. Menos de ₡7,000 al mes."
+/>
+
+Los tres patrones coinciden: no cambian con más presupuesto municipal. El primero depende de coordinación entre MOPT y MSJ. El segundo exige una instancia con mandato real sobre proyectos compartidos. El tercero pasa por cambiar los incentivos fiscales y urbanísticos.
+
+<ActFooter
+  source="Concello de Pontevedra, datos de tráfico 1999-2024. Premio ONU Hábitat, 2011. Transport for London, Congestion Charging Reports 2003-2008. Duranton y Turner (2011), American Economic Review. Ley 9329 (2015). Ley del Impuesto sobre Bienes Inmuebles No. 7509."
+  note="Sobre inducción de demanda: referencia académica principal es Duranton y Turner (2011). El cálculo del suelo ocioso usa valor fiscal ONT 2021 (₡59,000/m²) × 500 m² × 0.25% anual. Es ilustrativo."
+/>
+
+</ActShell>
+
+<ActShell act={5} title="Sí se puede salvar">
+
+<ActHero
+  eyebrow="Acto 5 de 5"
+  title="Las herramientas existen. Algunas están disponibles hoy. Otras requieren reforma."
+  subtitle="Dos herramientas están dentro de la competencia actual de la MSJ. Una requiere coordinación interinstitucional. Cuatro requieren reformas legislativas específicas con precedente en el ordenamiento costarricense."
+/>
+
+<StatGrid>
+  <KpiCard
+    label="Herramientas factibles hoy"
+    value="2"
+    detail="Modificación del Plan Regulador y restricción de tráfico en calles locales."
+    accent={true}
+  />
+  <KpiCard
+    label="Aporte del BID al modelo de Quito"
+    value="USD 41M"
+    detail="Primeros seis años de la Empresa del Centro Histórico. El resto vino de inversión privada."
+  />
+  <KpiCard
+    label="Proyectos con vegetación en Singapur"
+    value="2/3"
+    detail="Dos tercios de todos los proyectos nuevos incluyen fachadas o azoteas verdes. Programa LUSH, 15+ años."
+  />
+</StatGrid>
+
+<GraficoViabilidadLegal client:load />
+
+La Ley de Planificación Urbana 4240 le da a la MSJ facultad para establecer condiciones de construcción mediante el Plan Regulador. Una octava modificación podría exigir **fachada verde** y **planta baja activa** en nuevas construcciones del cantón central. El clima tropical costarricense hace que la vegetación crezca con mínima intervención — los costos de mantenimiento son una fracción de los de ciudades con climas fríos.
+
+La restricción de tráfico en calles locales es competencia directa de la MSJ hoy: puede reducir velocidades, eliminar estacionamiento y crear zonas peatonales en Barrio Amón, el entorno del Mercado Central o el Teatro Nacional sin esperar coordinación metropolitana.
+
+El patrón que más se repite en ciudades que recuperaron centros históricos es una entidad autónoma con mandato específico sobre el territorio. La Empresa del Centro Histórico de Quito, creada en 1994, produjo la renovación de 72 manzanas y 444 unidades de vivienda nueva. Su limitación: privilegió imagen sobre repoblamiento. Para San José, el mandato debería incluir explícitamente indicadores de densidad residencial. La figura legal más viable sería un fideicomiso público bajo la Ley 8131 o una empresa pública municipal.
+
+El mecanismo de Zonas de Desarrollo Especial exoneraría de impuestos municipales por 10 a 15 años a quien construya bajo estándares definidos. El precedente es la Ley de Zonas Francas 7210. Un edificio con valor fiscal de ₡500 millones paga hoy ₡1.25 millones anuales en impuesto municipal — una exoneración de diez años sacrifica ₡12.5 millones frente a una inversión privada que fácilmente supera cientos de millones.
+
+<Insight>
+  San José puede iniciar este proceso sin un presupuesto extraordinario. La condición es que la MSJ use las competencias que ya tiene y que la Asamblea habilite un conjunto acotado de instrumentos con precedente costarricense. El superávit libre acumulado en quince años ofrece una medida del costo de no hacerlo.
+</Insight>
+
+**Lo que esta investigación no pudo verificar.** La serie histórica de patentes comerciales por distrito estaba en trámite al cierre de esta publicación — si llega, se actualizará. El costo de fachadas verdes en clima tropical costarricense no tiene fuente pública verificable; el CFIA y el Instituto de Arquitectura Tropical son las fuentes correctas. El análisis costo-beneficio formal de las Zonas de Desarrollo Especial no existe y es prerequisito para cualquier propuesta legislativa responsable.
+
+<ActFooter
+  source="Ley de Planificación Urbana No. 4240. Ley de Tránsito No. 9078. Código Municipal. Ley de Zonas Francas No. 7210. Ley 8131. BID/Empresa del Centro Histórico de Quito, informes 1994-2008. Singapore Building and Construction Authority, LUSH 3.0, 2023. Concello de Pontevedra, Plan de Movilidad Sostenible 2018."
+  note="Viabilidad de bonos de densidad en CR: sería inédito. La CGR tiene criterios sobre condicionar derechos de construcción a contraprestaciones que deberían consultarse. El modelo ECH de Quito privilegió imagen sobre repoblamiento — relevante para el diseño del mandato de una entidad equivalente en San José."
+/>
+
+</ActShell>

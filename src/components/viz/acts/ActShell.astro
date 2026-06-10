@@ -2,14 +2,23 @@
 interface Props {
   class?: string;
   narrow?: boolean;
+  act?: number;
+  title?: string;
 }
 
 const {
   class: className = "",
-  narrow = false
+  narrow = false,
+  act,
+  title
 } = Astro.props;
 ---
 
+{act !== undefined && title && (
+  <div class="act-separator">
+    <span class="act-separator-eyebrow">Acto {act} — {title}</span>
+  </div>
+)}
 <section class:list={["act-shell", narrow && "act-shell--narrow", className]}>
   <slot />
 </section>
