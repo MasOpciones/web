@@ -42,7 +42,7 @@ const panelStyle = {
   position: "relative",
   width: "100%",
   background:
-    "radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 8%, transparent), transparent 36%), " +
+    "radial-gradient(circle at top left, color-mix(in srgb, var(--viz-line-accent) 8%, transparent), transparent 36%), " +
     "linear-gradient(160deg, var(--viz-panel-strong) 0%, var(--viz-panel) 100%)",
   borderRadius: "16px",
   padding: "20px 20px 16px",
@@ -145,12 +145,12 @@ export default function GraficoPresupuestoMSJ() {
               <line
                 x1={MARGIN_L} y1={yScale(tick)}
                 x2={MARGIN_L + plotW} y2={yScale(tick)}
-                stroke="var(--viz-grid)" strokeWidth={1} strokeOpacity={0.2}
+                stroke="var(--viz-line-grid)" strokeWidth={1} strokeOpacity={0.2}
               />
               <text
                 x={MARGIN_L - 6} y={yScale(tick) + 4}
                 textAnchor="end"
-                style={{ ...TXT, fill: "var(--text-muted)", fontSize: 9, opacity: 0.5 }}
+                style={{ ...TXT, fill: "var(--viz-line-muted)", fontSize: 9, opacity: 0.5 }}
               >
                 {tick === 0 ? "0" : `${(tick / 1000).toFixed(0)}k M`}
               </text>
@@ -166,7 +166,7 @@ export default function GraficoPresupuestoMSJ() {
                 key={yr}
                 x={xScale(i)} y={svgH - 4}
                 textAnchor="middle"
-                style={{ ...TXT, fill: "var(--text-muted)", fontSize: 9, opacity: 0.5 }}
+                style={{ ...TXT, fill: "var(--viz-line-muted)", fontSize: 9, opacity: 0.5 }}
               >
                 {yr}
               </text>
@@ -176,7 +176,7 @@ export default function GraficoPresupuestoMSJ() {
           {/* Area between lines (superávit) */}
           <path
             d={areaPath}
-            fill="var(--accent)"
+            fill="var(--viz-line-accent)"
             fillOpacity={animated ? 0.08 : 0}
             style={{ transition: "fill-opacity 0.8s ease" }}
           />
@@ -185,11 +185,11 @@ export default function GraficoPresupuestoMSJ() {
           <line
             x1={xScale(idx2000)} y1={MARGIN_T}
             x2={xScale(idx2000)} y2={MARGIN_T + plotH}
-            stroke="var(--text-muted)" strokeWidth={1} strokeDasharray="3 3" strokeOpacity={0.3}
+            stroke="var(--viz-line-muted)" strokeWidth={1} strokeDasharray="3 3" strokeOpacity={0.3}
           />
           <text
             x={xScale(idx2000) + 4} y={MARGIN_T + 10}
-            style={{ ...TXT, fill: "var(--text-muted)", fontSize: 9, opacity: 0.5 }}
+            style={{ ...TXT, fill: "var(--viz-line-muted)", fontSize: 9, opacity: 0.5 }}
           >
             superávit libre inicia
           </text>
@@ -198,11 +198,11 @@ export default function GraficoPresupuestoMSJ() {
           <line
             x1={xScale(idx2008)} y1={MARGIN_T}
             x2={xScale(idx2008)} y2={MARGIN_T + plotH}
-            stroke="var(--accent)" strokeWidth={1} strokeDasharray="3 3" strokeOpacity={0.5}
+            stroke="var(--viz-line-accent)" strokeWidth={1} strokeDasharray="3 3" strokeOpacity={0.5}
           />
           <text
             x={xScale(idx2008) + 4} y={MARGIN_T + 10}
-            style={{ ...TXT, fill: "var(--accent)", fontSize: 9, opacity: 0.7 }}
+            style={{ ...TXT, fill: "var(--viz-line-accent)", fontSize: 9, opacity: 0.7 }}
           >
             2008 — peor ejecución
           </text>
@@ -211,7 +211,7 @@ export default function GraficoPresupuestoMSJ() {
           <path
             d={presPath}
             fill="none"
-            stroke="var(--text-muted)"
+            stroke="var(--viz-line-muted)"
             strokeWidth={1.5}
             strokeDasharray="5 3"
             strokeOpacity={animated ? 0.45 : 0}
@@ -234,10 +234,10 @@ export default function GraficoPresupuestoMSJ() {
               <line
                 x1={xScale(hovered)} y1={MARGIN_T}
                 x2={xScale(hovered)} y2={MARGIN_T + plotH}
-                stroke="var(--text-muted)" strokeWidth={1} strokeOpacity={0.25}
+                stroke="var(--viz-line-muted)" strokeWidth={1} strokeOpacity={0.25}
               />
               <circle cx={xScale(hovered)} cy={yScale(DATA[hovered].pres)} r={3.5}
-                fill="var(--text-muted)" fillOpacity={0.6} />
+                fill="var(--viz-line-muted)" fillOpacity={0.6} />
               <circle cx={xScale(hovered)} cy={yScale(DATA[hovered].gasto)} r={3.5}
                 fill="var(--text)" fillOpacity={0.9} />
             </g>
@@ -270,20 +270,20 @@ export default function GraficoPresupuestoMSJ() {
                 {d.año}
               </div>
               <div style={{ display: "flex", justifyContent: "space-between", gap: 16, marginBottom: 3 }}>
-                <span style={{ ...TXT, fontSize: 11, color: "var(--text-muted)" }}>Presupuesto</span>
+                <span style={{ ...TXT, fontSize: 11, color: "var(--viz-line-muted)" }}>Presupuesto</span>
                 <strong style={{ ...TXT, fontSize: 11, color: "var(--text)" }}>{fmt(d.pres)}</strong>
               </div>
               <div style={{ display: "flex", justifyContent: "space-between", gap: 16, marginBottom: 3 }}>
-                <span style={{ ...TXT, fontSize: 11, color: "var(--text-muted)" }}>Gasto real</span>
+                <span style={{ ...TXT, fontSize: 11, color: "var(--viz-line-muted)" }}>Gasto real</span>
                 <strong style={{ ...TXT, fontSize: 11, color: "var(--text)" }}>{fmt(d.gasto)}</strong>
               </div>
               <div style={{ borderTop: "1px solid var(--border)", marginTop: 6, paddingTop: 6, display: "flex", justifyContent: "space-between", gap: 16 }}>
-                <span style={{ ...TXT, fontSize: 11, color: "var(--text-muted)" }}>Ejecución</span>
-                <strong style={{ ...TXT, fontSize: 11, color: ejec < 70 ? "var(--accent)" : "var(--text)" }}>{ejec}%</strong>
+                <span style={{ ...TXT, fontSize: 11, color: "var(--viz-line-muted)" }}>Ejecución</span>
+                <strong style={{ ...TXT, fontSize: 11, color: ejec < 70 ? "var(--viz-line-accent)" : "var(--text)" }}>{ejec}%</strong>
               </div>
               <div style={{ display: "flex", justifyContent: "space-between", gap: 16 }}>
-                <span style={{ ...TXT, fontSize: 11, color: "var(--text-muted)" }}>Sin ejecutar</span>
-                <strong style={{ ...TXT, fontSize: 11, color: "var(--accent)" }}>{fmt(superavit)}</strong>
+                <span style={{ ...TXT, fontSize: 11, color: "var(--viz-line-muted)" }}>Sin ejecutar</span>
+                <strong style={{ ...TXT, fontSize: 11, color: "var(--viz-line-accent)" }}>{fmt(superavit)}</strong>
               </div>
             </div>
           );
@@ -297,16 +297,16 @@ export default function GraficoPresupuestoMSJ() {
           transition: "opacity 0.5s ease 0.6s",
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <div style={{ width: 20, height: 1, borderTop: "1.5px dashed var(--text-muted)", opacity: 0.5 }} />
-            <span style={{ ...TXT, fontSize: 11, color: "var(--text-muted)" }}>Presupuesto aprobado</span>
+            <div style={{ width: 20, height: 1, borderTop: "1.5px dashed var(--viz-line-muted)", opacity: 0.5 }} />
+            <span style={{ ...TXT, fontSize: 11, color: "var(--viz-line-muted)" }}>Presupuesto aprobado</span>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <div style={{ width: 20, height: 2, background: "var(--text)", opacity: 0.8 }} />
-            <span style={{ ...TXT, fontSize: 11, color: "var(--text-muted)" }}>Gasto real</span>
+            <span style={{ ...TXT, fontSize: 11, color: "var(--viz-line-muted)" }}>Gasto real</span>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <div style={{ width: 20, height: 8, background: "var(--accent)", opacity: 0.12, borderRadius: 2 }} />
-            <span style={{ ...TXT, fontSize: 11, color: "var(--text-muted)" }}>Superávit libre</span>
+            <div style={{ width: 20, height: 8, background: "var(--viz-line-accent)", opacity: 0.12, borderRadius: 2 }} />
+            <span style={{ ...TXT, fontSize: 11, color: "var(--viz-line-muted)" }}>Superávit libre</span>
           </div>
         </div>
       </div>
@@ -314,7 +314,7 @@ export default function GraficoPresupuestoMSJ() {
       <footer style={{
         display: "flex", justifyContent: "space-between", alignItems: "center",
         gap: 12, marginTop: 10, fontSize: 10, textTransform: "uppercase",
-        color: "var(--text-muted)", ...TXT, letterSpacing: "0.04em",
+        color: "var(--viz-line-muted)", ...TXT, letterSpacing: "0.04em",
       }}>
         <span>FUENTE: CGR / MSJ VÍA LEY 8220 — LIQUIDACIONES 1990–2014</span>
         <span>PROYECTO: MÁSOPCIONES</span>

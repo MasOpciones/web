@@ -33,7 +33,7 @@ const panelStyle = {
   position: "relative",
   width: "100%",
   background:
-    "radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 8%, transparent), transparent 36%), " +
+    "radial-gradient(circle at top left, color-mix(in srgb, var(--viz-line-accent) 8%, transparent), transparent 36%), " +
     "linear-gradient(160deg, var(--viz-panel-strong) 0%, var(--viz-panel) 100%)",
   borderRadius: "16px",
   padding: "20px 0 16px",
@@ -97,12 +97,12 @@ export default function GraficoGastoMunicipal() {
                 <line
                   x1={tx} y1={MARGIN_T - 8}
                   x2={tx} y2={svgH - MARGIN_B}
-                  stroke="var(--viz-grid)" strokeWidth={1} strokeOpacity={0.2}
+                  stroke="var(--viz-line-grid)" strokeWidth={1} strokeOpacity={0.2}
                 />
                 <text
                   x={tx} y={svgH - MARGIN_B + 16}
                   textAnchor="middle"
-                  style={{ ...TXT, fill: "var(--text-muted)", fontSize: 9, opacity: 0.45 }}
+                  style={{ ...TXT, fill: "var(--viz-line-muted)", fontSize: 9, opacity: 0.45 }}
                 >
                   ${tick}
                 </text>
@@ -114,7 +114,7 @@ export default function GraficoGastoMunicipal() {
           <line
             x1={avgX} y1={MARGIN_T - 8}
             x2={avgX} y2={svgH - MARGIN_B}
-            stroke="var(--text-muted)"
+            stroke="var(--viz-line-muted)"
             strokeWidth={1.2}
             strokeDasharray="4 3"
             strokeOpacity={0.4}
@@ -122,7 +122,7 @@ export default function GraficoGastoMunicipal() {
           <text
             x={avgX} y={MARGIN_T - 12}
             textAnchor="middle"
-            style={{ ...TXT, fill: "var(--text-muted)", fontSize: 9, fontWeight: 600, opacity: 0.6 }}
+            style={{ ...TXT, fill: "var(--viz-line-muted)", fontSize: 9, fontWeight: 600, opacity: 0.6 }}
           >
             Promedio CA
           </text>
@@ -137,7 +137,7 @@ export default function GraficoGastoMunicipal() {
             const delay = `${i * 0.06}s`;
             const stemOpacity = isCR ? 0.5 : 0.18;
             const dotOpacity = isCR ? 1 : isAvg ? 0.6 : 0.35;
-            const lblColor = isCR ? "var(--accent)" : isAvg ? "var(--accent)" : "var(--text-muted)";
+            const lblColor = isCR ? "var(--viz-line-accent)" : isAvg ? "var(--viz-line-accent)" : "var(--viz-line-muted)";
 
             return (
               <g
@@ -150,7 +150,7 @@ export default function GraficoGastoMunicipal() {
                   <rect
                     x={0} y={y - ROW_H / 2}
                     width={width} height={ROW_H}
-                    fill="var(--text-muted)"
+                    fill="var(--viz-line-muted)"
                     fillOpacity={0.04}
                   />
                 )}
@@ -160,7 +160,7 @@ export default function GraficoGastoMunicipal() {
                   x1={MARGIN_L} y1={y}
                   x2={dotX} y2={y}
                   style={{
-                    stroke: isCR ? "var(--accent)" : "var(--text-muted)",
+                    stroke: isCR ? "var(--viz-line-accent)" : "var(--viz-line-muted)",
                     strokeWidth: isCR ? 2 : 1,
                     strokeOpacity: isHov ? stemOpacity * 2 : stemOpacity,
                     transition: `stroke-opacity 0.15s ease`,
@@ -171,7 +171,7 @@ export default function GraficoGastoMunicipal() {
                 <circle
                   cx={dotX} cy={y} r={DOT_R}
                   style={{
-                    fill: isCR ? "var(--accent)" : isAvg ? "var(--accent)" : "var(--text-muted)",
+                    fill: isCR ? "var(--viz-line-accent)" : isAvg ? "var(--viz-line-accent)" : "var(--viz-line-muted)",
                     fillOpacity: animated
                       ? (isHov ? Math.min(dotOpacity * 1.5, 1) : dotOpacity)
                       : 0,
@@ -217,7 +217,7 @@ export default function GraficoGastoMunicipal() {
           margin: "0 20px 4px",
           fontSize: 13,
           lineHeight: 1.55,
-          color: "var(--text-muted)",
+          color: "var(--viz-line-muted)",
           fontFamily: "var(--font-sans)",
           opacity: animated ? 1 : 0,
           transition: "opacity 0.5s ease 0.5s",
@@ -231,7 +231,7 @@ export default function GraficoGastoMunicipal() {
       <footer style={{
         display: "flex", justifyContent: "space-between", alignItems: "center",
         gap: 12, marginTop: 10, fontSize: 10, textTransform: "uppercase",
-        color: "var(--text-muted)", ...TXT, letterSpacing: "0.04em",
+        color: "var(--viz-line-muted)", ...TXT, letterSpacing: "0.04em",
       }}>
         <span>FUENTE: BID — IDB-DP-552 "Panorama de las finanzas municipales en América Central" (2017)</span>
         <span>PROYECTO: MÁSOPCIONES</span>

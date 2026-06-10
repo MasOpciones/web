@@ -23,7 +23,7 @@
   --panel: #ffffff;
   --text: #111111;
   --text-muted: #6b7280;
-  --accent: #3fa50a;
+  --accent: #52ff18;
   --border: #e5e7eb;
 }
 
@@ -419,6 +419,9 @@ main {
   --viz-shadow: 0 22px 54px rgba(0, 0, 0, 0.34);
   --viz-radius: 28px;
   --viz-panel-deep: color-mix(in srgb, var(--viz-panel) 60%, black);
+  --viz-line-accent: var(--accent);
+  --viz-line-muted: var(--text-muted);
+  --viz-line-grid: var(--viz-grid);
 }
 
 :root.light {
@@ -429,7 +432,7 @@ main {
   --viz-axis: rgba(17, 17, 17, 0.18);
   --viz-text: var(--text);
   --viz-muted: var(--text-muted);
-  --viz-accent: var(--accent);
+  --viz-accent: #60ff12;
   --viz-line-secondary: rgba(17, 17, 17, 0.16);
   --viz-tooltip-bg: rgba(255, 255, 255, 0.45);
   --viz-tooltip-border: rgba(17, 17, 17, 0.08);
@@ -438,6 +441,9 @@ main {
   --viz-tooltip-bg-bar: rgba(255, 255, 255, 0.88);
   --viz-shadow: 0 20px 46px rgba(17, 17, 17, 0.08);
   --viz-panel-deep: var(--viz-panel-strong);
+  --viz-line-accent: #52cc0a;
+  --viz-line-muted: #4b5563;
+  --viz-line-grid: rgba(17, 17, 17, 0.14);
 }
 
 .viz-act {

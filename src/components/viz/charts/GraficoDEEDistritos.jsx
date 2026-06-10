@@ -13,10 +13,10 @@ const DATA = [
 
 const LINES = [
   { key: "canton",   label: "Total cantón",  color: "var(--text)",       width: 2.5, opacity: 0.9,  labelOpacity: 0.9  },
-  { key: "hospital", label: "Hospital",       color: "var(--accent)",     width: 1.5, opacity: 0.85, labelOpacity: 0.85 },
-  { key: "merced",   label: "Merced",         color: "var(--text-muted)", width: 1.5, opacity: 0.65, labelOpacity: 0.7  },
-  { key: "catedral", label: "Catedral",       color: "var(--text-muted)", width: 1.5, opacity: 0.5,  labelOpacity: 0.6  },
-  { key: "carmen",   label: "Carmen",         color: "var(--text-muted)", width: 1.5, opacity: 0.4,  labelOpacity: 0.55 },
+  { key: "hospital", label: "Hospital",       color: "var(--viz-line-accent)",     width: 1.5, opacity: 0.85, labelOpacity: 0.85 },
+  { key: "merced",   label: "Merced",         color: "var(--viz-line-muted)", width: 1.5, opacity: 0.65, labelOpacity: 0.7  },
+  { key: "catedral", label: "Catedral",       color: "var(--viz-line-muted)", width: 1.5, opacity: 0.5,  labelOpacity: 0.6  },
+  { key: "carmen",   label: "Carmen",         color: "var(--viz-line-muted)", width: 1.5, opacity: 0.4,  labelOpacity: 0.55 },
 ];
 
 const TXT = { fontFamily: "var(--font-sans)", fontVariantNumeric: "tabular-nums" };
@@ -37,7 +37,7 @@ const panelStyle = {
   position: "relative",
   width: "100%",
   background:
-    "radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 8%, transparent), transparent 36%), " +
+    "radial-gradient(circle at top left, color-mix(in srgb, var(--viz-line-accent) 8%, transparent), transparent 36%), " +
     "linear-gradient(160deg, var(--viz-panel-strong) 0%, var(--viz-panel) 100%)",
   borderRadius: "16px",
   padding: "20px 20px 16px",
@@ -113,11 +113,11 @@ export default function GraficoDEEDistritos() {
           <p style={{ ...TXT, fontSize: 13, fontWeight: 600, color: "var(--text)", margin: 0, lineHeight: 1.3 }}>
             Empresas formales registradas en el cantón central de San José
           </p>
-          <p style={{ ...TXT, fontSize: 11, color: "var(--text-muted)", margin: "4px 0 0", lineHeight: 1.4 }}>
+          <p style={{ ...TXT, fontSize: 11, color: "var(--viz-line-muted)", margin: "4px 0 0", lineHeight: 1.4 }}>
             El cantón perdió el{" "}
-            <strong style={{ color: "var(--accent)" }}>47.6%</strong>
+            <strong style={{ color: "var(--viz-line-accent)" }}>47.6%</strong>
             {" "}de sus empresas entre 2008 y 2022. Hospital cayó un{" "}
-            <strong style={{ color: "var(--accent)" }}>61.7%</strong>.
+            <strong style={{ color: "var(--viz-line-accent)" }}>61.7%</strong>.
           </p>
         </div>
 
@@ -134,12 +134,12 @@ export default function GraficoDEEDistritos() {
               <line
                 x1={MARGIN_L} y1={yScale(tick)}
                 x2={MARGIN_L + plotW} y2={yScale(tick)}
-                stroke="var(--viz-grid)" strokeWidth={1} strokeOpacity={0.2}
+                stroke="var(--viz-line-grid)" strokeWidth={1} strokeOpacity={0.2}
               />
               <text
                 x={MARGIN_L - 6} y={yScale(tick) + 4}
                 textAnchor="end"
-                style={{ ...TXT, fill: "var(--text-muted)", fontSize: 9, opacity: 0.5 }}
+                style={{ ...TXT, fill: "var(--viz-line-muted)", fontSize: 9, opacity: 0.5 }}
               >
                 {tick === 0 ? "0" : `${(tick/1000).toFixed(0)}k`}
               </text>
@@ -152,7 +152,7 @@ export default function GraficoDEEDistritos() {
               key={d.año}
               x={xScale(i)} y={svgH - 4}
               textAnchor="middle"
-              style={{ ...TXT, fill: "var(--text-muted)", fontSize: 9, opacity: 0.45 }}
+              style={{ ...TXT, fill: "var(--viz-line-muted)", fontSize: 9, opacity: 0.45 }}
             >
               {d.año}
             </text>
@@ -162,12 +162,12 @@ export default function GraficoDEEDistritos() {
           <line
             x1={xScale(idx2022)} y1={MARGIN_T}
             x2={xScale(idx2022)} y2={MARGIN_T + plotH}
-            stroke="var(--accent)" strokeWidth={1} strokeDasharray="3 3" strokeOpacity={0.5}
+            stroke="var(--viz-line-accent)" strokeWidth={1} strokeDasharray="3 3" strokeOpacity={0.5}
           />
           <text
             x={xScale(idx2022) - 4} y={MARGIN_T + 12}
             textAnchor="end"
-            style={{ ...TXT, fill: "var(--accent)", fontSize: 9, opacity: 0.8 }}
+            style={{ ...TXT, fill: "var(--viz-line-accent)", fontSize: 9, opacity: 0.8 }}
           >
             mínimo histórico
           </text>
@@ -264,7 +264,7 @@ export default function GraficoDEEDistritos() {
       <footer style={{
         display: "flex", justifyContent: "space-between", alignItems: "center",
         gap: 12, marginTop: 10, fontSize: 10, textTransform: "uppercase",
-        color: "var(--text-muted)", ...TXT, letterSpacing: "0.04em",
+        color: "var(--viz-line-muted)", ...TXT, letterSpacing: "0.04em",
       }}>
         <span>FUENTE: INEC — DIRECTORIO DE EMPRESAS Y ESTABLECIMIENTOS 2008–2024</span>
         <span>PROYECTO: MÁSOPCIONES</span>
