@@ -1,12 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 
 const ZONAS = [
-  { nombre: "Boulevard / Av. Central", v2008: 900,  v2021: 1300, real: -26  },
   { nombre: "Barrio Amón",             v2008: 700,  v2021: 370,  real: -73  },
   { nombre: "Plaza Democracia",        v2008: 800,  v2021: 800,  real: -49  },
-  { nombre: "Terminal Atlántico",      v2008: 700,  v2021: 1000, real: -27  },
   { nombre: "Mercado Borbón / Coca Cola", v2008: 125, v2021: 59, real: -76 },
-  { nombre: "Paseo Colón",             v2008: 425,  v2021: 650,  real: -22  },
 ];
 
 const MAX_VAL = 1400;
