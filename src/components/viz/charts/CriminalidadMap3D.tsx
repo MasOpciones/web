@@ -1460,9 +1460,7 @@ export default function CriminalidadMap3D() {
           }
 
           .fullscreen-toggle {
-            top: 14px;
-            right: 16px;
-            bottom: auto;
+            display: none;
           }
 
           .controls-toggle {
