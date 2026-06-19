@@ -1,0 +1,30 @@
+---
+title: "El mapa de la inseguridad"
+description: "Dónde ocurren los delitos en Costa Rica y cómo ha crecido la criminalidad por distrito entre 2015 y 2026."
+pubDate: 2026-06-18
+tag: "DATOS"
+featured: true
+---
+
+import ActShell from "../../components/viz/acts/ActShell.astro";
+import ActHero from "../../components/viz/acts/ActHero.astro";
+import ActFooter from "../../components/viz/acts/ActFooter.astro";
+import CriminalidadMap3D from "../../components/viz/charts/CriminalidadMap3D.tsx";
+
+<ActShell>
+
+<ActHero
+  tag="Datos"
+  title="El mapa de la inseguridad"
+  subtitle="Más de 600.000 delitos registrados entre 2015 y 2026. Explorá dónde ocurren, cuáles crecen más, y qué distritos concentran la violencia."
+  align="left"
+/>
+
+<CriminalidadMap3D client:load />
+
+<ActFooter
+  source="OIJ / Poder Judicial de Costa Rica · INEC Censo 2022"
+  note="Los datos de 2026 son parciales (enero–abril). La tasa de homicidio excluye homicidios culposos. Registros sin ubicación ('DESCONOCIDO') fueron excluidos del análisis."
+/>
+
+</ActShell>
