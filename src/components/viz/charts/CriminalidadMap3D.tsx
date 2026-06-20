@@ -223,6 +223,40 @@ function formatoValor(v: number | null, metrica: Metrica): string {
   return Math.round(v).toLocaleString("es-CR");
 }
 
+const ADVERTENCIA_POBLACION_TEXTO =
+  "Este distrito combina una poblaci\u00F3n residente at\u00EDpicamente baja y una tasa por habitante alta. La tasa puede estar inflada cuando parte de los delitos afecta a poblaci\u00F3n flotante, no solo a quienes viven aqu\u00ED.";
+
+function percentil(valores: number[], percentilBuscado: number): number {
+  const ordenados = [...valores].sort((a, b) => a - b);
+  const posicion = (ordenados.length - 1) * percentilBuscado;
+  const inferior = Math.floor(posicion);
+  const superior = Math.ceil(posicion);
+  if (inferior === superior) return ordenados[inferior];
+  return ordenados[inferior] + (ordenados[superior] - ordenados[inferior]) * (posicion - inferior);
+}
+
+const DISTRITOS_CON_ADVERTENCIA_POBLACION = (() => {
+  const referencia = data.distritos
+    .map((distrito) => {
+      const delitos = distrito.datos["2024"]?.TODOS;
+      if (delitos === undefined || distrito.poblacion <= 0) return null;
+      return {
+        codigo: distrito.codigo,
+        poblacion: distrito.poblacion,
+        tasa: (delitos / distrito.poblacion) * 10000,
+      };
+    })
+    .filter((distrito): distrito is { codigo: string; poblacion: number; tasa: number } => distrito !== null);
+  const umbralTasa = percentil(referencia.map((distrito) => distrito.tasa), 0.9);
+  const pisoPoblacion = percentil(referencia.map((distrito) => distrito.poblacion), 0.25);
+
+  return new Set(
+    referencia
+      .filter((distrito) => distrito.tasa > umbralTasa && distrito.poblacion < pisoPoblacion)
+      .map((distrito) => distrito.codigo)
+  );
+})();
+
 // ── Componente ──────────────────────────────────────────────────────────
 
 export default function CriminalidadMap3D() {
@@ -243,6 +277,7 @@ export default function CriminalidadMap3D() {
   const [rankingExpanded, setRankingExpanded] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [hover, setHover] = useState<{ d: Distrito; valor: number | null; ranking: number; x: number; y: number } | null>(null);
+  const [advertenciaAbierta, setAdvertenciaAbierta] = useState<string | null>(null);
 
   const cantonesPorProvincia = useMemo(() => {
     const map = new Map<string, Set<string>>();
@@ -302,6 +337,10 @@ export default function CriminalidadMap3D() {
     for (const d of data.distritos) map.set(d.codigo, valorDistrito(d, anio, anioBase, tipo, metrica));
     return map;
   }, [anio, anioBase, tipo, metrica]);
+
+  const totalNacional = useMemo(() => {
+    return data.distritos.reduce((total, distrito) => total + (distrito.datos[String(anio)]?.[tipo] ?? 0), 0);
+  }, [anio, tipo]);
 
   const { minVal, maxVal } = useMemo(() => {
     let min = Infinity;
@@ -855,6 +894,44 @@ export default function CriminalidadMap3D() {
           white-space: nowrap;
         }
 
+        .warning-marker {
+          display: inline-flex;
+          align-items: center;
+          margin-left: 4px;
+          color: #facc15;
+          font-size: 0.85em;
+          line-height: 1;
+          vertical-align: middle;
+        }
+
+        .warning-marker-button {
+          position: relative;
+          padding: 0;
+          border: 0;
+          background: transparent;
+          cursor: help;
+        }
+
+        .warning-marker-tooltip {
+          position: absolute;
+          top: calc(100% + 8px);
+          left: 0;
+          z-index: 30;
+          width: min(260px, 70vw);
+          padding: 9px 11px;
+          border: 1px solid var(--border);
+          border-radius: 8px;
+          background: var(--viz-tooltip-bg);
+          box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
+          color: var(--text);
+          font-family: var(--font-sans);
+          font-size: 11px;
+          font-weight: 400;
+          line-height: 1.4;
+          text-align: left;
+          white-space: normal;
+        }
+
         .ranking-location {
           margin-top: 2px;
           color: var(--text-muted);
@@ -1341,6 +1418,13 @@ export default function CriminalidadMap3D() {
           font-weight: 700;
         }
 
+        .criminalidad-tooltip-warning {
+          margin-top: 7px;
+          color: var(--text-muted);
+          font-size: 11px;
+          line-height: 1.4;
+        }
+
         .criminalidad-tooltip-muted {
           color: var(--text-muted);
           font-size: 11px;
@@ -1777,7 +1861,9 @@ export default function CriminalidadMap3D() {
               />
               <span>{formatoValor(maxVal, metrica)}</span>
             </div>
-            <span>{filtrados.length} distritos · OIJ / Poder Judicial de Costa Rica</span>
+            <span>
+              {formatoValor(totalNacional, "conteo")} delitos en {anio} · {filtrados.length} distritos · OIJ / Poder Judicial de Costa Rica
+            </span>
           </div>
         </section>
 
@@ -1798,7 +1884,31 @@ export default function CriminalidadMap3D() {
                 <li className="ranking-item" key={distrito.codigo}>
                   <span className="ranking-number">{puesto}</span>
                   <div>
-                    <div className="ranking-place">{distrito.nombre}</div>
+                    <div className="ranking-place">
+                      {distrito.nombre}
+                      {DISTRITOS_CON_ADVERTENCIA_POBLACION.has(distrito.codigo) && (
+                        <button
+                          type="button"
+                          className="warning-marker warning-marker-button"
+                          aria-label="Advertencia de poblaci\u00F3n residencial"
+                          aria-expanded={advertenciaAbierta === distrito.codigo}
+                          onPointerEnter={(evento) => {
+                            if (evento.pointerType === "mouse") setAdvertenciaAbierta(distrito.codigo);
+                          }}
+                          onPointerLeave={() => setAdvertenciaAbierta(null)}
+                          onFocus={() => setAdvertenciaAbierta(distrito.codigo)}
+                          onBlur={() => setAdvertenciaAbierta(null)}
+                          onClick={() => setAdvertenciaAbierta((abierta) => (abierta === distrito.codigo ? null : distrito.codigo))}
+                        >
+                          &#9888;
+                          {advertenciaAbierta === distrito.codigo && (
+                            <span className="warning-marker-tooltip" role="tooltip">
+                              {ADVERTENCIA_POBLACION_TEXTO}
+                            </span>
+                          )}
+                        </button>
+                      )}
+                    </div>
                     <div className="ranking-location">
                       {distrito.canton}, {PROVINCIA_LABEL[distrito.provincia] ?? distrito.provincia}
                     </div>
@@ -1870,13 +1980,23 @@ export default function CriminalidadMap3D() {
             top: hover.y + 14,
           }}
         >
-          <div className="criminalidad-tooltip-title">{hover.d.nombre}</div>
+          <div className="criminalidad-tooltip-title">
+            {hover.d.nombre}
+            {DISTRITOS_CON_ADVERTENCIA_POBLACION.has(hover.d.codigo) && (
+              <span className="warning-marker" title={ADVERTENCIA_POBLACION_TEXTO} aria-label="Advertencia de poblaci\u00F3n residencial">
+                &#9888;
+              </span>
+            )}
+          </div>
           <div className="criminalidad-tooltip-muted">
             {hover.d.canton}, {PROVINCIA_LABEL[hover.d.provincia] ?? hover.d.provincia}
           </div>
           <div>
             {METRICA_LABEL[metrica]}: <strong>{formatoValor(hover.valor, metrica)}</strong>
           </div>
+          {DISTRITOS_CON_ADVERTENCIA_POBLACION.has(hover.d.codigo) && (
+            <div className="criminalidad-tooltip-warning">{ADVERTENCIA_POBLACION_TEXTO}</div>
+          )}
           <div className="criminalidad-tooltip-muted">Ranking #{hover.ranking}</div>
         </div>
       )}
