@@ -38,6 +38,7 @@ const geo = geoJson as unknown as GeoFile;
 const DISTRITOS_POR_CODIGO = new Map(data.distritos.map((distrito) => [distrito.codigo, distrito]));
 
 type Metrica = "conteo" | "tasa_por_10k" | "crecimiento_pct";
+type AdvertenciaActiva = { texto: string; etiqueta: string };
 
 const PROVINCIAS = ["SAN JOSE", "ALAJUELA", "CARTAGO", "HEREDIA", "GUANACASTE", "PUNTARENAS", "LIMON"];
 const PROVINCIA_LABEL: Record<string, string> = {
@@ -237,6 +238,9 @@ function formatoValor(v: number | null, metrica: Metrica): string {
 
 const ADVERTENCIA_POBLACION_TEXTO =
   "Este distrito combina una poblaci\u00F3n residente at\u00EDpicamente baja y una tasa por habitante alta. La tasa puede estar inflada cuando parte de los delitos afecta a poblaci\u00F3n flotante, no solo a quienes viven aqu\u00ED.";
+const UMBRAL_BASE_PEQUENA = 10;
+const ADVERTENCIA_BASE_PEQUENA_TEXTO =
+  "El a\u00F1o base de comparaci\u00F3n tiene muy pocos casos registrados (menos de 10). Los porcentajes de crecimiento calculados sobre n\u00FAmeros tan bajos pueden ser extremos o enga\u00F1osos: un cambio de 2 a 20 casos ya representa +900%, aunque en t\u00E9rminos absolutos siga siendo un nivel bajo de delito.";
 
 function percentil(valores: number[], percentilBuscado: number): number {
   const ordenados = [...valores].sort((a, b) => a - b);
@@ -277,6 +281,11 @@ function textoAdvertenciaPoblacion(distrito: Distrito): string {
   return distrito.advertencia_texto || ADVERTENCIA_POBLACION_TEXTO;
 }
 
+function tieneBaseEstadisticaPequena(distrito: Distrito, anioBase: number, tipo: string): boolean {
+  const conteoBase = distrito.datos[String(anioBase)]?.[tipo];
+  return conteoBase !== undefined && conteoBase < UMBRAL_BASE_PEQUENA;
+}
+
 // ── Componente ──────────────────────────────────────────────────────────
 
 export default function CriminalidadMap3D() {
@@ -303,6 +312,10 @@ export default function CriminalidadMap3D() {
     x: number;
     y: number;
   } | null>(null);
+
+  useEffect(() => {
+    setAdvertenciaTooltip(null);
+  }, [metrica, anioBase, tipo]);
 
   const cantonesPorProvincia = useMemo(() => {
     const map = new Map<string, Set<string>>();
@@ -678,42 +691,54 @@ export default function CriminalidadMap3D() {
     };
   }, [valores, ranking]);
 
-  function posicionAdvertencia(distrito: Distrito, elemento: HTMLElement) {
+  function advertenciaActiva(distrito: Distrito): AdvertenciaActiva | null {
+    if (metrica === "tasa_por_10k" && tieneAdvertenciaPoblacion(distrito)) {
+      return { texto: textoAdvertenciaPoblacion(distrito), etiqueta: "Advertencia de poblaci\u00F3n residencial" };
+    }
+    if (metrica === "crecimiento_pct" && tieneBaseEstadisticaPequena(distrito, anioBase, tipo)) {
+      return { texto: ADVERTENCIA_BASE_PEQUENA_TEXTO, etiqueta: "Advertencia de base estad\u00EDstica peque\u00F1a" };
+    }
+    return null;
+  }
+
+  function posicionAdvertencia(distrito: Distrito, advertencia: AdvertenciaActiva, elemento: HTMLElement) {
     const rect = elemento.getBoundingClientRect();
     return {
       codigo: distrito.codigo,
-      texto: textoAdvertenciaPoblacion(distrito),
+      texto: advertencia.texto,
       x: Math.max(8, Math.min(rect.left, window.innerWidth - 276)),
       y: Math.min(rect.bottom + 8, window.innerHeight - 120),
     };
   }
 
-  function mostrarAdvertencia(distrito: Distrito, elemento: HTMLElement) {
-    setAdvertenciaTooltip(posicionAdvertencia(distrito, elemento));
+  function mostrarAdvertencia(distrito: Distrito, advertencia: AdvertenciaActiva, elemento: HTMLElement) {
+    setAdvertenciaTooltip(posicionAdvertencia(distrito, advertencia, elemento));
   }
 
   function ocultarAdvertencia(codigo: string) {
     setAdvertenciaTooltip((actual) => (actual?.codigo === codigo ? null : actual));
   }
 
-  function alternarAdvertencia(distrito: Distrito, elemento: HTMLElement) {
-    setAdvertenciaTooltip((actual) => (actual?.codigo === distrito.codigo ? null : posicionAdvertencia(distrito, elemento)));
+  function alternarAdvertencia(distrito: Distrito, advertencia: AdvertenciaActiva, elemento: HTMLElement) {
+    setAdvertenciaTooltip((actual) =>
+      actual?.codigo === distrito.codigo ? null : posicionAdvertencia(distrito, advertencia, elemento)
+    );
   }
 
-  function IconoAdvertencia({ distrito }: { distrito: Distrito }) {
+  function IconoAdvertencia({ distrito, advertencia }: { distrito: Distrito; advertencia: AdvertenciaActiva }) {
     return (
       <button
         type="button"
         className="warning-marker warning-marker-button"
-        aria-label="Advertencia de poblaci\u00F3n residencial"
+        aria-label={advertencia.etiqueta}
         aria-expanded={advertenciaTooltip?.codigo === distrito.codigo}
         onPointerEnter={(evento) => {
-          if (evento.pointerType === "mouse") mostrarAdvertencia(distrito, evento.currentTarget);
+          if (evento.pointerType === "mouse") mostrarAdvertencia(distrito, advertencia, evento.currentTarget);
         }}
         onPointerLeave={(evento) => {
           if (evento.pointerType === "mouse") ocultarAdvertencia(distrito.codigo);
         }}
-        onClick={(evento) => alternarAdvertencia(distrito, evento.currentTarget)}
+        onClick={(evento) => alternarAdvertencia(distrito, advertencia, evento.currentTarget)}
       >
         &#9888;
       </button>
@@ -792,6 +817,7 @@ export default function CriminalidadMap3D() {
   const cantonesActivos = cantonesSel ?? new Set(cantonesDisponibles.map((canton) => canton.key));
   const anioMin = 2015;
   const anioMax = 2026;
+  const advertenciaHover = hover ? advertenciaActiva(hover.d) : null;
 
   return (
     <div
@@ -1941,21 +1967,24 @@ export default function CriminalidadMap3D() {
             </div>
 
             <ol className="ranking-list">
-              {rankingList.map(({ distrito, valor, puesto }) => (
-                <li className="ranking-item" key={distrito.codigo}>
-                  <span className="ranking-number">{puesto}</span>
-                  <div>
-                    <div className="ranking-place">
-                      {distrito.nombre}
-                      {tieneAdvertenciaPoblacion(distrito) && <IconoAdvertencia distrito={distrito} />}
+              {rankingList.map(({ distrito, valor, puesto }) => {
+                const advertencia = advertenciaActiva(distrito);
+                return (
+                  <li className="ranking-item" key={distrito.codigo}>
+                    <span className="ranking-number">{puesto}</span>
+                    <div>
+                      <div className="ranking-place">
+                        {distrito.nombre}
+                        {advertencia && <IconoAdvertencia distrito={distrito} advertencia={advertencia} />}
+                      </div>
+                      <div className="ranking-location">
+                        {distrito.canton}, {PROVINCIA_LABEL[distrito.provincia] ?? distrito.provincia}
+                      </div>
                     </div>
-                    <div className="ranking-location">
-                      {distrito.canton}, {PROVINCIA_LABEL[distrito.provincia] ?? distrito.provincia}
-                    </div>
-                  </div>
-                  <span className="ranking-value">{formatoValor(valor, metrica)}</span>
-                </li>
-              ))}
+                    <span className="ranking-value">{formatoValor(valor, metrica)}</span>
+                  </li>
+                );
+              })}
               {rankingList.length === 0 && <li className="ranking-empty">No hay datos para estos filtros.</li>}
             </ol>
           </div>
@@ -2022,7 +2051,7 @@ export default function CriminalidadMap3D() {
         >
           <div className="criminalidad-tooltip-title">
             {hover.d.nombre}
-            {tieneAdvertenciaPoblacion(hover.d) && <IconoAdvertencia distrito={hover.d} />}
+            {advertenciaHover && <IconoAdvertencia distrito={hover.d} advertencia={advertenciaHover} />}
           </div>
           <div className="criminalidad-tooltip-muted">
             {hover.d.canton}, {PROVINCIA_LABEL[hover.d.provincia] ?? hover.d.provincia}
