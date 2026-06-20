@@ -209,6 +209,13 @@ main {
   display: inline-block;
 }
 
+.theme-toggle svg {
+  display: block;
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+}
+
 .article-link {
   transition: opacity 0.2s ease, transform 0.15s ease;
 }

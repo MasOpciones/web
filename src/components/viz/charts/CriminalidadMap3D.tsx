@@ -317,6 +317,12 @@ export default function CriminalidadMap3D() {
     setAdvertenciaTooltip(null);
   }, [metrica, anioBase, tipo]);
 
+  useEffect(() => {
+    const cerrarAdvertencia = () => setAdvertenciaTooltip(null);
+    document.addEventListener("pointerdown", cerrarAdvertencia);
+    return () => document.removeEventListener("pointerdown", cerrarAdvertencia);
+  }, []);
+
   const cantonesPorProvincia = useMemo(() => {
     const map = new Map<string, Set<string>>();
     for (const d of data.distritos) {
@@ -732,13 +738,17 @@ export default function CriminalidadMap3D() {
         className="warning-marker warning-marker-button"
         aria-label={advertencia.etiqueta}
         aria-expanded={advertenciaTooltip?.codigo === distrito.codigo}
+        onPointerDown={(evento) => evento.stopPropagation()}
         onPointerEnter={(evento) => {
           if (evento.pointerType === "mouse") mostrarAdvertencia(distrito, advertencia, evento.currentTarget);
         }}
         onPointerLeave={(evento) => {
           if (evento.pointerType === "mouse") ocultarAdvertencia(distrito.codigo);
         }}
-        onClick={(evento) => alternarAdvertencia(distrito, advertencia, evento.currentTarget)}
+        onClick={(evento) => {
+          evento.stopPropagation();
+          alternarAdvertencia(distrito, advertencia, evento.currentTarget);
+        }}
       >
         &#9888;
       </button>
@@ -1526,6 +1536,8 @@ export default function CriminalidadMap3D() {
           .criminalidad-map3d {
             height: min(82vh, 640px);
             min-height: 520px;
+            --mobile-legend-space: 76px;
+            --mobile-drawer-height: min(calc(82% - var(--mobile-legend-space)), 520px);
           }
 
           .criminalidad-layout {
@@ -1541,9 +1553,11 @@ export default function CriminalidadMap3D() {
             position: absolute;
             left: 0;
             right: 0;
-            bottom: 0;
+            bottom: var(--mobile-legend-space);
             width: 100%;
-            height: min(82%, 520px);
+            max-width: 100%;
+            height: var(--mobile-drawer-height);
+            box-sizing: border-box;
             border-right: 0;
             border-top: 1px solid var(--border);
             transform: translateY(calc(100% + 12px));
@@ -1566,10 +1580,12 @@ export default function CriminalidadMap3D() {
           .ranking-panel {
             position: absolute;
             right: 0;
-            bottom: 0;
+            bottom: var(--mobile-legend-space);
             left: 0;
             width: 100%;
-            height: min(82%, 520px);
+            max-width: 100%;
+            height: var(--mobile-drawer-height);
+            box-sizing: border-box;
             flex-basis: auto;
             transform: translateY(calc(100% + 12px));
             border-top: 1px solid var(--border);
@@ -1588,12 +1604,17 @@ export default function CriminalidadMap3D() {
             pointer-events: auto;
           }
 
+          .ranking-panel-inner {
+            width: 100%;
+            min-width: 0;
+          }
+
           .criminalidad-map3d.filters-open .filter-fab {
-            bottom: calc(min(82%, 520px) + 12px);
+            bottom: calc(var(--mobile-drawer-height) + var(--mobile-legend-space) + 12px);
           }
 
           .criminalidad-map3d.ranking-open .ranking-toggle {
-            bottom: calc(min(82%, 520px) + 12px);
+            bottom: calc(var(--mobile-drawer-height) + var(--mobile-legend-space) + 12px);
           }
 
           .criminalidad-map3d.filters-open .ranking-toggle,
@@ -1607,7 +1628,7 @@ export default function CriminalidadMap3D() {
             justify-content: center;
             position: absolute;
             right: 16px;
-            bottom: 86px;
+            bottom: calc(var(--mobile-legend-space) + 10px);
             z-index: 5;
             min-height: 36px;
             padding: 0 12px;
@@ -1624,7 +1645,7 @@ export default function CriminalidadMap3D() {
           .ranking-toggle {
             top: auto;
             right: auto;
-            bottom: 86px;
+            bottom: calc(var(--mobile-legend-space) + 10px);
             left: 16px;
             min-height: 36px;
             box-shadow: 0 8px 22px rgba(0, 0, 0, 0.24);
