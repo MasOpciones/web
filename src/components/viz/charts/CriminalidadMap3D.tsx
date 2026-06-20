@@ -1560,7 +1560,7 @@ export default function CriminalidadMap3D() {
             box-sizing: border-box;
             border-right: 0;
             border-top: 1px solid var(--border);
-            transform: translateY(calc(100% + 12px));
+            transform: translateY(calc(100% + var(--mobile-legend-space) + 12px));
             transition: transform 220ms ease;
             box-shadow: 0 -18px 40px rgba(0, 0, 0, 0.24);
           }
@@ -1587,7 +1587,7 @@ export default function CriminalidadMap3D() {
             height: var(--mobile-drawer-height);
             box-sizing: border-box;
             flex-basis: auto;
-            transform: translateY(calc(100% + 12px));
+            transform: translateY(calc(100% + var(--mobile-legend-space) + 12px));
             border-top: 1px solid var(--border);
             border-left: 0;
             opacity: 1;
