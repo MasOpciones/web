@@ -3,6 +3,7 @@ import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import {
   AUTHOR,
+  AUTHOR_PROFILE_LINKS,
   AUTHOR_SAME_AS,
   getAuthorPersonJsonLd,
   isMarioSalasSandi,
@@ -98,6 +99,19 @@ function formatDate(date: Date) {
         </section>
 
         <section class="about-block">
+          <h2>Perfiles</h2>
+          <ul>
+            {AUTHOR_PROFILE_LINKS.map((profile) => (
+              <li>
+                <a href={profile.url} target="_blank" rel="me noopener">
+                  {profile.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section class="about-block">
           <h2>Publicaciones de {AUTHOR.name}</h2>
 
           <div style="display: grid; gap: 0; margin-top: 1rem;">
@@ -129,6 +143,7 @@ function formatDate(date: Date) {
 
         <footer class="site-footer-minimal">
           <a href="/about">About</a>
+          <a href={AUTHOR.path}>Autor</a>
         </footer>
       </article>
     </section>

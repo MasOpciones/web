@@ -1,5 +1,6 @@
 ﻿---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { AUTHOR } from "../lib/site";
 import { getCollection } from "astro:content";
 
 const posts = await getCollection("posts");
@@ -136,8 +137,9 @@ const featuredPost =
         </p>
       </section>
       <footer class="site-footer-minimal">
-  <a href="/about">About</a>
-</footer>
+        <a href="/about">About</a>
+        <a href={AUTHOR.path}>Autor</a>
+      </footer>
     </section>
   </main>
 </BaseLayout>

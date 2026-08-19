@@ -111,7 +111,28 @@ function formatDate(date: string | Date | undefined) {
               {isAuthorProfileLinked && (
                 <>
                   {pubDate && " · "}
-                  Por <a href={AUTHOR.path} rel="author">{AUTHOR.name}</a>
+                  Por{" "}
+                  <a
+                    href={AUTHOR.path}
+                    target="_blank"
+                    rel="author noopener"
+                    class="article-author-link"
+                  >
+                    <strong>{AUTHOR.name}</strong>
+                    <svg
+                      class="article-author-link-icon"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                      focusable="false"
+                    >
+                      <path d="M7 17 17 7" />
+                      <path d="M9 7h8v8" />
+                    </svg>
+                  </a>
                 </>
               )}
             </p>
@@ -125,6 +146,7 @@ function formatDate(date: string | Date | undefined) {
 
       <footer class="site-footer-minimal">
         <a href="/about">About</a>
+        <a href={AUTHOR.path}>Autor</a>
       </footer>
     </section>
   </main>

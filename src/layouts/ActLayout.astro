@@ -1,5 +1,6 @@
 ﻿---
 import BaseLayout from "./BaseLayout.astro";
+import { AUTHOR } from "../lib/site";
 
 interface Props {
   title: string;
@@ -61,8 +62,9 @@ function formatDate(date: string | Date | undefined) {
         <slot />
       </div>
       <footer class="site-footer-minimal">
-  <a href="/about">About</a>
-</footer>
+        <a href="/about">About</a>
+        <a href={AUTHOR.path}>Autor</a>
+      </footer>
     </section>
   </main>
 </BaseLayout>
