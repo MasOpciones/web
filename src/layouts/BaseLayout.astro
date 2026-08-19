@@ -1,6 +1,7 @@
 ﻿---
 import "../styles/global.css";
 import { ClientRouter } from "astro:transitions";
+import { BRAND_PROFILE_URLS, ORGANIZATION_JSON_LD, SITE } from "../lib/site";
 
 interface Props {
   title?: string;
@@ -11,12 +12,14 @@ interface Props {
 }
 
 const {
-  title = "MásOpciones",
-  description = "Laboratorio visual de datos, análisis y explicaciones públicas.",
+  title = SITE.name,
+  description = SITE.description,
   canonical = Astro.url.href,
   ogType = "website",
   ogImage,
 } = Astro.props;
+
+const organizationJsonLd = JSON.stringify(ORGANIZATION_JSON_LD);
 ---
 
 <!doctype html>
@@ -42,6 +45,10 @@ const {
       </>
     )}
     <meta name="twitter:card" content={ogImage ? "summary_large_image" : "summary"} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    {ogImage && <meta name="twitter:image" content={ogImage} />}
+    <script is:inline type="application/ld+json" set:html={organizationJsonLd} />
     <slot name="head" />
     <ClientRouter />
   </head>
@@ -50,10 +57,10 @@ const {
 
     <footer class="site-social-footer">
       <p>También puedes encontrarnos en
-        <a href="https://linkedin.com/company/masopciones" target="_blank" rel="noopener">LinkedIn</a>,
-        <a href="https://instagram.com/masopcioness" target="_blank" rel="noopener">Instagram</a>,
-        <a href="https://medium.com/@másopciones" target="_blank" rel="noopener">Medium</a> y
-        <a href="https://github.com/MasOpciones" target="_blank" rel="noopener">GitHub</a>.
+        <a href={BRAND_PROFILE_URLS.linkedin} target="_blank" rel="noopener">LinkedIn</a>,
+        <a href={BRAND_PROFILE_URLS.instagram} target="_blank" rel="noopener">Instagram</a>,
+        <a href={BRAND_PROFILE_URLS.medium} target="_blank" rel="noopener">Medium</a> y
+        <a href={BRAND_PROFILE_URLS.github} target="_blank" rel="noopener">GitHub</a>.
       </p>
     </footer>
 

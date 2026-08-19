@@ -1,0 +1,136 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import {
+  AUTHOR,
+  AUTHOR_SAME_AS,
+  getAuthorPersonJsonLd,
+  isMarioSalasSandi,
+} from "../../lib/site";
+
+const pageTitle = "Mario Salas Sandí | Fundador de MásOpciones";
+const pageDescription =
+  "Mario Salas Sandí es fundador de MásOpciones, un proyecto independiente de análisis económico, datos y visualización en Costa Rica.";
+const canonical = AUTHOR.url;
+
+const posts = await getCollection("posts");
+const authorPosts = posts
+  .filter((post) => isMarioSalasSandi(post.data.author))
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+
+const profilePageJsonLd = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "ProfilePage",
+  name: pageTitle,
+  url: canonical,
+  mainEntity: getAuthorPersonJsonLd(),
+});
+
+function formatDate(date: Date) {
+  return new Date(date).toLocaleDateString("es-CR", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    timeZone: "UTC",
+  });
+}
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={pageDescription}
+  canonical={canonical}
+  ogType="profile"
+>
+  <Fragment slot="head">
+    <meta name="robots" content="index, follow" />
+    {AUTHOR_SAME_AS.length > 0 && AUTHOR_SAME_AS.map((url) => (
+      <link rel="me" href={url} />
+    ))}
+    <script is:inline type="application/ld+json" set:html={profilePageJsonLd} />
+  </Fragment>
+
+  <main>
+    <section class="container about-page-shell">
+      <div class="topbar">
+        <a href="/" class="logo-link" aria-label="Ir al inicio de MásOpciones">
+          <img
+            data-site-logo
+            src="/logo-blanco.svg"
+            alt="MásOpciones"
+            class="site-logo"
+          />
+        </a>
+
+        <button
+          class="theme-toggle"
+          onclick="toggleTheme()"
+          aria-label="Cambiar tema"
+          title="Cambiar tema"
+        >
+          <span data-theme-icon aria-hidden="true"></span>
+        </button>
+      </div>
+
+      <article class="about-page">
+        <header class="about-header">
+          <p class="eyebrow">Autor</p>
+          <h1>{AUTHOR.name}</h1>
+          <p class="about-lead">{AUTHOR.role}</p>
+        </header>
+
+        <section class="about-block">
+          <p>
+            Mario Salas Sandí es estudiante de Ciencia de Datos y Economía Empresarial en
+            Lead University, Costa Rica. Su trabajo se concentra en análisis económico,
+            investigación, mercados financieros, banca, inversión y uso de datos para
+            comprender fenómenos económicos y empresariales.
+          </p>
+          <p>
+            Es fundador de MásOpciones, un proyecto editorial independiente dedicado al
+            análisis económico, la visualización de datos y la explicación de fenómenos
+            públicos.
+          </p>
+          <p>
+            También cuenta con experiencia en análisis económico, investigación económica e
+            investment research.
+          </p>
+        </section>
+
+        <section class="about-block">
+          <h2>Publicaciones de {AUTHOR.name}</h2>
+
+          <div style="display: grid; gap: 0; margin-top: 1rem;">
+            {authorPosts.map((post) => (
+              <a
+                href={`/articulos/${post.slug}/`}
+                class="article-link"
+                style="display: block; padding: 1.25rem 0; border-top: 1px solid var(--border);"
+              >
+                <div style="display: grid; gap: 0.5rem;">
+                  <p class="eyebrow" style="margin: 0 0 0.25rem;">
+                    {formatDate(post.data.pubDate)}
+                  </p>
+
+                  <h3
+                    style="margin: 0; font-size: clamp(1.45rem, 3vw, 2rem); line-height: 1.08; letter-spacing: -0.03em;"
+                  >
+                    {post.data.title}
+                  </h3>
+
+                  <p class="muted" style="margin: 0; max-width: 62ch;">
+                    {post.data.description}
+                  </p>
+                </div>
+              </a>
+            ))}
+          </div>
+        </section>
+
+        <footer class="site-footer-minimal">
+          <a href="/about">About</a>
+        </footer>
+      </article>
+    </section>
+  </main>
+</BaseLayout>

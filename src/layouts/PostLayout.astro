@@ -1,5 +1,12 @@
 ﻿---
 import BaseLayout from "./BaseLayout.astro";
+import {
+  AUTHOR,
+  absoluteUrl,
+  getAuthorPersonJsonLd,
+  isMarioSalasSandi,
+  resolveAuthorName,
+} from "../lib/site";
 
 interface Props {
   title: string;
@@ -10,10 +17,16 @@ interface Props {
   ogImage?: string;
 }
 
-const { title, description, pubDate, updatedDate, author = "MásOpciones", ogImage } = Astro.props;
+const { title, description, pubDate, updatedDate, author, ogImage } = Astro.props;
 
-const ogImageAbsolute = ogImage ? `https://masopciones.blog${ogImage}` : undefined;
-const canonical = Astro.url.href;
+const resolvedAuthor = resolveAuthorName(author);
+const isAuthorProfileLinked = isMarioSalasSandi(resolvedAuthor);
+const authorJsonLd = isAuthorProfileLinked
+  ? getAuthorPersonJsonLd()
+  : { "@type": "Person", name: resolvedAuthor };
+const ogImageAbsolute = ogImage ? absoluteUrl(ogImage) : undefined;
+const canonical = absoluteUrl(Astro.url.pathname);
+const dateModified = updatedDate ?? pubDate;
 
 const jsonLd = JSON.stringify({
   "@context": "https://schema.org",
@@ -21,9 +34,9 @@ const jsonLd = JSON.stringify({
   headline: title,
   ...(description && { description }),
   ...(pubDate && { datePublished: new Date(pubDate).toISOString() }),
-  dateModified: new Date(updatedDate ?? pubDate ?? Date.now()).toISOString(),
-  author: { "@type": "Person", name: author },
-  publisher: { "@type": "Organization", name: "MásOpciones", url: "https://masopciones.blog" },
+  ...(dateModified && { dateModified: new Date(dateModified).toISOString() }),
+  author: authorJsonLd,
+  publisher: { "@type": "Organization", name: "MásOpciones", url: absoluteUrl("/") },
   url: canonical,
   ...(ogImageAbsolute && { image: ogImageAbsolute }),
 });
@@ -34,6 +47,7 @@ function formatDate(date: string | Date | undefined) {
     year: "numeric",
     month: "long",
     day: "numeric",
+    timeZone: "UTC",
   });
 }
 ---
@@ -87,9 +101,19 @@ function formatDate(date: string | Date | undefined) {
             </p>
           )}
 
-          {pubDate && (
+          {(pubDate || isAuthorProfileLinked) && (
             <p class="muted" style="margin-top: 1rem;">
-              {formatDate(pubDate)}
+              {pubDate && (
+                <time datetime={new Date(pubDate).toISOString()}>
+                  {formatDate(pubDate)}
+                </time>
+              )}
+              {isAuthorProfileLinked && (
+                <>
+                  {pubDate && " · "}
+                  Por <a href={AUTHOR.path} rel="author">{AUTHOR.name}</a>
+                </>
+              )}
             </p>
           )}
         </header>
@@ -105,4 +129,3 @@ function formatDate(date: string | Date | undefined) {
     </section>
   </main>
 </BaseLayout>
-

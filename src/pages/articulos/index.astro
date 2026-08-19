@@ -12,7 +12,8 @@ function formatDate(date: Date) {
   return new Date(date).toLocaleDateString("es-CR", {
     year: "numeric",
     month: "long",
-    day: "numeric"
+    day: "numeric",
+    timeZone: "UTC"
   });
 }
 ---

@@ -1,5 +1,6 @@
 ﻿---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { AUTHOR } from "../lib/site";
 ---
 
 <BaseLayout title="Sobre MásOpciones — MásOpciones">
@@ -77,12 +78,22 @@ import BaseLayout from "../layouts/BaseLayout.astro";
         <section class="about-block">
           <h2>Autor</h2>
           <p>
-            MásOpciones es desarrollado por Mario Salas, estudiante de Ciencia de Datos y
-            Economía Empresarial en Costa Rica.
+            <strong>MásOpciones fue fundado y es desarrollado por {AUTHOR.name}</strong>,
+            estudiante de Ciencia de Datos y Economía Empresarial en Lead University, Costa
+            Rica.
           </p>
           <p>
-            El objetivo del proyecto es explorar análisis económico aplicado utilizando datos
-            públicos.
+            Su trabajo e intereses se concentran en el análisis económico aplicado, los
+            mercados financieros, el sistema bancario, la inversión y el uso de datos para
+            comprender fenómenos económicos y empresariales.
+          </p>
+          <p>
+            En MásOpciones desarrolla análisis, visualizaciones y exploraciones basadas en
+            datos públicos con el objetivo de acercar evidencia económica a discusiones de
+            interés público.
+          </p>
+          <p>
+            <a href={AUTHOR.path}>Perfil de {AUTHOR.name}</a>
           </p>
         </section>
 
